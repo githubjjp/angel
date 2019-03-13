@@ -1,0 +1,53 @@
+server:
+  port: 8080
+spring:
+  datasource:
+      druid:
+          mysql:
+              username: root
+              password: mysql123
+              driver-class-name: com.mysql.jdbc.Driver
+              url: jdbc:mysql://pig-mysql:3306/pig?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Asia/Shanghai
+              initialSize: 5
+              minIdle: 5
+              maxActive: 20
+          mongodb:
+              username: root
+              password: mysql123
+              driver-class-name: com.mysql.jdbc.Driver
+              url: jdbc:mysql://pig-mysql:3306/sys?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Asia/Shanghai
+              initialSize: 5
+              minIdle: 5
+              maxActive: 20
+mybatis-plus:
+  # 如果是放在src/main/java目录下 classpath:/com/yourpackage/*/mapper/*Mapper.xml
+  # 如果是放在resource目录 classpath:/mapper/*Mapper.xml
+  mapper-locations: classpath:/mapper/*Mapper.xml
+  #实体扫描，多个package用逗号或者分号分隔
+  typeAliasesPackage: com.pingan.angel.admin.entity
+  global-config:
+    db-config:
+      id-type : AUTO
+      #主键类型  AUTO 0:"数据库ID自增", 1:"INPUT 用户输入ID",2:"全局唯一ID (ID_WORKER 数字类型唯一ID)", 3:"全局唯一ID UUID";
+      field-strategy: NOT_NULL #字段策略 0:"忽略判断",1:"非 NULL 判断"),2:"非空判断"
+      table-underline: true
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+  configuration:
+    #配置返回数据库(column下划线命名&&返回java实体是驼峰命名)，自动匹配无需as（没开启这个，SQL需要写as： select user_id as userId）
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+    #配置JdbcTypeForNull, oracle数据库必须配置
+    jdbc-type-for-null: 'null'
+
+    
+    
+    
+    
+ # 注册中心
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: http://angel:angel@pig-eureka:8123/eureka/   
