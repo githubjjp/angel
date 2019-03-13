@@ -18,8 +18,8 @@ import com.pingan.angel.admin.constants.CodeConstants;
 import com.pingan.angel.admin.dto.LoginUser;
 import com.pingan.angel.admin.dto.UserInfo;
 import com.pingan.angel.admin.entity.SysUser;
-import com.pingan.angel.admin.security.constants.SecurityConstants;
 import com.pingan.angel.admin.util.R;
+import com.pingan.angel.security.constants.SecurityConstants;
 
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
@@ -31,8 +31,6 @@ import lombok.extern.slf4j.Slf4j;
  * @author ouyangenkun
  *
  */
-//@Service
-@Slf4j
 @Service
 @AllArgsConstructor
 public class BaseUserDetailService implements UserDetailsService {

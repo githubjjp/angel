@@ -10,13 +10,12 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
 
-import com.pingan.angel.admin.security.util.HttpUtils;
 import com.pingan.angel.admin.util.R;
+import com.pingan.angel.security.util.HttpUtils;
 
 import lombok.AllArgsConstructor;
 
 /**
- * @author lengleng
  * 授权拒绝处理器，覆盖默认的OAuth2AccessDeniedHandler
  * 包装失败信息到PigDeniedException
  */

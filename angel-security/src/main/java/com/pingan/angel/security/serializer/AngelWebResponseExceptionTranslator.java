@@ -15,12 +15,12 @@ import org.springframework.security.oauth2.provider.error.WebResponseExceptionTr
 import org.springframework.security.web.util.ThrowableAnalyzer;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 
-import com.pingan.angel.admin.security.exception.AngelAuth2Exception;
-import com.pingan.angel.admin.security.exception.ForbiddenException;
-import com.pingan.angel.admin.security.exception.InvalidException;
-import com.pingan.angel.admin.security.exception.MethodNotAllowed;
-import com.pingan.angel.admin.security.exception.ServerErrorException;
-import com.pingan.angel.admin.security.exception.UnauthorizedException;
+import com.pingan.angel.security.exception.AngelAuth2Exception;
+import com.pingan.angel.security.exception.ForbiddenException;
+import com.pingan.angel.security.exception.InvalidException;
+import com.pingan.angel.security.exception.MethodNotAllowed;
+import com.pingan.angel.security.exception.ServerErrorException;
+import com.pingan.angel.security.exception.UnauthorizedException;
 
 /**
  * 异常处理,重写oauth 默认实现

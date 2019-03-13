@@ -3,7 +3,7 @@ package com.pingan.angel.security.exception;
 import org.springframework.security.oauth2.common.exceptions.OAuth2Exception;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.pingan.angel.admin.security.serializer.AngelAuth2ExceptionSerializer;
+import com.pingan.angel.security.serializer.AngelAuth2ExceptionSerializer;
 
 import lombok.Getter;
 

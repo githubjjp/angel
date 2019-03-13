@@ -13,8 +13,8 @@ import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pingan.angel.admin.constants.CodeConstants;
-import com.pingan.angel.admin.security.exception.AngelDeniedException;
 import com.pingan.angel.admin.util.R;
+import com.pingan.angel.security.exception.AngelDeniedException;
 
 import cn.hutool.http.HttpStatus;
 import lombok.AllArgsConstructor;

@@ -25,7 +25,6 @@ import com.pingan.angel.admin.util.R;
 import lombok.AllArgsConstructor;
 
 /**
- * @author lengleng
  * @date 2019/2/1
  */
 @RestController
