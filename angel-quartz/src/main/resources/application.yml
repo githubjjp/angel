@@ -1,0 +1,14 @@
+server:
+  port: 8395
+  spring:
+    application:
+      name: microservice-simple-quartz-cluster
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://192.168.137.128:3306/quartz?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true
+    username: root
+    password: admin
+  jpa:
+    hibernate:
+      ddl-auto: update #ddl-auto:设为update表示每次都不会重新建表
+      show-sql: true
