@@ -113,6 +113,7 @@
   	<module>angel-monitor</module>
   	<module>angel-gateway</module>
   	<module>angel-security</module>
+	  <module>angel-quartz</module>
   </modules>
   
   <build>
