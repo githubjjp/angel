@@ -1,0 +1,19 @@
+mybatis:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  mapper-locations: classpath*:mappers/*Mapper.xml
+
+spring:
+  application:
+    name: angel-quartz
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://192.168.137.128:3306/quartz?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true
+    username: root
+    password: admin
+erueka:
+  client:
+    serviceUrl:
+      defaultZone: http://angel:angel@localhost:8123/eureka/
+
+
