@@ -56,7 +56,7 @@ public class SenderController {
      * @return
      */
     @GetMapping("/kafka/sendMsg")
-    public String sendMsg2(@RequestParam("message") String message,@RequestParam("type") String type){
+    public String sendMsg2(@RequestParam("message") String message){
         logger.info("------------SenderController-------param:{"+message+"}");
         Map<String,Object> resultMap=new HashMap<String,Object>();
         if(message==null || "".equals(message)){
@@ -65,12 +65,7 @@ public class SenderController {
             return JSON.toJSONString(resultMap);
         }
         try{
-            if("1".equals(type)){
-                this.kafkaSender.sendMsg(message);
-            }else if("2".equals(type)){
-                this.kafkaSender.sendMsg2(message);
-            }
-
+            this.kafkaSender.sendMsg(message);
             resultMap.put("code", Content.REQ_OK);
             resultMap.put("msg",Content.REQ_OK_CONTENT);
             resultMap.put("data","处理的推送消息为--{"+message+"}");

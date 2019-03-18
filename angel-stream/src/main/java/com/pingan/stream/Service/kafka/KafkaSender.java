@@ -20,26 +20,11 @@ public class KafkaSender {
      */
     public void sendMsg(String message) {
         try{
-            logger.info("【kafka-生产者-1】-发送消息::" + JSON.toJSONString(message));
+            logger.info("【kafka-生产者】-发送消息::" + JSON.toJSONString(message));
             KafkaSource.output().send(MessageBuilder.withPayload(message).build());
         }catch(Exception e){
-            logger.error("【kafka-生产者-1】-消息发送失败",e);
+            logger.error("【kafka-生产者】-消息发送失败",e);
         }
     }
-
-     /**
-     * 通道2
-     * @param message
-     */
-    public void sendMsg2(String message) {
-        try{
-            logger.info("【kafka-生产者-2】-发送消息::" + JSON.toJSONString(message));
-            KafkaSource.output2().send(MessageBuilder.withPayload(message).build());
-        }catch(Exception e){
-            logger.error("【kafka-生产者-2】-消息发送失败",e);
-        }
-    }
-
-
 
 }

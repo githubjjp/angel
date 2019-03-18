@@ -23,14 +23,8 @@ public class KafkaListener {
 
     @StreamListener(value=KafkaSink.INPUT)
     public void receive(String payload){
-        logger.info("【kafka-消费者-1】 监听消息::"+payload);
+        logger.info("【kafka-消费者】 监听消息::"+payload);
         messageServer.receiveMsg(payload, Content.MQ_TYPE_2);
-    }
-
-    @StreamListener(value=KafkaSink.INPUT2)
-    public void receive2(String payload){
-        logger.info("【kafka-消费者-2】 监听消息::"+payload);
-        messageServer.receiveMsg(payload,Content.MQ_TYPE_2);
     }
 
 
