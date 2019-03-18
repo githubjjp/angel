@@ -114,6 +114,7 @@
   	<module>angel-gateway</module>
   	<module>angel-security</module>
 	  <module>angel-quartz</module>
+	  <module>angel-stream</module>
   </modules>
   
   <build>
