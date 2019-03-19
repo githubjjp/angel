@@ -11,7 +11,6 @@
   <name>angel-gateway</name>
   <url>http://maven.apache.org</url>
   <description> 服务网关，基于 spring cloud gateway</description>
-
 	<dependencies>
 		<!--gateway 网关依赖,内置webflux 依赖-->
 		<dependency>

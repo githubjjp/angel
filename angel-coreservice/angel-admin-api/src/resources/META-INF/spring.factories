@@ -1,0 +1,7 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.pingan.angel.admin.api.feign.fallback.RemoteUserServiceFallbackImpl,\
+  com.pingan.angel.admin.api.feign.fallback.RemoteLogServiceFallbackImpl,\
+  com.pingan.angel.admin.api.feign.fallback.RemoteTokenServiceFallbackImpl,\
+  com.pingan.angel.admin.api.feign.factory.RemoteUserServiceFallbackFactory,\
+  com.pingan.angel.admin.api.feign.factory.RemoteLogServiceFallbackFactory,\
+  com.pingan.angel.admin.api.feign.factory.RemoteTokenServiceFallbackFactory

@@ -112,8 +112,11 @@
   	<module>angel-eureka</module>
   	<module>angel-monitor</module>
   	<module>angel-gateway</module>
-  	<module>angel-security</module>
+  	
 	  <module>angel-quartz</module>
+	<module>angel-admin</module>
+	<module>angel-common</module>
+	<module>angel-coreservice</module>
   </modules>
   
   <build>

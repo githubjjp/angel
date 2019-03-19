@@ -77,6 +77,8 @@
 			<artifactId>hutool-all</artifactId>
 			<version>${hutool.version}</version>
 		</dependency>
+		  
+	
 		
 		
 		<!--web 模块 -->
