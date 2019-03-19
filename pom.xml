@@ -117,6 +117,7 @@
 	<module>angel-admin</module>
 	<module>angel-common</module>
 	<module>angel-coreservice</module>
+	<module>angel-stream</module>
   </modules>
   
   <build>
