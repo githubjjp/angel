@@ -1,0 +1,7 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.pingan.angel.security.security.component.PermissionService,\
+  com.pingan.angel.security.security.component.AngelAccessDeniedHandler,\
+  com.pingan.angel.security.security.component.ResourceAuthExceptionEntryPoint,\
+  com.pingan.angel.security.security.component.AngelResourceServerTokenRelayAutoConfiguration,\
+  com.pingan.angel.security.security.feign.AngelFeignClientConfiguration,\
+  com.pingan.angel.security.security.service.AngelUserDetailsServiceImpl

@@ -3,7 +3,8 @@ package com.pingan.angel.security.util;
 
 import cn.hutool.core.util.StrUtil;
 import com.pingan.angel.common.core.constant.SecurityConstants;
-import com.pingan.angel.common.security.service.PigUser;
+import com.pingan.angel.security.service.AngelLoginUser;
+
 import lombok.experimental.UtilityClass;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -31,10 +32,10 @@ public class SecurityUtils {
 	/**
 	 * 获取用户
 	 */
-	public PigUser getUser(Authentication authentication) {
+	public AngelLoginUser getUser(Authentication authentication) {
 		Object principal = authentication.getPrincipal();
-		if (principal instanceof PigUser) {
-			return (PigUser) principal;
+		if (principal instanceof AngelLoginUser) {
+			return (AngelLoginUser) principal;
 		}
 		return null;
 	}
@@ -42,7 +43,7 @@ public class SecurityUtils {
 	/**
 	 * 获取用户
 	 */
-	public PigUser getUser() {
+	public AngelLoginUser getUser() {
 		Authentication authentication = getAuthentication();
 		if (authentication == null) {
 			return null;

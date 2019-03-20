@@ -1,15 +1,14 @@
 package com.pingan.angel.security.exception;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.pingan.angel.security.serializer.AngelAuth2ExceptionSerializer;
+import com.pingan.angel.security.component.AngelAuth2ExceptionSerializer;
 
 /**
- * 无效请求
- * @author ouyangenkun
- *
+ * @author lengleng
+ * @date 2019/2/1
  */
-@SuppressWarnings("serial")
 @JsonSerialize(using = AngelAuth2ExceptionSerializer.class)
+@SuppressWarnings("serial")
 public class InvalidException extends AngelAuth2Exception {
 
 	public InvalidException(String msg, Throwable t) {

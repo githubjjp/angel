@@ -1,18 +1,15 @@
 package com.pingan.angel.security.exception;
 
-
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.pingan.angel.security.component.AngelAuth2ExceptionSerializer;
 import org.springframework.http.HttpStatus;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.pingan.angel.security.serializer.AngelAuth2ExceptionSerializer;
-
 /**
- * 未被授权
- * @author ouyangenkun
- *
+ * @author lengleng
+ * @date 2019/2/1
  */
-@SuppressWarnings("serial")
 @JsonSerialize(using = AngelAuth2ExceptionSerializer.class)
+@SuppressWarnings("serial")
 public class UnauthorizedException extends AngelAuth2Exception {
 
 	public UnauthorizedException(String msg, Throwable t) {

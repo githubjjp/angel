@@ -17,7 +17,7 @@ eureka:
     
 spring:
   application:
-      name: pig-gateway
+      name: angel-gateway
   cloud:
     gateway:
       globalcors:
@@ -30,4 +30,32 @@ spring:
       discovery:
         locator:
           enabled: true
+      routes:
+      # 认证中心
+      - id: pig-auth
+        uri: lb:/angel-auth #  重点！/info必须使用http进行转发，lb代表从注册中心获取服务
+        predicates: #重点！转发该路径！,/auth/**,
+        - Path=/auth/**
+        filters:
+          # 验证码处理
+        - ValidateCodeGatewayFilter
+          # 前端密码解密
+        - PasswordDecoderFilter
+      #UPMS 模块
+      - id: pig-upms
+        uri: lb://pig-upms
+        predicates:
+        - Path=/admin/**
+        filters:
+          # 限流配置
+        - name: RequestRateLimiter
+          args:
+            key-resolver: '#{@remoteAddrKeyResolver}'
+            redis-rate-limiter.replenishRate: 10
+            redis-rate-limiter.burstCapacity: 20
+          # 降级配置
+        - name: Hystrix
+          args:
+            name: default
+            fallbackUri: 'forward:/fallback'
       

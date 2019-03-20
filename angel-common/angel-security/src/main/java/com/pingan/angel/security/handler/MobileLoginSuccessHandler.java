@@ -1,11 +1,12 @@
 package com.pingan.angel.security.handler;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import cn.hutool.core.map.MapUtil;
+import cn.hutool.core.util.CharsetUtil;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.pingan.angel.common.core.constant.CommonConstants;
+import com.pingan.angel.security.util.AuthUtils;
+import lombok.Builder;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
@@ -13,23 +14,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.common.exceptions.InvalidClientException;
 import org.springframework.security.oauth2.common.exceptions.UnapprovedClientAuthenticationException;
-import org.springframework.security.oauth2.provider.ClientDetails;
-import org.springframework.security.oauth2.provider.ClientDetailsService;
-import org.springframework.security.oauth2.provider.OAuth2Authentication;
-import org.springframework.security.oauth2.provider.OAuth2Request;
-import org.springframework.security.oauth2.provider.TokenRequest;
+import org.springframework.security.oauth2.provider.*;
 import org.springframework.security.oauth2.provider.request.DefaultOAuth2RequestValidator;
 import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.pingan.angel.admin.constants.CodeConstants;
-import com.pingan.angel.security.util.AuthUtils;
-
-import cn.hutool.core.map.MapUtil;
-import cn.hutool.core.util.CharsetUtil;
-import lombok.Builder;
-import lombok.extern.slf4j.Slf4j;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 /**
  * @author lengleng
@@ -84,7 +77,7 @@ public class MobileLoginSuccessHandler implements AuthenticationSuccessHandler {
 			log.info("获取token 成功：{}", oAuth2AccessToken.getValue());
 
 			response.setCharacterEncoding(CharsetUtil.UTF_8);
-			response.setContentType(CodeConstants.CONTENT_TYPE);
+			response.setContentType(CommonConstants.CONTENT_TYPE);
 			PrintWriter printWriter = response.getWriter();
 			printWriter.append(objectMapper.writeValueAsString(oAuth2AccessToken));
 		} catch (IOException e) {
