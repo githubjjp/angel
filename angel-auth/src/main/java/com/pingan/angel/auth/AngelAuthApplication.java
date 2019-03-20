@@ -1,7 +1,7 @@
 package com.pingan.angel.auth;
 
 
-import com.pingan.angel.security.annotation.EnablePigFeignClients;
+import com.pingan.angel.security.annotation.EnableAngelFeignClients;
 import org.springframework.boot.SpringApplication;
 import org.springframework.cloud.client.SpringCloudApplication;
 import org.springframework.context.annotation.ComponentScan;
@@ -12,7 +12,7 @@ import org.springframework.context.annotation.ComponentScan;
  * 认证授权中心
  */
 @SpringCloudApplication
-@EnablePigFeignClients
+@EnableAngelFeignClients
 @ComponentScan(basePackages = {"com.pingan.angel"})
 public class AngelAuthApplication {
 

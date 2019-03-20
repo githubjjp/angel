@@ -7,9 +7,7 @@
     <artifactId>angel-coreservice</artifactId>
     <version>1.0.0-SNAPSHOT</version>
   </parent>
-  <groupId>com.pingan.angel</groupId>
   <artifactId>angel-admin-api</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
   <name>angel-admin-api</name>
  
   <description>通用用户权限管理系统公共api模块</description>

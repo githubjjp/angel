@@ -7,14 +7,14 @@ spring:
       name: angel
       password: angel
   application:
-    name: pig-eureka
+    name: angel-eureka
 
 
-# docker-compose部署时候 hostname 换成pig-eureka
-# 类似的 redis 使用pig-redis ,gateway 换成 pig-gateway
+# docker-compose部署时候 hostname 换成angel-eureka
+# 类似的 redis 使用angel-eureka ,gateway 换成 angel-eureka
 eureka:
   instance:
-    hostname: pig-eureka
+    hostname: angel-eureka
     prefer-ip-address: true
   client:
     register-with-eureka: false

@@ -13,7 +13,7 @@ eureka:
     prefer-ip-address: true
   client:
     service-url:
-      defaultZone: http://angel:angel@pig-eureka:8123/eureka/   
+      defaultZone: http://angel:angel@angel-eureka:8123/eureka/   
     
 spring:
   application:
@@ -32,7 +32,7 @@ spring:
           enabled: true
       routes:
       # 认证中心
-      - id: pig-auth
+      - id: angel-auth
         uri: lb:/angel-auth #  重点！/info必须使用http进行转发，lb代表从注册中心获取服务
         predicates: #重点！转发该路径！,/auth/**,
         - Path=/auth/**
@@ -42,8 +42,8 @@ spring:
           # 前端密码解密
         - PasswordDecoderFilter
       #UPMS 模块
-      - id: pig-upms
-        uri: lb://pig-upms
+      - id: angel-admin
+        uri: lb://angel-admin
         predicates:
         - Path=/admin/**
         filters:

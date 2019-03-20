@@ -37,7 +37,7 @@ import java.util.Map;
 @AllArgsConstructor
 @RequestMapping("/oauth")
 @SuppressWarnings("rawtypes")
-public class PigTokenEndpoint {
+public class AngelTokenEndpoint {
 	private static final String PROJECT_OAUTH_ACCESS = SecurityConstants.PROJECT_PREFIX + SecurityConstants.OAUTH_PREFIX + "access:";
 	private static final String CURRENT = "current";
 	private static final String SIZE = "size";
