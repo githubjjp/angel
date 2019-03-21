@@ -1,14 +1,15 @@
 package com.pingan.angel.admin.api.feign;
 
-import com.pingan.angel.admin.api.feign.factory.RemoteUserServiceFallbackFactory;
-import com.pingan.angel.admin.api.dto.UserInfo;
-import com.pingan.angel.common.core.constant.SecurityConstants;
-import com.pingan.angel.common.core.constant.ServiceNameConstants;
-import com.pingan.angel.common.core.util.Result;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
+
+import com.pingan.angel.admin.api.dto.UserInfo;
+import com.pingan.angel.admin.api.feign.factory.RemoteUserServiceFallbackFactory;
+import com.pingan.angel.common.core.constant.SecurityConstants;
+import com.pingan.angel.common.core.constant.ServiceNameConstants;
+import com.pingan.angel.common.core.util.Result;
 
 
 @FeignClient(value = ServiceNameConstants.UMPS_SERVICE, fallbackFactory = RemoteUserServiceFallbackFactory.class)

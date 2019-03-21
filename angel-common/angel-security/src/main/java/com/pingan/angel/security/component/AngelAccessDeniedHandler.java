@@ -23,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * @author lengleng
  * 授权拒绝处理器，覆盖默认的OAuth2AccessDeniedHandler
- * 包装失败信息到PigDeniedException
+ * 包装失败信息到AngelDeniedException
  */
 @Slf4j
 @Component

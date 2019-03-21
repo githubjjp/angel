@@ -8,6 +8,7 @@ eureka:
   client:
     service-url:
       defaultZone: http://angel:angel@angel-eureka:8123/eureka/
+      
 feign:
   client:
     config:
@@ -57,6 +58,7 @@ mybatis-plus:
       logic-not-delete-value: 0
       table-underline: true
   mapper-locations: classpath:/mapper/*Mapper.xml
+  
 ribbon:
   ConnectTimeout: 10000
   ReadTimeout: 10000
@@ -93,7 +95,7 @@ spring:
             fallbackUri: forward:/fallback
             name: default
           name: Hystrix
-        id: pig-upms
+        id: angel-admin
         predicates:
         - Path=/admin/**
         uri: lb://angel-admin
@@ -103,6 +105,3 @@ spring:
   redis:
     host: angel-redis
     password: '' 
-logging:
-  level:
-    root: debug 

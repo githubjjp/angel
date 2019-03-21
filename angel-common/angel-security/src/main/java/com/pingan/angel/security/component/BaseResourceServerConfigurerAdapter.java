@@ -21,7 +21,6 @@ import org.springframework.web.client.RestTemplate;
 import java.io.IOException;
 
 /**
- * @author lengleng
  * @date 2019/2/1
  * <p>
  * 1. 支持remoteTokenServices 负载均衡

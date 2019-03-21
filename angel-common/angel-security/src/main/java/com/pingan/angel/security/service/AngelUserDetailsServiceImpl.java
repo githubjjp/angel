@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.netflix.loadbalancer.LoadBalancerContext;
 import com.pingan.angel.admin.api.dto.UserInfo;
 import com.pingan.angel.admin.api.entity.SysUser;
 import com.pingan.angel.admin.api.feign.RemoteUserService;
@@ -49,7 +50,6 @@ public class AngelUserDetailsServiceImpl implements UserDetailsService {
 		if (cache != null && cache.get(username) != null) {
 			return (AngelLoginUser) cache.get(username).get();
 		}
-
 		Result<UserInfo> result = remoteUserService.info(username, SecurityConstants.FROM_IN);
 		UserDetails userDetails = getUserDetails(result);
 		cache.put(username, userDetails);

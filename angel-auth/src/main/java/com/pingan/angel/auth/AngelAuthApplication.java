@@ -13,7 +13,7 @@ import com.pingan.angel.security.annotation.EnableAngelFeignClients;
  * 认证授权中心
  */
 @SpringCloudApplication
-@EnableAngelFeignClients(basePackages = {"om.pingan.angel"})
+@EnableAngelFeignClients(basePackages = {"com.pingan.angel"})
 @ComponentScan("com.pingan.angel")
 public class AngelAuthApplication {
 
