@@ -24,7 +24,7 @@ public class KafkaListener {
     @StreamListener(value=KafkaSink.INPUT)
     public void receive(String payload){
         logger.info("【kafka-消费者】 监听消息::"+payload);
-        messageServer.receiveMsg(payload, Content.MQ_TYPE_2);
+        messageServer.receiveMsg(payload, Content.MQ_TYPE_2,Content.TOPIC_TYPE_1);
     }
 
 
