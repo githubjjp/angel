@@ -15,5 +15,6 @@
   	<module>angel-admin</module>
   	<module>angel-admin-api</module>
   	<module>angel-quartz</module>
+      <module>angel-stream</module>
   </modules>
 </project>
