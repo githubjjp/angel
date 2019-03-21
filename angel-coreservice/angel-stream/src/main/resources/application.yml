@@ -2,17 +2,10 @@ server:
   port: 8431
 eureka:
   instance:
-    metadata-map:
-      user.name: angel
-      user.password: angel
-    health-check-url-path: /actuator/health
-    ip-address: 127.0.0.1
     prefer-ip-address: true
-    instance-id: ${eureka.instance.ip-address}:${server.port}
   client:
-    registryFetchIntervalSeconds: 5
-    serviceUrl:
-      defaultZone: http://angel:angel@127.0.0.1:8123/eureka/    #注册中心地址，后面可配置服务集群
+    service-url:
+      defaultZone: http://angel:angel@angel-eureka:8123/eureka/  #注册中心
 spring:
   data:
     mongodb:    #引入mongodb
@@ -24,15 +17,6 @@ spring:
       instanceCount: 3   #指定当前的实例数为2
       instanceIndex: 0  #实例的索引号,从0开始
       binders:
-        rabbitmq:      #这里集成了一个rabbitmq
-          type: rabbit #集成rabbit
-          environment: #配置rabbimq连接环境
-            spring:
-              rabbitmq:
-                host: 127.0.0.1
-                username: guest
-                password: guest
-                virtual-host: /
         kafka:       #集成kafka集群
           type: kafka
           environment:
@@ -47,20 +31,6 @@ spring:
                       autoCreateTopics: false   #禁止自动增加主题
                       minPartitionCount: 1 #最小分区数是1
       bindings:
-        rabbit_output: # 自定义的通道
-          destination: myExchange  #exchange名称，交换模式默认是topic
-          content-type: application/json
-          binder: rabbitmq
-          producer:
-            partitionKeyExpression: payload.id
-            partitionCount: 2
-        rabbit_input:     ##消息接受者
-          destination: myExchange
-          content-type: application/json
-          binder: rabbitmq
-          group: rabbit-server-A   #分组的目的保证只能有一个消费者实例消费消息
-          consumer:
-            partitioned: true     #开启分组功能
         kafka_output:
           destination: shakeHands   #主题--文档中说明
           binder: kafka

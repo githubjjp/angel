@@ -1,4 +1,4 @@
-package com.pingan.stream.Service.kafka;
+package com.pingan.stream.listener;
 
 import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;

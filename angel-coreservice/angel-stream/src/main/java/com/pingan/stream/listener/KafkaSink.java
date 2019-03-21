@@ -1,4 +1,4 @@
-package com.pingan.stream.Service.kafka;
+package com.pingan.stream.listener;
 
 import org.springframework.cloud.stream.annotation.Input;
 import org.springframework.messaging.SubscribableChannel;

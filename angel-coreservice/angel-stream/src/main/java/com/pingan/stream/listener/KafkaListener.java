@@ -1,7 +1,6 @@
 package com.pingan.stream.listener;
 
 import com.pingan.stream.Service.MessageServer;
-import com.pingan.stream.Service.kafka.KafkaSink;
 import com.pingan.stream.common.Content;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
