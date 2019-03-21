@@ -20,7 +20,7 @@ eureka:
     register-with-eureka: false
     fetch-registry: false
     service-url:
-      defaultZone: http://angel:angel@${eureka.instance.hostname}:${server.port}/eureka/
+      defaultZone: http://angel:angel@127.0.0.1:${server.port}/eureka/
   server:
     eviction-interval-timer-in-ms: 4000
     enable-self-preservation: false
