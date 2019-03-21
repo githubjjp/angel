@@ -112,10 +112,8 @@
   	<module>angel-eureka</module>
   	<module>angel-monitor</module>
   	<module>angel-gateway</module>
-  	
 	<module>angel-common</module>
 	<module>angel-coreservice</module>
-	<module>angel-stream</module>
 	<module>angel-auth</module>
   </modules>
   
