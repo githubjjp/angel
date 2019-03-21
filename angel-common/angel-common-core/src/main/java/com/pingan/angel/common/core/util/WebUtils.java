@@ -190,9 +190,8 @@ public class WebUtils extends org.springframework.web.util.WebUtils {
 	@SneakyThrows
 	public static String[] getClientId(ServerHttpRequest request) {
 		String header = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
-
 		if (header == null || !header.startsWith(BASIC_)) {
-			throw new CheckedException("请求头中  client   信息为空   is null");
+			throw new CheckedException("请求头中client信息为空  client is null");
 		}
 		byte[] base64Token = header.substring(6).getBytes("UTF-8");
 		byte[] decoded;

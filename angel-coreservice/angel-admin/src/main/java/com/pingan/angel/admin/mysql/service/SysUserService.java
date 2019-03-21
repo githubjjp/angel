@@ -1,36 +1,28 @@
-/*
- *  Copyright (c) 2019-2020, 冷冷 (wangiegie@gmail.com).
- *  <p>
- *  Licensed under the GNU Lesser General Public License 3.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *  <p>
- * https://www.gnu.org/licenses/lgpl.html
- *  <p>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.pingan.angel.admin.mysql.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.pingan.angel.admin.dto.UserDTO;
-import com.pingan.angel.admin.dto.UserVO;
-import com.pingan.angel.admin.entity.SysUser;
-import com.pingan.angel.admin.util.R;
+import com.pingan.angel.admin.api.dto.UserDTO;
+import com.pingan.angel.admin.api.dto.UserInfo;
+import com.pingan.angel.admin.api.entity.SysUser;
+import com.pingan.angel.admin.api.vo.UserVO;
+import com.pingan.angel.common.core.util.Result;
+
+import java.util.List;
 
 /**
  * @author lengleng
  * @date 2019/2/1
  */
-@SuppressWarnings("rawtypes")
 public interface SysUserService extends IService<SysUser> {
-
+	/**
+	 * 查询用户信息
+	 *
+	 * @param sysUser 用户
+	 * @return userInfo
+	 */
+	UserInfo findUserInfo(SysUser sysUser);
 
 	/**
 	 * 分页查询用户信息（含有角色信息）
@@ -55,7 +47,7 @@ public interface SysUserService extends IService<SysUser> {
 	 * @param userDto 用户信息
 	 * @return Boolean
 	 */
-	R<Boolean> updateUserInfo(UserDTO userDto);
+	Result<Boolean> updateUserInfo(UserDTO userDto);
 
 	/**
 	 * 更新指定用户信息
@@ -73,7 +65,14 @@ public interface SysUserService extends IService<SysUser> {
 	 */
 	UserVO selectUserVoById(Integer id);
 
-	
+	/**
+	 * 查询上级部门的用户信息
+	 *
+	 * @param username 用户名
+	 * @return R
+	 */
+	List<SysUser> listAncestorUsers(String username);
+
 	/**
 	 * 保存用户信息
 	 *

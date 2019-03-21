@@ -23,6 +23,9 @@ public class AngelAuthenticationFailureEvenHandler extends AuthenticationFailure
 	 */
 	@Override
 	public void handle(AuthenticationException authenticationException, Authentication authentication) {
-		log.info("用户：{} 登录失败，异常：{}", authentication.getPrincipal(), authenticationException.getLocalizedMessage());
+		authenticationException.printStackTrace();
+		log.info("用户：{} 登录失败，异常：{}"+authentication.toString(), authentication.getPrincipal(), authenticationException.getLocalizedMessage());
+		authenticationException.getStackTrace();
+		
 	}
 }

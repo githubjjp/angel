@@ -1,13 +1,32 @@
 server:
-  port: 8125
+  port: 8126
 
-# 注册中心
+spring:
+  application:
+    name: angel-auth
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    password: mysql123
+    type: com.zaxxer.hikari.HikariDataSource
+    url: jdbc:mysql://localhost:3306/pig?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Asia/Shanghai
+    username: root
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  redis:
+    host: angel-redis
+    password: ''
+# 注册中心配置
 eureka:
   instance:
     prefer-ip-address: true
   client:
     service-url:
       defaultZone: http://angel:angel@angel-eureka:8123/eureka/
+logging:
+  level:
+    root: debug      
+      
 feign:
   client:
     config:
@@ -34,9 +53,6 @@ hystrix:
           thread:
             timeoutInMilliseconds: 60000
   shareSecurityContext: true
-ignore:
-  clients:
-  - test
 jasypt:
   encryptor:
     password: pig
@@ -61,48 +77,7 @@ ribbon:
   ConnectTimeout: 10000
   ReadTimeout: 10000
 security:
-  encode:
-    key: thanks,pig4cloud
   oauth2:
     resource:
       loadBalanced: true
-      token-info-uri: http://angel-auth/oauth/check_token
-spring:
-  application:
-    name: angel-gateway
-  cloud:
-    gateway:
-      locator:
-        enabled: true
-      routes:
-      - filters:
-        #- ValidateCodeGatewayFilter
-        - PasswordDecoderFilter
-        id: pig-auth
-        predicates:
-        - Path=/auth/**
-        uri: lb://angel-auth
-      - filters:
-        - args:
-            key-resolver: '#{@remoteAddrKeyResolver}'
-            redis-rate-limiter:
-              burstCapacity: 20
-              replenishRate: 10
-          name: RequestRateLimiter
-        - args:
-            fallbackUri: forward:/fallback
-            name: default
-          name: Hystrix
-        id: pig-upms
-        predicates:
-        - Path=/admin/**
-        uri: lb://angel-admin
-  jackson:
-    date-format: yyyy-MM-dd HH:mm:ss
-    time-zone: GMT+8
-  redis:
-    host: angel-redis
-    password: '' 
-logging:
-  level:
-    root: debug 
+      token-info-uri: http://angel-auth/oauth/check_token  

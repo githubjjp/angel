@@ -20,12 +20,11 @@ import reactor.core.publisher.Mono;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.net.URI;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 /**
- * @author lengleng
- * @date 2019/2/1
  * 密码解密工具类
  */
 @SuppressWarnings("rawtypes")
@@ -43,6 +42,9 @@ public class PasswordDecoderFilter extends AbstractGatewayFilterFactory {
 			new IvParameterSpec(pass.getBytes()));
 		byte[] result = aes.decrypt(Base64.decode(data.getBytes(StandardCharsets.UTF_8)));
 		return new String(result, StandardCharsets.UTF_8);
+	}
+	public static void main(String[] args) {
+		System.out.println(URLEncoder.encode(Base64.encode("123456".getBytes(StandardCharsets.UTF_8))));
 	}
 
 	@Override

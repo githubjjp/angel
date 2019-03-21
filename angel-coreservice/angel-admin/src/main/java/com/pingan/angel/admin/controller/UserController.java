@@ -3,6 +3,7 @@ package com.pingan.angel.admin.controller;
 
 import javax.validation.Valid;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,12 +16,14 @@ import org.springframework.web.bind.annotation.RestController;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.pingan.angel.admin.dto.UserDTO;
-import com.pingan.angel.admin.entity.SysConfig;
-import com.pingan.angel.admin.entity.SysUser;
+import com.pingan.angel.admin.api.dto.UserDTO;
+import com.pingan.angel.admin.api.entity.SysConfig;
+import com.pingan.angel.admin.api.entity.SysUser;
 import com.pingan.angel.admin.mogodb.service.SysConfigService;
 import com.pingan.angel.admin.mysql.service.SysUserService;
-import com.pingan.angel.admin.util.R;
+import com.pingan.angel.common.core.util.Result;
+import com.pingan.angel.security.annotation.Inner;
+import com.pingan.angel.security.util.SecurityUtils;
 
 import lombok.AllArgsConstructor;
 
@@ -34,21 +37,20 @@ public class UserController {
 	private  SysUserService userService;
 	
 	private  SysConfigService sysConfigService;
-
 	/**
 	 * 获取当前用户全部信息
 	 *
 	 * @return 用户信息
 	 */
 	@GetMapping(value = {"/info"})
-	public R info() {
-		String username = "admin";
+	public Result info() {
+		String username = SecurityUtils.getUser().getUsername();
 		SysUser user = userService.getOne(Wrappers.<SysUser>query()
 				.lambda().eq(SysUser::getUsername, username));
 		if (user == null) {
-			return new R<>(Boolean.FALSE, "获取当前用户信息失败");
+			return new Result<>(Boolean.FALSE, "获取当前用户信息失败");
 		}
-		return new R<>(userService.selectUserVoById(user.getUserId()));
+		return new Result<>(userService.findUserInfo(user));
 	}
 
 	/**
@@ -56,14 +58,15 @@ public class UserController {
 	 *
 	 * @return 用户信息
 	 */
+	@Inner
 	@GetMapping("/info/{username}")
-	public R info(@PathVariable String username) {
+	public Result info(@PathVariable String username) {
 		SysUser user = userService.getOne(Wrappers.<SysUser>query()
 				.lambda().eq(SysUser::getUsername, username));
 		if (user == null) {
-			return new R<>(Boolean.FALSE, String.format("用户信息为空 %s", username));
+			return new Result<>(Boolean.FALSE, String.format("用户信息为空 %s", username));
 		}
-		return new R<>(userService.selectUserVoById(user.getUserId()));
+		return new Result<>(userService.findUserInfo(user));
 	}
 
 	/**
@@ -73,8 +76,8 @@ public class UserController {
 	 * @return 用户信息
 	 */
 	@GetMapping("/{id}")
-	public R user(@PathVariable Integer id) {
-		return new R<>(userService.selectUserVoById(id));
+	public Result user(@PathVariable Integer id) {
+		return new Result<>(userService.selectUserVoById(id));
 	}
 
 	/**
@@ -84,13 +87,11 @@ public class UserController {
 	 * @return
 	 */
 	@GetMapping("/details/{username}")
-	public R user(@PathVariable String username) {
+	public Result user(@PathVariable String username) {
 		SysUser condition = new SysUser();
 		condition.setUsername(username);
-		return new R<>(userService.getOne(new QueryWrapper<>(condition)));
+		return new Result<>(userService.getOne(new QueryWrapper<>(condition)));
 	}
-	
-	
 
 	/**
 	 * 删除用户信息
@@ -99,9 +100,10 @@ public class UserController {
 	 * @return R
 	 */
 	@DeleteMapping("/{id}")
-	public R userDel(@PathVariable Integer id) {
+	@PreAuthorize("@pms.hasPermission('sys_user_del')")
+	public Result userDel(@PathVariable Integer id) {
 		SysUser sysUser = userService.getById(id);
-		return new R<>(userService.deleteUserById(sysUser));
+		return new Result<>(userService.deleteUserById(sysUser));
 	}
 
 	/**
@@ -111,8 +113,9 @@ public class UserController {
 	 * @return success/false
 	 */
 	@PostMapping
-	public R user(@RequestBody UserDTO userDto) {
-		return new R<>(userService.saveUser(userDto));
+	@PreAuthorize("@pms.hasPermission('sys_user_add')")
+	public Result user(@RequestBody UserDTO userDto) {
+		return new Result<>(userService.saveUser(userDto));
 	}
 
 	/**
@@ -122,8 +125,9 @@ public class UserController {
 	 * @return R
 	 */
 	@PutMapping
-	public R updateUser(@Valid @RequestBody UserDTO userDto) {
-		return new R<>(userService.updateUser(userDto));
+	@PreAuthorize("@pms.hasPermission('sys_user_edit')")
+	public Result updateUser(@Valid @RequestBody UserDTO userDto) {
+		return new Result<>(userService.updateUser(userDto));
 	}
 
 	/**
@@ -134,8 +138,8 @@ public class UserController {
 	 * @return 用户集合
 	 */
 	@GetMapping("/page")
-	public R getUserPage(Page page, UserDTO userDTO) {
-		return new R<>(userService.getUsersWithRolePage(page, userDTO));
+	public Result getUserPage(Page page, UserDTO userDTO) {
+		return new Result<>(userService.getUsersWithRolePage(page, userDTO));
 	}
 
 	/**
@@ -145,14 +149,24 @@ public class UserController {
 	 * @return success/false
 	 */
 	@PutMapping("/edit")
-	public R updateUserInfo(@Valid @RequestBody UserDTO userDto) {
+	public Result updateUserInfo(@Valid @RequestBody UserDTO userDto) {
 		return userService.updateUserInfo(userDto);
 	}
+
+	/**
+	 * @param username 用户名称
+	 * @return 上级部门用户列表
+	 */
+	@GetMapping("/ancestor/{username}")
+	public Result listAncestorUsers(@PathVariable String username) {
+		return new Result<>(userService.listAncestorUsers(username));
+	}
+
 	
 	
 	@GetMapping("/log/{id}")
-	public R getlog(@PathVariable String id) {
-		return new R<>(sysConfigService.getOne(Wrappers.<SysConfig>query()
+	public Result getlog(@PathVariable String id) {
+		return new Result<>(sysConfigService.getOne(Wrappers.<SysConfig>query()
 				.lambda().eq(SysConfig::getVariable, id)));
 	}
 
