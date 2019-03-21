@@ -14,24 +14,14 @@ eureka:
     serviceUrl:
       defaultZone: http://angel:angel@127.0.0.1:8123/eureka/    #注册中心地址，后面可配置服务集群
 spring:
-  datasource:
-    druid:
-      mysql:
-        username: root
-        password: root
-        driver-class-name: com.mysql.jdbc.Driver
-        url: jdbc:mysql://127.0.0.1:3306/angel?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Asia/Shanghai
-        initialSize: 5
-        minIdle: 5
-        maxActive: 20
   data:
     mongodb:    #引入mongodb
-      url: mongodb://root:root@192.168.36.141:27017/angel
+      url: mongodb://root:root@192.168.36.141:27017/test?authSource=admin&connect=replicaSet&readPreference=secondaryPreferred&safe=true&authMechanism=SCRAM-SHA-1&maxPoolSize=500&minPoolSize=10
   application:
     name: angel-stream
   cloud:
     stream:
-      instanceCount: 2   #指定当前的实例数为2
+      instanceCount: 3   #指定当前的实例数为2
       instanceIndex: 0  #实例的索引号,从0开始
       binders:
         rabbitmq:      #这里集成了一个rabbitmq
@@ -53,13 +43,16 @@ spring:
                     binder:
                       brokers: 192.168.36.141:9092
                       zkNodes: 192.168.36.141:2181   #zookeeper的地址
+                      autoAddPartitions: true   # 自动增加分区
+                      autoCreateTopics: false   #禁止自动增加主题
+                      minPartitionCount: 1 #最小分区数是1
       bindings:
         rabbit_output: # 自定义的通道
           destination: myExchange  #exchange名称，交换模式默认是topic
           content-type: application/json
           binder: rabbitmq
           producer:
-            partitionKeyExpression: payload
+            partitionKeyExpression: payload.id
             partitionCount: 2
         rabbit_input:     ##消息接受者
           destination: myExchange
@@ -69,17 +62,17 @@ spring:
           consumer:
             partitioned: true     #开启分组功能
         kafka_output:
-          destination: kafka-Topic   #主题
+          destination: shakeHands   #主题--文档中说明
           binder: kafka
           content-type: application/json
           producer:
             partitionKeyExpression: payload
-            partitionCount: 2 #设置消费分区的数量
+            partitionCount: 1 #设置消费分区的数量
         kafka_input:
-          destination: kafka-Topic   #主题
+          destination: shakeHands   #主题--文档中说明
           content-type: application/json
           binder: kafka
-          group: cloud-kafka-group
+          group: cloud-kafka-group   #设置分组
           autoCommitOffset: false
           consumer:
             partitioned: true  #设置分区

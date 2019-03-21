@@ -48,5 +48,52 @@ public class Content {
      *  MQ类型-kafka
      */
     public static final String MQ_TYPE_2="kafka";
+    /**
+     *  主题-监听设备指令
+     */
+    public static final String TOPIC_TYPE_1="shakeHands";
+    /**
+     * 告警指令
+     */
+    public static final String CMD_21="21";
+    /**
+     * 设备主动上报数据指令
+     */
+    public static final String CMD_22="22";
+    /**
+     * 请求服务器数据指令
+     */
+    public static final String CMD_25="25";
+    /**
+     * 设备上传机器状态指令
+     */
+    public static final String CMD_29="29";
+    /**
+     * 请求升级文件指令
+     */
+    public static final String CMD_32="32";
+    /**
+     * 升级完成状态指令
+     */
+    public static final String CMD_33="33";
+    /**
+     * 定时上报心跳指令
+     */
+    public static final String CMD_34="34";
+    /**
+     * 滤芯复位上报指令
+     */
+    public static final String CMD_35="35";
+    /**
+     * 指令类型-设备主动上报指令
+     */
+    public static final String CMD_STYLE_0="设备上报指令";
+    /**
+     * 指令类型-服务器主动下发指令
+     */
+    public static final String CMD_STYLE_1="服务器下发指令";
+
+
+
 
 }

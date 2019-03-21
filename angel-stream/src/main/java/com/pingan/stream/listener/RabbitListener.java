@@ -24,6 +24,6 @@ public class RabbitListener {
     @StreamListener(RabbitSink.INPUT)
     public void msgToSender(String payload) {
         logger.info("【rabbit-消费者】监听消息::" + payload);
-        messageServer.receiveMsg(payload, Content.MQ_TYPE_1);
+        messageServer.receiveMsg(payload, Content.MQ_TYPE_1,null);
     }
 }

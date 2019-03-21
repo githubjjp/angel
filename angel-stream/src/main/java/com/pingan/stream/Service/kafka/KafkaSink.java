@@ -5,9 +5,9 @@ import org.springframework.messaging.SubscribableChannel;
 
 public interface KafkaSink {
     //输出通道1
-    public static final String INPUT="kafka_input1";
+    public static final String INPUT="kafka_input";
 
     @Input(KafkaSink.INPUT)
     public SubscribableChannel input();
-    
+
 }
