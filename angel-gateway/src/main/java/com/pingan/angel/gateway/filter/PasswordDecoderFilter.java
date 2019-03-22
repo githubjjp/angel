@@ -1,5 +1,22 @@
 package com.pingan.angel.gateway.filter;
 
+import java.net.URI;
+import java.nio.charset.StandardCharsets;
+import java.util.Map;
+
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.gateway.filter.GatewayFilter;
+import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
+import org.springframework.http.server.reactive.ServerHttpRequest;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Component;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import com.pingan.angel.common.core.constant.SecurityConstants;
+
 import cn.hutool.core.codec.Base64;
 import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.StrUtil;
@@ -7,22 +24,8 @@ import cn.hutool.crypto.Mode;
 import cn.hutool.crypto.Padding;
 import cn.hutool.crypto.symmetric.AES;
 import cn.hutool.http.HttpUtil;
-import com.pingan.angel.common.core.constant.SecurityConstants;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cloud.gateway.filter.GatewayFilter;
-import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
-import org.springframework.http.server.reactive.ServerHttpRequest;
-import org.springframework.stereotype.Component;
-import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Mono;
-
-import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.SecretKeySpec;
-import java.net.URI;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-import java.util.Map;
 
 /**
  * 密码解密工具类
@@ -44,7 +47,9 @@ public class PasswordDecoderFilter extends AbstractGatewayFilterFactory {
 		return new String(result, StandardCharsets.UTF_8);
 	}
 	public static void main(String[] args) {
-		System.out.println(URLEncoder.encode(Base64.encode("123456".getBytes(StandardCharsets.UTF_8))));
+		System.out.println(decryptAES("LFEt60GoMTj5/mQQ7HjJeA==","thanks,pig4cloud"));
+		
+		System.out.println(new BCryptPasswordEncoder().matches("123456", "{}$2a$10$RpFJjxYiXdEsAGnWp/8fsOetMuOON96Ntk/Ym2M/RKRyU0GZseaDC"));
 	}
 
 	@Override

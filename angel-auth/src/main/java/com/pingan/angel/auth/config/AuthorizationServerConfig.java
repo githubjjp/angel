@@ -19,10 +19,10 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 import org.springframework.security.oauth2.provider.token.TokenStore;
-import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
 
 import com.pingan.angel.common.core.constant.SecurityConstants;
 import com.pingan.angel.security.component.AngelWebResponseExceptionTranslator;
+import com.pingan.angel.security.config.MyRedisTokenStore;
 import com.pingan.angel.security.service.AngelClientDetailsService;
 
 import lombok.AllArgsConstructor;
@@ -71,7 +71,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
 	@Bean
 	public TokenStore tokenStore() {
-		RedisTokenStore tokenStore = new RedisTokenStore(redisConnectionFactory);
+		MyRedisTokenStore tokenStore = new MyRedisTokenStore(redisConnectionFactory);
 		tokenStore.setPrefix(SecurityConstants.PROJECT_PREFIX + SecurityConstants.OAUTH_PREFIX);
 		return tokenStore;
 	}

@@ -10,11 +10,6 @@ eureka:
       defaultZone: http://angel:angel@angel-eureka:8123/eureka/
       
 feign:
-  client:
-    config:
-      default:
-        connectTimeout: 10000
-        readTimeout: 10000
   compression:
     request:
       enabled: true
@@ -80,7 +75,7 @@ spring:
       - filters:
         #- ValidateCodeGatewayFilter
         - PasswordDecoderFilter
-        id: pig-auth
+        id: angel-auth
         predicates:
         - Path=/auth/**
         uri: lb://angel-auth

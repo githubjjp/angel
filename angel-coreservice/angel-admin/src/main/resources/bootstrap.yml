@@ -31,12 +31,12 @@ security:
   oauth2:
     client:
       id: angel_client_id
-      client-id: angel_client_id
-      client-secret: angel_client_secret
+      client-id: pig
+      client-secret: pig
       scope: server
     resource:
       loadBalanced: true
-      token-info-uri: http://pig-auth/oauth/check_token
+      token-info-uri: http://angel-auth/oauth/check_token
 eureka:
   instance:
     prefer-ip-address: true

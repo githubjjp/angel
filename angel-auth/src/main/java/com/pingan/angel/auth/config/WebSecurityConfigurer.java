@@ -1,7 +1,5 @@
 package com.pingan.angel.auth.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.pingan.angel.security.handler.MobileLoginSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,9 +15,10 @@ import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.pingan.angel.security.handler.MobileLoginSuccessHandler;
+
 /**
- * @author lengleng
- * @date 2019/2/1
  * 认证相关配置
  */
 @Primary
@@ -33,7 +32,6 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 	@Lazy
 	@Autowired
 	private AuthorizationServerTokenServices defaultAuthorizationServerTokenServices;
-
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http

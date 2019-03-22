@@ -1,0 +1,1 @@
+2019-03-22 19:34:47,037 [lettuce-nioEventLoop-4-1] ERROR [c.p.angel.gateway.handler.HystrixFallbackHandler] HystrixFallbackHandler.java:29 - 网关执行请求:[http://angel-gateway:8125/admin/user/info/1, lb://angel-admin:8125/user/info/1]失败,hystrix服务降级处理
