@@ -100,7 +100,6 @@ public class UserController {
 	 * @return R
 	 */
 	@DeleteMapping("/{id}")
-	@PreAuthorize("@pms.hasPermission('sys_user_del')")
 	public Result userDel(@PathVariable Integer id) {
 		SysUser sysUser = userService.getById(id);
 		return new Result<>(userService.deleteUserById(sysUser));
@@ -113,7 +112,6 @@ public class UserController {
 	 * @return success/false
 	 */
 	@PostMapping
-	@PreAuthorize("@pms.hasPermission('sys_user_add')")
 	public Result user(@RequestBody UserDTO userDto) {
 		return new Result<>(userService.saveUser(userDto));
 	}
@@ -125,7 +123,6 @@ public class UserController {
 	 * @return R
 	 */
 	@PutMapping
-	@PreAuthorize("@pms.hasPermission('sys_user_edit')")
 	public Result updateUser(@Valid @RequestBody UserDTO userDto) {
 		return new Result<>(userService.updateUser(userDto));
 	}

@@ -94,7 +94,10 @@ mybatis-plus:
       logic-delete-value: 1
       logic-not-delete-value: 0
       table-underline: true
-  mapper-locations: classpath:/mapper/*Mapper.xml
+  mapper-locations: classpath*:mapper/*Mapper.xml
+logging:
+  level:
+    root: debug
 ribbon:
   ConnectTimeout: 10000
   ReadTimeout: 10000

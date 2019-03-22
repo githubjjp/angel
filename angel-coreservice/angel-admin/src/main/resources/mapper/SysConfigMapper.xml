@@ -4,7 +4,7 @@
 
 <mapper namespace="com.pingan.angel.admin.mapper.SysConfigMapper">
 
-	<resultMap id="sysConfigMap" type="com.pingan.angel.admin.entity.SysConfig">
+	<resultMap id="sysConfigMap" type="com.pingan.angel.admin.api.entity.SysConfig">
 		<id property="variable" column="variable"/>
 		<result property="value" column="value"/>
 		<result property="setTime" column="set_time"/>
