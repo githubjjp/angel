@@ -6,10 +6,7 @@ import com.pingan.stream.listener.KafkaSender;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,7 +24,7 @@ public class MessageController {
      * @return
      */
     @GetMapping("/kafka/sendMsg")
-    public String sendMsg2(@RequestParam("message") String message){
+    public String sendMsg(@RequestParam("message") String message){
         logger.info("------------SenderController-------param:{"+message+"}");
         Map<String,Object> resultMap=new HashMap<String,Object>();
         if(message==null || "".equals(message)){
@@ -45,5 +42,14 @@ public class MessageController {
             resultMap.put("msg",Content.REQ_ERROR_CONTENT);
         }
         return JSON.toJSONString(resultMap);
+    }
+    @GetMapping("/kafka/test/{msg}")
+    public String sendMsg2(@PathVariable String msg){
+        try{
+            this.kafkaSender.sendMsg2(msg);
+        }catch(Exception e){
+            return "error";
+        }
+        return "success";
     }
 }

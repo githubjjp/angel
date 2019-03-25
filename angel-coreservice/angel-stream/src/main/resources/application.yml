@@ -26,7 +26,7 @@ spring:
                   kafka:
                     binder:
                       brokers: 192.168.36.141:9092
-                      zkNodes: 192.168.36.141:2181   #zookeeper的地址
+                      zkNodes: 192.168.36.141:2181,192.168.36.140:2181   #zookeeper集群
                       autoAddPartitions: true   # 自动增加分区
                       autoCreateTopics: false   #禁止自动增加主题
                       minPartitionCount: 1 #最小分区数是1
@@ -43,6 +43,20 @@ spring:
           content-type: application/json
           binder: kafka
           group: cloud-kafka-group   #设置分组
+          consumer:
+            partitioned: true  #设置分区
+        kafka_output2:
+          destination: test   #自定义
+          binder: kafka
+          content-type: application/json
+          producer:
+            partitionKeyExpression: payload
+            partitionCount: 1 #设置消费分区的数量
+        kafka_input2:
+          destination: test   #自定义
+          content-type: application/json
+          binder: kafka
+          group: cloud-kafka-group2   #设置分组
           consumer:
             partitioned: true  #设置分区
 
