@@ -52,7 +52,7 @@ hystrix:
   shareSecurityContext: true
 jasypt:
   encryptor:
-    password: pig
+    password: angel
 management:
   endpoints:
     web:

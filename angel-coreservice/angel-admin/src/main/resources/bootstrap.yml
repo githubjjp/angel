@@ -25,14 +25,14 @@ spring:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
   redis:
-    host: pig-redis
+    host: angel-redis
     password: ''
 security:
   oauth2:
     client:
       id: angel_client_id
-      client-id: pig
-      client-secret: pig
+      client-id: angel
+      client-secret: angel
       scope: server
     resource:
       loadBalanced: true
@@ -77,7 +77,7 @@ ignore:
   - /log/**
 jasypt:
   encryptor:
-    password: pig
+    password: angel
 management:
   endpoints:
     web:

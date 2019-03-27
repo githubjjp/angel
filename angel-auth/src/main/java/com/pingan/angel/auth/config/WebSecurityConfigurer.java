@@ -41,6 +41,7 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 				"/oauth/removeToken",
 				"/oauth/delToken/*",
 				"/oauth/listToken",
+				"/api/**",
 				"/mobile/**").permitAll()
 			.anyRequest().authenticated()
 			.and().csrf().disable();

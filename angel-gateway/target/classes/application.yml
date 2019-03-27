@@ -35,7 +35,7 @@ ignore:
   - test
 jasypt:
   encryptor:
-    password: pig
+    password: angel
 management:
   endpoints:
     web:
@@ -59,7 +59,7 @@ ribbon:
   ReadTimeout: 10000
 security:
   encode:
-    key: thanks,pig4cloud
+    key: pinganbyangel123
   oauth2:
     resource:
       loadBalanced: true
@@ -72,28 +72,40 @@ spring:
       locator:
         enabled: true
       routes:
-      - filters:
-        #- ValidateCodeGatewayFilter
-        - PasswordDecoderFilter
-        id: angel-auth
-        predicates:
+       #认证中心
+      - id: angel-auth
+        uri: lb://angel-auth #  重点！/info必须使用http进行转发，lb代表从注册中心获取服务
+        predicates: #重点！转发该路径！,/auth/**,
         - Path=/auth/**
-        uri: lb://angel-auth
-      - filters:
-        - args:
-            key-resolver: '#{@remoteAddrKeyResolver}'
-            redis-rate-limiter:
-              burstCapacity: 20
-              replenishRate: 10
-          name: RequestRateLimiter
-        - args:
-            fallbackUri: forward:/fallback
-            name: default
-          name: Hystrix
-        id: angel-admin
+        filters:
+          # 验证码处理
+        #- ValidateCodeGatewayFilter
+          # 前端密码解密
+        - PasswordDecoderFilter
+      #UPMS 模块
+      - id: angel-upms
+        uri: lb://angel-upms
         predicates:
         - Path=/admin/**
+        filters:
+          # 限流配置
+        - name: RequestRateLimiter
+          args:
+            key-resolver: '#{@remoteAddrKeyResolver}'
+            redis-rate-limiter.replenishRate: 10
+            redis-rate-limiter.burstCapacity: 20
+          # 降级配置
+        - name: Hystrix
+          args:
+            name: default
+            fallbackUri: 'forward:/fallback'
+        #api 模块
+      - id: angel-api
         uri: lb://angel-admin
+        predicates:
+        - Path=/api/**
+            
+       
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8

@@ -11,7 +11,6 @@ import com.pingan.angel.gateway.handler.HystrixFallbackHandler;
 import com.pingan.angel.gateway.handler.ImageCodeHandler;
 
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author lengleng
