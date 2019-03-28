@@ -36,19 +36,19 @@ public interface CommonConstants {
 	 */
 	String FRONT_END_PROJECT = "angel-ui";
 
-	/**
-	 * 后端工程名
-	 */
-	String BACK_END_PROJECT = "angel";
+    /**
+     * 后端工程名
+     */
+    String BACK_END_PROJECT = "angel";
 
-	/**
-	 * 成功标记
-	 */
-	Integer SUCCESS = 0;
-	/**
-	 * 失败标记
-	 */
-	Integer FAIL = 1;
+    /**
+     * 成功标记
+     */
+    Integer SUCCESS = 0;
+    /**
+     * 失败标记
+     */
+    Integer FAIL = 1;
 
 	/**
 	 * 验证码前缀
