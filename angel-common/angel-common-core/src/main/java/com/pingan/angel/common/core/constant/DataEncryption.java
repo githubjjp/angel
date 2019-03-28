@@ -23,7 +23,7 @@ public class DataEncryption {
 	 */
 	public static String md5(String text, String key){
 		// 加密后的字符串
-		String encodeStr = DigestUtils.md5Hex(text + key);
+		String encodeStr = DigestUtils.md5Hex(text + key).toUpperCase();
 		
 		return encodeStr;
 	}
@@ -78,8 +78,7 @@ public class DataEncryption {
 	}
 
 	/**
-	 * map字段拼接返回String字符串
-	 *
+	 * map字段拼接返回String字符串&key=value&
 	 * @param paraMap
 	 * @return
 	 */
@@ -102,4 +101,6 @@ public class DataEncryption {
 		}
 		return sb.toString().substring(0, sb.toString().length() - 1);
 	}
+
+
 }
