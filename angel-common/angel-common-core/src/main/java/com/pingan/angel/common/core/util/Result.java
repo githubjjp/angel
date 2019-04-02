@@ -53,6 +53,12 @@ public class Result<T> implements Serializable {
 		this.msg = msg;
 	}
 
+	public Result(int code,String msg) {
+		super();
+		this.code = code;
+		this.msg = msg;
+	}
+
 	public Result(Throwable e) {
 		super();
 		this.msg = e.getMessage();

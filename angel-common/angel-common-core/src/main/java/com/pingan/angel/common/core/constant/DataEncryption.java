@@ -7,13 +7,13 @@ import java.util.*;
 
 
 /**
- * 
+ *
  * 	@author zhangquan
  *	@Date 2019-3-18 16:51:28
  *  @Text 加密解密工具
  */
 public class DataEncryption {
-	
+
 	/**
 	 * MD5方法
 	 * @param text 明文
@@ -24,7 +24,7 @@ public class DataEncryption {
 	public static String md5(String text, String key){
 		// 加密后的字符串
 		String encodeStr = DigestUtils.md5Hex(text + key).toUpperCase();
-		
+
 		return encodeStr;
 	}
 
@@ -44,10 +44,9 @@ public class DataEncryption {
 			System.out.println("MD5验证通过");
 			return true;
 		}
-
 		return false;
 	}
-	
+
 	/**
 	 * 拼接参数
 	 * @param splitKey
@@ -56,7 +55,7 @@ public class DataEncryption {
 	 * @return
 	 */
 	public static String splitParameter( String splitKey, Map<String,Object> map, String[] parameterKey){
-		
+
 		StringBuffer strB = new StringBuffer() ;
 		String key = null ;
 		boolean isBlank = false ;
@@ -73,7 +72,7 @@ public class DataEncryption {
 			strB.append( map.get(key) ) ;
 			isBlank = true ;
 		}
-		
+
 		return strB.toString() ;
 	}
 

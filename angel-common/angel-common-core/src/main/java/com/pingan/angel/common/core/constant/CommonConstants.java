@@ -45,11 +45,16 @@ public interface CommonConstants {
      * 成功标记
      */
     Integer SUCCESS = 0;
-    /**
-     * 失败标记
-     */
-    Integer FAIL = 1;
 
+	/**
+	 * 失败标记
+	 */
+	Integer FAIL = 1;
+
+	/**
+	 * 失败标记
+	 */
+	String MD5_JX_FAIL = "MD5解析失败";
 	/**
 	 * 验证码前缀
 	 */
