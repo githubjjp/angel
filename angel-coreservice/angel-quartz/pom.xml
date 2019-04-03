@@ -8,7 +8,7 @@
 		<artifactId>angel-coreservice</artifactId>
 		<version>1.0.0-SNAPSHOT</version>
 	</parent>
-	<artifactId>angel-admin</artifactId>
+	<artifactId>angel-quartz</artifactId>
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
