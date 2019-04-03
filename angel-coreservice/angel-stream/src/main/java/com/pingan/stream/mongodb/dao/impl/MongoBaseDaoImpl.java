@@ -1,6 +1,6 @@
-package com.pingan.stream.dao.mongoDao.impl;
+package com.pingan.stream.mongodb.dao.impl;
 
-import com.pingan.stream.dao.mongoDao.MongoBaseDao;
+import com.pingan.stream.mongodb.dao.MongoBaseDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.mongodb.core.MongoTemplate;

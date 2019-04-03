@@ -40,58 +40,32 @@ public class Content {
      *  请求参数为空-01
      */
     public static final String PARAM_NULL="01";
-    /**
-     *  MQ类型-rabbitMQ
-     */
-    public static final String MQ_TYPE_1="rabbitMQ";
+
     /**
      *  MQ类型-kafka
      */
-    public static final String MQ_TYPE_2="kafka";
+    public static final String MQ_TYPE="kafka";
     /**
      *  主题-监听设备指令
      */
     public static final String TOPIC_TYPE_1="shakeHands";
     /**
-     * 告警指令
+     * 订阅消息-上下线消息
      */
-    public static final String CMD_21="21";
+    public static final String MSTYPE_1="1";
     /**
-     * 设备主动上报数据指令
+     * 订阅消息-普通消息
      */
-    public static final String CMD_22="22";
+    public static final String MSTYPE_0="0";
     /**
-     * 请求服务器数据指令
+     *  指令状态-未处理
      */
-    public static final String CMD_25="25";
+    public static final String DEAL_ORDER_0="0";
     /**
-     * 设备上传机器状态指令
+     * 指令状态-已处理
      */
-    public static final String CMD_29="29";
-    /**
-     * 请求升级文件指令
-     */
-    public static final String CMD_32="32";
-    /**
-     * 升级完成状态指令
-     */
-    public static final String CMD_33="33";
-    /**
-     * 定时上报心跳指令
-     */
-    public static final String CMD_34="34";
-    /**
-     * 滤芯复位上报指令
-     */
-    public static final String CMD_35="35";
-    /**
-     * 指令类型-设备主动上报指令
-     */
-    public static final String CMD_STYLE_0="设备上报指令";
-    /**
-     * 指令类型-服务器主动下发指令
-     */
-    public static final String CMD_STYLE_1="服务器下发指令";
+    public static final String DEAL_ORDER_1="1";
+
 
 
 

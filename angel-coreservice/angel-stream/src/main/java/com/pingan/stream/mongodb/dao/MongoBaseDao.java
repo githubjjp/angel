@@ -1,4 +1,4 @@
-package com.pingan.stream.dao.mongoDao;
+package com.pingan.stream.mongodb.dao;
 
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;

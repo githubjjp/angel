@@ -10,10 +10,11 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>angel-stream</artifactId>
     <dependencies>
-        <!--集成rabbitMq-->
+        <!--upms api、model 模块-->
         <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-stream-rabbit</artifactId>
+            <groupId>com.pingan.angel</groupId>
+            <artifactId>angel-admin-api</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
         </dependency>
 
         <dependency>
@@ -32,11 +33,6 @@
             <artifactId>commons-lang3</artifactId>
             <version>3.7</version>
         </dependency>
-        <!-- 引入kafka-->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-stream-kafka</artifactId>
-        </dependency>
         <dependency>
             <groupId>org.mongodb</groupId>
             <artifactId>bson</artifactId>
@@ -47,21 +43,48 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-mongodb</artifactId>
         </dependency>
-
-
         <dependency>
             <groupId>cglib</groupId>
             <artifactId>cglib</artifactId>
             <version>3.2.10</version>
         </dependency>
-        <!-- 添加servlet-api的依赖 -->
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <version>3.1.0</version>
-            <scope>provided</scope>
-        </dependency>
 
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
+            <version>4.0.25.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.5</version>
+        </dependency>
+        <!--mq客户端日志-->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.0.13</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-core</artifactId>
+            <version>1.0.13</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.7</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpcore</artifactId>
+            <version>4.4.10</version>
+        </dependency>
+        <dependency>
+            <groupId>fmq</groupId>
+            <artifactId>fmq</artifactId>
+            <version>1.0.0</version>
+        </dependency>
 
     </dependencies>
 
