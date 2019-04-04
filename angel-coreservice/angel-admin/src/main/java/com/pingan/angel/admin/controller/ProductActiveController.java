@@ -42,8 +42,7 @@ public class ProductActiveController {
      * @return
      */
     @GetMapping("/geInfo")
-    public Result geInfo(@PathVariable Integer id, @PathVariable String customerSuperCode,
-                         @PathVariable String barcodeId, @PathVariable String logisticsCode,
+    public Result geInfo(@PathVariable Integer id, @PathVariable String snCode,
                          @PathVariable String sign) {
 
         // md5解密比对
@@ -136,15 +135,15 @@ public class ProductActiveController {
 
 
     /**
-     *
      * 用水量查询
+     *
      * @param id
      * @return
      */
     @GetMapping("/useWaterInfo")
     public Result useWaterInfo(@PathVariable Integer id, @PathVariable String customerSuperCode,
-                              @PathVariable String barcodeId, @PathVariable String logisticsCode,
-                              @PathVariable String sign) {
+                               @PathVariable String barcodeId, @PathVariable String logisticsCode,
+                               @PathVariable String sign) {
 
         // md5解密比对
 

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @AllArgsConstructor
-@RequestMapping("/client")
+@RequestMapping("/registerInfo")
 public class ProductRegisterController {
 
     private String productId = "";
