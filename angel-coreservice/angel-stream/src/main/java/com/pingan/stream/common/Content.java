@@ -41,14 +41,7 @@ public class Content {
      */
     public static final String PARAM_NULL="01";
 
-    /**
-     *  MQ类型-kafka
-     */
-    public static final String MQ_TYPE="kafka";
-    /**
-     *  主题-监听设备指令
-     */
-    public static final String TOPIC_TYPE_1="shakeHands";
+
     /**
      * 订阅消息-上下线消息
      */
@@ -65,6 +58,14 @@ public class Content {
      * 指令状态-已处理
      */
     public static final String DEAL_ORDER_1="1";
+    /**
+     *  100-上线
+     */
+    public static final String IS_ONLINE="100";
+    /**
+     *  101-下线
+     */
+    public static final String IS_NOT_ONLINE="101";
 
 
 
