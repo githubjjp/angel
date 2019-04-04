@@ -15,7 +15,7 @@ spring:
     username: root
     password: admin
 eureka:
-    client:
+  client:
     serviceUrl:
       defaultZone: http://angel:angel@127.0.0.1:8123/eureka/
     register-with-eureka: true
