@@ -1,7 +1,0 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.pingan.angel.common.core.config.JacksonConfig,\
-  com.pingan.angel.common.core.config.RedisConfig,\
-  com.pingan.angel.common.core.config.RestTemplateConfig,\
-  com.pingan.angel.common.core.config.FilterIgnorePropertiesConfig,\
-  com.pingan.angel.common.core.exception.GlobalExceptionHandler,\
-  com.pingan.angel.common.core.util.SpringContextHolder
