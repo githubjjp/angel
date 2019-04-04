@@ -1,0 +1,22 @@
+#server:
+#  port: 12741
+
+mybatis:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  mapper-locations: classpath*:mappers/*Mapper.xml
+
+spring:
+  application:
+    name: angel-qctest
+  data:
+    mongodb:    #引入mongodb
+      url: mongodb://root:root@192.168.36.141:27017/test?authSource=admin&connect=replicaSet&readPreference=secondaryPreferred&safe=true&authMechanism=SCRAM-SHA-1&maxPoolSize=500&minPoolSize=10
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://angel:angel@127.0.0.1:8123/eureka/
+    register-with-eureka: true
+    fetch-registry: true
+
