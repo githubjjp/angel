@@ -1,8 +1,11 @@
 package com.pingan.angel.admin.api.mongodb;
 
+import lombok.Data;
+
 /**
  *  下发指令对象
  */
+@Data
 public class OrderDownloadEntity{
     private int operateType;//cmd=17    d10x01:冲洗   0x02:开机 0x04:关机 0x08:锁机 0x10:预留 0x20:预留 0x40:预留 0x80:预留
     private String systemTime;//cmd=18  yyyy-MM-dd HH:mm:ss  对应 d1-d6

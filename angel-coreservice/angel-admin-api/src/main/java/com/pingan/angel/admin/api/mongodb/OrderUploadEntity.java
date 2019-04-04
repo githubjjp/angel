@@ -1,8 +1,11 @@
 package com.pingan.angel.admin.api.mongodb;
 
+import lombok.Data;
+
 /**
  * 设备主动上报指令对象
  */
+@Data
 public class OrderUploadEntity{
     /*
       cmd=21   故障代码 对应  d1
