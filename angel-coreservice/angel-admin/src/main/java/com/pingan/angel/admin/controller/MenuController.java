@@ -1,33 +1,22 @@
 package com.pingan.angel.admin.controller;
 
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import javax.validation.Valid;
-
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.pingan.angel.admin.api.dto.MenuTree;
 import com.pingan.angel.admin.api.entity.SysMenu;
 import com.pingan.angel.admin.api.vo.MenuVO;
 import com.pingan.angel.admin.api.vo.TreeUtil;
-import com.pingan.angel.admin.mysql.service.SysLogService;
-import com.pingan.angel.admin.mysql.service.SysMenuService;
+import com.pingan.angel.admin.service.mysql.service.SysMenuService;
 import com.pingan.angel.common.core.constant.CommonConstants;
 import com.pingan.angel.common.core.util.Result;
-
 import lombok.AllArgsConstructor;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author lengleng

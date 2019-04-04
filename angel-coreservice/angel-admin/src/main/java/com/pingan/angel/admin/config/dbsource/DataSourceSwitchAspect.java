@@ -14,11 +14,11 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class DataSourceSwitchAspect {
 
-    @Pointcut("execution(* com.pingan.angel.admin.mysql.service..*.*(..))")
+    @Pointcut("execution(* com.pingan.angel.admin.service.mysql.service..*.*(..))")
     private void mysqlAspect() {
     }
 
-    @Pointcut("execution(* com.pingan.angel.admin.mogodb.service..*.*(..))")
+    @Pointcut("execution(* com.pingan.angel.admin.service.mongodb.service..*.*(..))")
     private void mongodbAspect() {
     }
 

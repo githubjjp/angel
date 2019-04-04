@@ -1,31 +1,21 @@
 
 package com.pingan.angel.admin.controller;
 
-import javax.validation.Valid;
-
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.pingan.angel.admin.api.dto.UserDTO;
 import com.pingan.angel.admin.api.entity.SysConfig;
 import com.pingan.angel.admin.api.entity.SysUser;
-import com.pingan.angel.admin.mogodb.service.SysConfigService;
-import com.pingan.angel.admin.mysql.service.SysUserService;
+import com.pingan.angel.admin.service.mongodb.service.SysConfigService;
+import com.pingan.angel.admin.service.mysql.service.SysUserService;
 import com.pingan.angel.common.core.util.Result;
 import com.pingan.angel.security.annotation.Inner;
 import com.pingan.angel.security.util.SecurityUtils;
-
 import lombok.AllArgsConstructor;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 /**
  * @date 2019/2/1
@@ -34,9 +24,9 @@ import lombok.AllArgsConstructor;
 @RequestMapping("/user")
 @AllArgsConstructor
 public class UserController {
-	private  SysUserService userService;
+	private SysUserService userService;
 	
-	private  SysConfigService sysConfigService;
+	private SysConfigService sysConfigService;
 	/**
 	 * 获取当前用户全部信息
 	 *
