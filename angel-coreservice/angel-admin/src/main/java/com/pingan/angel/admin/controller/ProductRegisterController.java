@@ -1,6 +1,5 @@
 package com.pingan.angel.admin.controller;
 
-import com.pingan.angel.admin.mysql.service.SysOauthClientDetailsService;
 import com.pingan.angel.common.core.constant.DataEncryption;
 import com.pingan.angel.common.core.util.Result;
 import com.pingan.stream.Service.IotHubService;
