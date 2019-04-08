@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.pingan.angel.admin.mapper.qc.QCTestSuccessMapper">
+
+    <!-- 通过整机码查询产测通过整机码记录 -->
+    <select id="findBySnCode" resultType="com.pingan.angel.admin.api.dto.QCtestSuccess">
+        select
+    </select>
+
+</mapper>

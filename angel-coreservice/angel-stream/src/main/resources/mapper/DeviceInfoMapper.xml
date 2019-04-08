@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pingan.stream.mysql.mapper.DeviceInfoMapper">
+    <resultMap id="ResultData" type="com.pingan.stream.entity.mysql.DeviceEntity">
+        <id property="id" column="id" />
+        <result property="snCode" column="sn_code"/>
+        <result property="deviceId" column="device_id"/>
+        <result property="customerSuperCode" column="customer_super_code"/>
+        <result property="barcodeId" column="barcode_id"/>
+        <result property="activeId" column="active_id"/>
+        <result property="customerSn" column="customer_sn"/>
+        <result property="isActivation" column="is_activation"/>
+        <result property="isProductTest" column="is_product_test"/>
+        <result property="isOnline" column="is_online"/>
+        <result property="isOnlineDate" column="is_online_date"/>
+        <result property="wifiOrGprs" column="wifi_or_gprs"/>
+        <result property="createdTime" column="created_time"/>
+        <result property="createdBy" column="created_by"/>
+        <result property="updatedTime" column="updated_time"/>
+        <result property="updatedBy" column="updated_by"/>
+        <result property="deviceSecret" column="device_secret"/>
+    </resultMap>
+    <!--更新设备上下线时间-->
+    <update id="updateOnlineStatus" parameterType="java.util.Map">
+        update t_device_info
+        <set>
+            <if test="isOnline != null">is_online=#{isOnline},</if>
+            <if test="isOnlineDate != null">is_online_date=#{isOnlineDate},</if>
+        </set>
+        where barcode_id=#{barcodeId}
+    </update>
+    <!--查询设备在线状态 -->
+    <select id="queryDeviceOnline" parameterType="java.lang.String" resultType="java.util.Map">
+       select
+           device_id as deviceId,
+           is_online as isOnline,
+           is_online_date as isOnlineDate,
+           sn_code as snCode
+      from t_device_info
+      where device_id =#{deviceId}
+    </select>
+    <!--根据设备ID查询设备状态 -->
+    <select id="findByDeviceId" parameterType="java.util.Map" resultMap="ResultData">
+       select
+           id,sn_code,device_id,customer_super_code,barcode_id,active_id,customer_sn,
+           is_activation,is_product_test,is_online,is_online_date,wifi_or_gprs,created_time,
+           created_by,updated_time,updated_by,device_secret
+      from t_device_info
+      where 1=1
+        <if test="deviceId !=null">
+            and device_id =#{deviceId}
+        </if>
+        <if test="barcodeId !=null">
+            and barcode_id =#{barcodeId}
+        </if>
+
+    </select>
+
+</mapper>
+
+
