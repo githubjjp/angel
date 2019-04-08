@@ -1,15 +1,15 @@
 package com.pingan.angel.admin.api.mysql;
 
+import java.io.Serializable;
+import java.util.Date;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 
-import java.util.Date;
-
 /**
- * 设备信息表
+ * 设备对象(设备表)
  */
 @Data
-public class DeviceEntity extends BaseEntity{
+public class DeviceEntity extends BaseEntity implements Serializable {
     @Id
     private Long id;
     private String snCode;//物流码/整机码

@@ -5,7 +5,7 @@ import com.pingan.angel.admin.api.mongodb.QcTestSuccessDeviceEntity;
 /**
  * 产测通过服务
  */
-public interface QCTestSuccessServcie {
+public interface QcTestSuccessServcie {
 
     /**
      * 使用整机码查询产测通过整机码记录

@@ -1,10 +1,9 @@
 package com.pingan.angel.qctest.controller;
 
-import com.pingan.angel.qctest.service.QCDeviceDispatchService;
+import com.pingan.angel.qctest.service.QcDeviceDispatchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
@@ -14,10 +13,10 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/webapi/qc/")
-public class QCapiController {
+public class QcapiController {
 
     @Autowired
-    private QCDeviceDispatchService service;
+    private QcDeviceDispatchService service;
 
 
     /**
@@ -25,7 +24,7 @@ public class QCapiController {
      * @param snCode
      * @return
      */
-    @RequestMapping(value = "/isTestSuccess",method = RequestMethod.GET)
+    @RequestMapping(value = "/isTestSuccess",method = RequestMethod.POST)
     public Map<String,Object> isTestSuccess(String snCode){
         return service.isTestSuccess(snCode);
     }
@@ -37,10 +36,10 @@ public class QCapiController {
      * @param isWifi    是否wifi网络
      * @return
      */
-//    @RequestMapping(value = "/scanTest",method = RequestMethod.GET)
-//    public Map<String,Object> scanTest(String snCode,String mac,@RequestParam(required = false,defaultValue = "true") boolean isWifi){
-//        return service.scanTest(snCode,isWifi,mac);
-//    }
+    @RequestMapping(value = "/scanTest",method = RequestMethod.POST)
+    public Map<String,Object> scanTest(String snCode,String mac,boolean isWifi){
+        return service.scanTest(snCode,isWifi,mac);
+    }
 
     /**
      * 重新产测
