@@ -5,4 +5,10 @@ import com.pingan.angel.common.core.mongodb.MongoBaseDao;
 
 public interface QcTestSuccessDao extends MongoBaseDao<QcTestSuccessDeviceEntity> {
 
+    /**
+     * 根据整机码查询产测通过整机码记录
+     * @param snCode
+     * @return
+     */
+    QcTestSuccessDeviceEntity findBySnCode(String snCode);
 }
