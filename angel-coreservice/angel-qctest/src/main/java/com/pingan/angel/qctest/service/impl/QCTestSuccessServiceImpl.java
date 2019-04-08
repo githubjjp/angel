@@ -22,7 +22,6 @@ public class QCTestSuccessServiceImpl implements QCTestSuccessServcie {
     @Override
     public QcTestSuccessDeviceEntity findBySnCode(String snCode) {
 //        return qcTestSuccessDao.findBySnCode(snCode);
-        return null;
-//        return qcTestSuccessDao.findOne(Query.query(Criteria.where("snCode")));
+        return qcTestSuccessDao.findOne(Query.query(Criteria.where("snCode").is(snCode)));
     }
 }
