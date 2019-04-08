@@ -1,6 +1,6 @@
 package com.pingan.angel.qctest.service;
 
-import com.pingan.angel.admin.api.dto.QCtestSuccess;
+import com.pingan.angel.admin.api.mongodb.QcTestSuccessDeviceEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +22,7 @@ public class QCDeviceDispatchService {
      * @return
      */
     public Map<String, Object> isTestSuccess(String snCode) {
-        QCtestSuccess qcSuccessEntity = qcTestSuccessServcie.findBySnCode(snCode);
+        QcTestSuccessDeviceEntity qcSuccessEntity = qcTestSuccessServcie.findBySnCode(snCode);
         //无论产测是否通过都要去查询到对应的配件码
 
         return null;

@@ -14,7 +14,7 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
-import org.springframework.data.redis.core.RedisTemplate;
+//import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
@@ -30,7 +30,8 @@ import reactor.core.publisher.Mono;
 @AllArgsConstructor
 public class ValidateCodeGatewayFilter extends AbstractGatewayFilterFactory {
 	private final ObjectMapper objectMapper;
-	private final RedisTemplate redisTemplate;
+	//FIXME 改为mongodb
+	//private final RedisTemplate redisTemplate;
 	private final FilterIgnorePropertiesConfig filterIgnorePropertiesConfig;
 
 	@Override
@@ -97,27 +98,27 @@ public class ValidateCodeGatewayFilter extends AbstractGatewayFilterFactory {
 		}
 
 		String key = CommonConstants.DEFAULT_CODE_KEY + randomStr;
-		if (!redisTemplate.hasKey(key)) {
-			throw new ValidateCodeException("验证码不合法");
-		}
-
-		Object codeObj = redisTemplate.opsForValue().get(key);
-
-		if (codeObj == null) {
-			throw new ValidateCodeException("验证码不合法");
-		}
-
-		String saveCode = codeObj.toString();
-		if (StrUtil.isBlank(saveCode)) {
-			redisTemplate.delete(key);
-			throw new ValidateCodeException("验证码不合法");
-		}
-
-		if (!StrUtil.equals(saveCode, code)) {
-			redisTemplate.delete(key);
-			throw new ValidateCodeException("验证码不合法");
-		}
-
-		redisTemplate.delete(key);
+//		if (!redisTemplate.hasKey(key)) {
+//			throw new ValidateCodeException("验证码不合法");
+//		}
+//
+//		Object codeObj = redisTemplate.opsForValue().get(key);
+//
+//		if (codeObj == null) {
+//			throw new ValidateCodeException("验证码不合法");
+//		}
+//
+//		String saveCode = codeObj.toString();
+//		if (StrUtil.isBlank(saveCode)) {
+//			redisTemplate.delete(key);
+//			throw new ValidateCodeException("验证码不合法");
+//		}
+//
+//		if (!StrUtil.equals(saveCode, code)) {
+//			redisTemplate.delete(key);
+//			throw new ValidateCodeException("验证码不合法");
+//		}
+//
+//		redisTemplate.delete(key);
 	}
 }

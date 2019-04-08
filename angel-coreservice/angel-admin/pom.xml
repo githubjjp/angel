@@ -25,22 +25,8 @@
 			<artifactId>angel-security</artifactId>
 			<version>1.0.0-SNAPSHOT</version>
 		</dependency>
-		<!--配置中心客户端-->
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-config</artifactId>
-		</dependency>
-		<!--mybatis-->
-		<dependency>
-			<groupId>com.baomidou</groupId>
-			<artifactId>mybatis-plus-boot-starter</artifactId>
-			<version>${mybatis-plus.version}</version>
-		</dependency>
-		<!--数据库-->
-		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-		</dependency>
+
+
 		<!--web 模块-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -59,12 +45,7 @@
 			<artifactId>spring-boot-starter-undertow</artifactId>
 		</dependency>
 		
-		<!--import druid -->
-		<dependency>
-			<groupId>com.alibaba</groupId>
-			<artifactId>druid-spring-boot-starter</artifactId>
-			<version>1.1.10</version>
-		</dependency>
+
 		<dependency>
 			<groupId>com.pingan.angel</groupId>
 			<artifactId>angel-stream</artifactId>

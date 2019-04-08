@@ -2,8 +2,16 @@ package com.pingan.angel.qctest.util;
 
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.IndexOptions;
+import com.mongodb.client.model.Indexes;
+import org.bson.BsonDocument;
+import org.bson.codecs.configuration.CodecRegistry;
+import org.bson.conversions.Bson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.mongodb.core.index.Index;
+
+import java.util.concurrent.TimeUnit;
 
 public class MongoHelper {
 
@@ -50,6 +58,7 @@ public class MongoHelper {
         try {
             // 连接到数据库
             mongoDataBase = getMongoDataBase(getMongoClient());
+            mongoDataBase.getCollection("a").createIndex(Indexes.text("date"),new IndexOptions().expireAfter(60*60L, TimeUnit.SECONDS));
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -13,10 +13,6 @@ spring:
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
-  redis:
-    host: 127.0.0.1
-    port: 6379
-    password: ''
 # 注册中心配置
 eureka:
   instance:
@@ -69,7 +65,7 @@ mybatis-plus:
       logic-delete-value: 1
       logic-not-delete-value: 0
       table-underline: true
-  mapper-locations: classpath:/mapper/*Mapper.xml
+  mapper-locations: classpath:/dao/*Mapper.xml
 ribbon:
   ConnectTimeout: 10000
   ReadTimeout: 10000
