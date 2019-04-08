@@ -1,7 +1,9 @@
 package com.pingan.angel.admin.api.mongodb;
 
 import lombok.Data;
+import org.springframework.data.mongodb.core.mapping.Document;
 
+@Document(collection = "QcDeviceUnionInfoEntity")
 @Data
 public class QcDeviceUnionInfoEntity extends BaseMongoEntity {
 
