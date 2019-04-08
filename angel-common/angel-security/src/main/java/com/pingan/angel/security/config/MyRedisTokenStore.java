@@ -1,3 +1,4 @@
+/*
 package com.pingan.angel.security.config;
 
 
@@ -20,6 +21,7 @@ import org.springframework.security.oauth2.provider.token.store.redis.JdkSeriali
 import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStoreSerializationStrategy;
 import org.springframework.stereotype.Component;
  
+*/
 /**
  * <Description> 重写tokenStore .因为最新版中RedisTokenStore的set已经被弃用了，
  * 所以我就只能自定义一个，代码和RedisTokenStore一样，
@@ -31,7 +33,8 @@ import org.springframework.stereotype.Component;
  * @taskId <br>
  * @CreateDate Create in 10:59 2018/2/13
  * @since V1.0<br>
- */
+ *//*
+
 @Component
 public class MyRedisTokenStore implements TokenStore {
     private static final String ACCESS = "access:";
@@ -399,3 +402,4 @@ public class MyRedisTokenStore implements TokenStore {
     }
  
 }
+*/

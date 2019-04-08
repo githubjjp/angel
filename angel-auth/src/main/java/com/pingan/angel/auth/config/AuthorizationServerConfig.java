@@ -1,9 +1,10 @@
+/*
 package com.pingan.angel.auth.config;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.sql.DataSource;
+import javax.sql.DataSource;S
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,11 +28,13 @@ import com.pingan.angel.security.service.AngelClientDetailsService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 
+*/
 /**
  * @author lengleng
  * @date 2019/2/1
  * 认证服务器配置
- */
+ *//*
+
 @Configuration
 @AllArgsConstructor
 @EnableAuthorizationServer
@@ -88,3 +91,4 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 		};
 	}
 }
+*/
