@@ -6,6 +6,8 @@
     <groupId>com.pingan.angel</groupId>
     <artifactId>angel</artifactId>
     <version>1.0.0-SNAPSHOT</version>
+      <relativePath>../../angel</relativePath>
+
   </parent>
   <artifactId>angel-monitor</artifactId>
   <name>angel-monitor</name>

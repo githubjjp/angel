@@ -6,6 +6,8 @@
     <groupId>com.pingan.angel</groupId>
     <artifactId>angel-common</artifactId>
     <version>1.0.0-SNAPSHOT</version>
+	  <relativePath>../../angel-common</relativePath>
+
   </parent>
   <artifactId>angel-common-core</artifactId>
   <name>angel-common-core</name>

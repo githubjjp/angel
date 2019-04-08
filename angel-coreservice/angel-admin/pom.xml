@@ -8,6 +8,8 @@
 		<groupId>com.pingan.angel</groupId>
 		<artifactId>angel-coreservice</artifactId>
 		<version>1.0.0-SNAPSHOT</version>
+		<relativePath>../../angel-coreservice</relativePath>
+
 	</parent>
 	<artifactId>angel-admin</artifactId>
 	<name>angel-admin</name>
