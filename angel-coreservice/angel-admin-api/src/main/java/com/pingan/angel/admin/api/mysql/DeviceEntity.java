@@ -1,11 +1,12 @@
 package com.pingan.angel.admin.api.mysql;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 设备对象
+ * 设备对象(设备表)
  */
-public class DeviceEntity {
+public class DeviceEntity implements Serializable {
     private String id;
     private String snCode;//物流码/整机码
     private String deviceId;//设备ID

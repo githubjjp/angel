@@ -1,18 +1,18 @@
 package com.pingan.angel.qctest.service.impl;
 
 import com.pingan.angel.admin.api.mongodb.QcTestSuccessDeviceEntity;
-import com.pingan.angel.qctest.dao.QCTestSuccessDao;
-import com.pingan.angel.qctest.service.QCTestSuccessServcie;
+import com.pingan.angel.qctest.dao.QcTestSuccessDao;
+import com.pingan.angel.qctest.service.QcTestSuccessServcie;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 @Service("qcTestSuccessService")
-public class QCTestSuccessServiceImpl implements QCTestSuccessServcie {
+public class QcTestSuccessServiceImpl implements QcTestSuccessServcie {
 
     @Autowired
-    private QCTestSuccessDao qcTestSuccessDao;
+    private QcTestSuccessDao qcTestSuccessDao;
 
     /**
      * 通过整机码查询产测通过整机码记录
@@ -21,7 +21,6 @@ public class QCTestSuccessServiceImpl implements QCTestSuccessServcie {
      */
     @Override
     public QcTestSuccessDeviceEntity findBySnCode(String snCode) {
-//        return qcTestSuccessDao.findBySnCode(snCode);
         return qcTestSuccessDao.findOne(Query.query(Criteria.where("snCode").is(snCode)));
     }
 }
