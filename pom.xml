@@ -7,10 +7,8 @@
   <version>1.0.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
-
-	<name>angel</name>
+  <name>angel</name>
   <url>http://maven.apache.org</url>
-
 
   <properties>
 		<spring-boot.version>2.0.8.RELEASE</spring-boot.version>
