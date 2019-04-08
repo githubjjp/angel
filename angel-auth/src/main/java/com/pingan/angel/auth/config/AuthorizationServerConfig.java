@@ -7,7 +7,6 @@ import javax.sql.DataSource;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -26,6 +25,7 @@ import com.pingan.angel.security.config.MyRedisTokenStore;
 import com.pingan.angel.security.service.AngelClientDetailsService;
 
 import lombok.AllArgsConstructor;
+import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 
 /**
  * @author lengleng
@@ -39,7 +39,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	private final DataSource dataSource;
 	private final UserDetailsService userDetailsService;
 	private final AuthenticationManager authenticationManager;
-	private final RedisConnectionFactory redisConnectionFactory;
+	//private final RedisConnectionFactory redisConnectionFactory;
 
 	@Override
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
@@ -71,9 +71,11 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
 	@Bean
 	public TokenStore tokenStore() {
-		MyRedisTokenStore tokenStore = new MyRedisTokenStore(redisConnectionFactory);
-		tokenStore.setPrefix(SecurityConstants.PROJECT_PREFIX + SecurityConstants.OAUTH_PREFIX);
-		return tokenStore;
+//		MyRedisTokenStore tokenStore = new MyRedisTokenStore(redisConnectionFactory);
+//		tokenStore.setPrefix(SecurityConstants.PROJECT_PREFIX + SecurityConstants.OAUTH_PREFIX);
+//		return tokenStore;
+
+		return new JdbcTokenStore(dataSource);
 	}
 
 	@Bean

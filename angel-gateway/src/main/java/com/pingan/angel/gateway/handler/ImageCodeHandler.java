@@ -5,7 +5,7 @@ import com.pingan.angel.common.core.constant.CommonConstants;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ByteArrayResource;
-import org.springframework.data.redis.core.RedisTemplate;
+//import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -31,7 +31,7 @@ import java.util.concurrent.TimeUnit;
 @AllArgsConstructor
 public class ImageCodeHandler implements HandlerFunction<ServerResponse> {
 	private final Producer producer;
-	private final RedisTemplate redisTemplate;
+	//private final RedisTemplate redisTemplate;
 
 	@Override
 	public Mono<ServerResponse> handle(ServerRequest serverRequest) {
@@ -41,7 +41,7 @@ public class ImageCodeHandler implements HandlerFunction<ServerResponse> {
 
 		//保存验证码信息
 		String randomStr = serverRequest.queryParam("randomStr").get();
-		redisTemplate.opsForValue().set(CommonConstants.DEFAULT_CODE_KEY + randomStr, text, 60, TimeUnit.SECONDS);
+		//redisTemplate.opsForValue().set(CommonConstants.DEFAULT_CODE_KEY + randomStr, text, 60, TimeUnit.SECONDS);
 
 		// 转换流信息写出
 		FastByteArrayOutputStream os = new FastByteArrayOutputStream();

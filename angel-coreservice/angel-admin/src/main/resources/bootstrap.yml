@@ -4,23 +4,14 @@ spring:
   application:
     name: angel-admin 
   datasource:
-    druid:
-      mysql:
-        username: root
-        password: mysql123
-        driver-class-name: com.mysql.jdbc.Driver
-        url: jdbc:mysql://pig-mysql:3306/pig?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Asia/Shanghai
-        initialSize: 5
-        minIdle: 5
-        maxActive: 20
-      mongodb:
-        username: root
-        password: mysql123
-        driver-class-name: com.mysql.jdbc.Driver
-        url: jdbc:mysql://pig-mysql:3306/sys?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Asia/Shanghai
-        initialSize: 5
-        minIdle: 5
-        maxActive: 20
+    mysql:
+      username: root
+      password: mysql123
+      driver-class-name: com.mysql.jdbc.Driver
+      url: jdbc:mysql://pig-mysql:3306/pig?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Asia/Shanghai
+      initialSize: 5
+      minIdle: 5
+      maxActive: 20
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
@@ -94,7 +85,7 @@ mybatis-plus:
       logic-delete-value: 1
       logic-not-delete-value: 0
       table-underline: true
-  mapper-locations: classpath*:mapper/*Mapper.xml
+  mapper-locations: classpath*:dao/*Mapper.xml
 logging:
   level:
     root: debug

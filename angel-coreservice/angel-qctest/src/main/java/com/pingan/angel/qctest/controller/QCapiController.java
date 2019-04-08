@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Map;
 
 /**
- * 产测api接口
+ * 产测api接口调度
  */
 @RestController
 @RequestMapping("/webapi/qc/")
