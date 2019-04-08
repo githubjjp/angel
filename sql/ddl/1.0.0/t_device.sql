@@ -46,7 +46,7 @@ CREATE TABLE `t_device_status` (
   `updated_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '最后修改时间',
   `updated_by` varchar(32) DEFAULT NULL COMMENT '最后修改人',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 ###设备滤芯状态信息表
@@ -95,7 +95,7 @@ CREATE TABLE `t_device_filter_element` (
   `report_hour_filter_count10` int(11) DEFAULT NULL COMMENT '第10个滤芯上报剩余时长',
   `report_flow_filter_count10` double DEFAULT NULL COMMENT '第10个滤芯上报剩余流量',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 ###设备故障信息表
 DROP TABLE IF EXISTS `t_device_error`;
@@ -113,4 +113,4 @@ CREATE TABLE `t_device_error` (
   `updated_time` datetime DEFAULT NULL COMMENT '修改时间',
   `updated_by` varchar(50) DEFAULT NULL COMMENT '修改人',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
