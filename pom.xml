@@ -108,14 +108,14 @@
 	</dependencyManagement>
 	
 
-<!--  <modules>
+  <modules>
   	<module>angel-eureka</module>
   	<module>angel-monitor</module>
   	<module>angel-gateway</module>
 	<module>angel-common</module>
 	<module>angel-coreservice</module>
 	<module>angel-auth</module>
-  </modules>-->
+  </modules>
   
   <build>
 		<finalName>${project.name}</finalName>
