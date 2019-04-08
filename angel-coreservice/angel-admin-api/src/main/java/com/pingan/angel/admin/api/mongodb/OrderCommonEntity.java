@@ -2,7 +2,6 @@ package com.pingan.angel.admin.api.mongodb;
 
 import lombok.Data;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.Map;
 @Data
@@ -12,6 +11,7 @@ public class OrderCommonEntity extends BaseMongoEntity{
     private Map<String,Object> data;
     private String deviceId; //设备id
     private String barcodeId;//配件码
+    private String snCode;//整机码/物流码
     private int flage;//起始标志  默认242
     private String version;// 版本
     private String versionName;//协议名称
@@ -24,6 +24,7 @@ public class OrderCommonEntity extends BaseMongoEntity{
     private String IMEI;//默认为经纬度，CMD=28时候，为IMEI号
     private String cmdText;//指令说明
     private String json;//原始指令
+    private long timestamp;//指令上报的时间戳
 
 
 }

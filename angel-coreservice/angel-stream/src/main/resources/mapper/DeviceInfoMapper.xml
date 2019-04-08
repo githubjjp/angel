@@ -50,8 +50,8 @@
         <if test="deviceId !=null">
             and device_id =#{deviceId}
         </if>
-        <if test="barcodeId !=null">
-            and barcode_id =#{barcodeId}
+        <if test="snCode !=null">
+            and sn_code =#{snCode}
         </if>
 
     </select>
