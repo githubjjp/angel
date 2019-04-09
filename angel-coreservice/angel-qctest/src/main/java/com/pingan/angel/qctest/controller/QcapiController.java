@@ -1,5 +1,6 @@
 package com.pingan.angel.qctest.controller;
 
+import com.pingan.angel.admin.api.entity.ApiResult;
 import com.pingan.angel.qctest.service.QcDeviceDispatchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +22,7 @@ public class QcapiController {
 
     /**
      * 查询是否产测成功
-     * @param snCode
+     * @param snCode 整机码
      * @return
      */
     @RequestMapping(value = "/isTestSuccess",method = RequestMethod.POST)
@@ -43,36 +44,45 @@ public class QcapiController {
 
     /**
      * 重新产测
-     * @param snCode
+     * @param snCode 整机码
      * @return
      */
-    @RequestMapping(value = "/reQcDevice",method = RequestMethod.GET)
+    @RequestMapping(value = "/reQcDevice",method = RequestMethod.POST)
     public Map<String,Object> reQcDevice(String snCode){
         return service.reQcDevice(snCode);
     }
 
     /**
-     * 获取设备实时数据
-     * @param id
+     * 设备设置工作模式
+     * @param deviceId 设备id
+     * @param barcodeId 配件码
      * @return
      */
-//    @RequestMapping(value = "/getData",method = RequestMethod.GET)
-//    public Map<String,Object> getData(String id){
-//        QcDeviceHistoryEntity testHistory = service.findTestHistory(id);
-//        return WebApiResult.success(JClassUtil.copyTo(testHistory,new QcHistoryVo()));
-//    }
+    @RequestMapping(value = "/setMod",method = RequestMethod.POST)
+    public Map<String,Object> setMod(String deviceId,String barcodeId){
+        return service.setMod(deviceId, barcodeId);
+    }
+
+    /**
+     * 获取产测记录设备实时数据
+     * @param historyId 产测记录id
+     * @return
+     */
+    @RequestMapping(value = "/getData",method = RequestMethod.POST)
+    public Map<String,Object> getData(String historyId){
+        return service.findTestHistory(historyId);
+    }
 
     /**
      * 设备关机
-     * @param deviceId
-     * @param barcodeId
+     * @param deviceId 设备id
+     * @param barcodeId 配件码
      * @return
      */
-//    @RequestMapping(value = "/shutdownDevice",method = RequestMethod.GET)
-//    public Map<String,Object> shutdownDevice(String deviceId,String barcodeId){
-//        boolean b = service.shutdownDevice(deviceId, barcodeId);
-//        return b?WebApiResult.success(null):WebApiResult.error("关机失败，请稍后再试");
-//    }
+    @RequestMapping(value = "/shutdownDevice",method = RequestMethod.POST)
+    public Map<String,Object> shutdownDevice(String deviceId,String barcodeId){
+        return service.handleDevice(deviceId, barcodeId,1);
+    }
 
     /**
      * 设备开机
@@ -80,21 +90,10 @@ public class QcapiController {
      * @param barcodeId
      * @return
      */
-//    @RequestMapping(value = "/startupDevice",method = RequestMethod.GET)
-//    public Map<String,Object> startupDevice(String deviceId,String barcodeId){
-//        boolean b = service.startupDevice(deviceId, barcodeId);
-//        return b?WebApiResult.success(null):WebApiResult.error("开机失败，请稍后再试");
-//    }
-
-    /**
-     * 查询设备当前状态
-     * @param snCode
-     * @return
-     */
-//    @RequestMapping(value = "/deviceStatus",method = RequestMethod.GET)
-//    public Map<String,Object> deviceStatus(String snCode){
-//        return service.deviceStatus(snCode);
-//    }
+    @RequestMapping(value = "/startupDevice",method = RequestMethod.GET)
+    public Map<String,Object> startupDevice(String deviceId,String barcodeId){
+        return service.handleDevice(deviceId, barcodeId,2);
+    }
 
     /**
      * 冲洗设备
@@ -102,23 +101,10 @@ public class QcapiController {
      * @param barcodeId
      * @return
      */
-//    @RequestMapping(value = "/washDevice",method = RequestMethod.GET)
-//    public Map<String,Object> washDevice(String deviceId,String barcodeId){
-//        boolean b = service.washDevice(deviceId, barcodeId);
-//        return b?WebApiResult.success(null):WebApiResult.error("清洗失败，请稍后再试");
-//    }
-
-    /**
-     * 设备设置工作模式
-     * @param deviceId
-     * @param barcodeId
-     * @return
-     */
-//    @RequestMapping(value = "/setMod",method = RequestMethod.GET)
-//    public Map<String,Object> setMod(String deviceId,String barcodeId){
-//        boolean b = service.setMod(deviceId, barcodeId);
-//        return b?WebApiResult.success(null):WebApiResult.error("测试模式设置失败，请稍后再试");
-//    }
+    @RequestMapping(value = "/washDevice",method = RequestMethod.GET)
+    public Map<String,Object> washDevice(String deviceId,String barcodeId){
+        return service.handleDevice(deviceId, barcodeId,3);
+    }
 
     /**
      * 结束产测，提交产测

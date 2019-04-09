@@ -18,4 +18,11 @@ public class QcDeviceServiceimpl implements QcDeviceService {
     public QcDeviceEntity findBySnCode(String snCode) {
         return qcDeviceDao.findOne(Query.query(Criteria.where("snCode").is(snCode)));
     }
+
+    @Override
+    public QcDeviceEntity findByBarCodeId(String barcodeId) {
+        return qcDeviceDao.findOne(Query.query(Criteria.where("barcodeId").is(barcodeId)));
+    }
+
+
 }
