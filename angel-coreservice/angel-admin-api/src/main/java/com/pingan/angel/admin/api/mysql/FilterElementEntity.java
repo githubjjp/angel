@@ -12,6 +12,7 @@ import java.util.Date;
 public class FilterElementEntity {
     @Id
     private Long id;//主键   关联设备状态表的filterElementId 字段
+    private String deviceId;//设备id
     private double configTotalFlowFilterCount1;//第1个滤芯的配置总流量值（固定）
     private Date invalidDateFilter1;//第1个滤芯的失效时间（固定）
     private int reportHourFilterCount1;//第1个滤芯上报剩余时长
