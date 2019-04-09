@@ -13,4 +13,6 @@ public interface QcTestSuccessServcie {
      * @return
      */
     QcTestSuccessDeviceEntity findBySnCode(String snCode);
+
+    void deleteBySnCode(String snCode);
 }

@@ -46,10 +46,10 @@ public class QcapiController {
      * @param snCode
      * @return
      */
-//    @RequestMapping(value = "/reQcDevice",method = RequestMethod.GET)
-//    public Map<String,Object> reQcDevice(String snCode){
-//        return service.reQcDevice(snCode);
-//    }
+    @RequestMapping(value = "/reQcDevice",method = RequestMethod.GET)
+    public Map<String,Object> reQcDevice(String snCode){
+        return service.reQcDevice(snCode);
+    }
 
     /**
      * 获取设备实时数据
