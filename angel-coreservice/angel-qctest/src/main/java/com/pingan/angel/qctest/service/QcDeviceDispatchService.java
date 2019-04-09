@@ -49,6 +49,9 @@ public class QcDeviceDispatchService {
      * @return
      */
     public Map<String, Object> isTestSuccess(String snCode) {
+        if(StringUtils.isEmpty(snCode)){
+            return ApiResult.error("参数为空，请重试");
+        }
         QcTestSuccessDeviceEntity qcSuccessEntity = qcTestSuccessServcie.findBySnCode(snCode);
         //无论产测是否通过都要去查询到对应的配件码
         QcDeviceUnionInfoEntity unionEntity = deviceUnionInfoService.findBySnCode(snCode);
@@ -79,6 +82,9 @@ public class QcDeviceDispatchService {
      * @return
      */
     public Map<String, Object> reQcDevice(String snCode) {
+        if(StringUtils.isEmpty(snCode)){
+            return ApiResult.error("参数为空，请重试");
+        }
         QcTestSuccessDeviceEntity successDevice = qcTestSuccessServcie.findBySnCode(snCode);
         if (successDevice != null) {
             if(StringUtils.isEmpty(successDevice.getDeviceId())){
@@ -105,6 +111,12 @@ public class QcDeviceDispatchService {
      * @return
      */
     public Map<String,Object> setMod(String deviceId, String barcodeId) {
+        if(StringUtils.isEmpty(barcodeId)){
+            return ApiResult.error("参数为空，请重试");
+        }
+        if(StringUtils.isEmpty(deviceId)){
+            return ApiResult.error("参数为空，请重试");
+        }
         //通过配件码查询产测设备表，查看是否认证成功
         QcDeviceEntity qcDevice = qcDeviceService.findByBarCodeId(barcodeId);
         if (qcDevice==null || !qcDevice.isAuthorization()){
@@ -140,6 +152,12 @@ public class QcDeviceDispatchService {
      * @return
      */
     public Map<String, Object> handleDevice(String deviceId, String barcodeId,int type) {
+        if(StringUtils.isEmpty(deviceId)){
+            return ApiResult.error("操作失败，请重新尝试");
+        }
+        if(StringUtils.isEmpty(barcodeId)){
+            return ApiResult.error("操作失败，请重新尝试");
+        }
         String handleType = null;
         switch (type){
             case 1:
@@ -167,6 +185,9 @@ public class QcDeviceDispatchService {
      * @return
      */
     public Map<String, Object> findTestHistory(String historyId) {
+        if(StringUtils.isEmpty(historyId)){
+            return ApiResult.error("操作失败，请重新尝试");
+        }
         QcDeviceHistoryEntity qcDeviceHistory = qcDeviceHistoryService.findById(historyId);
         if(!qcDeviceHistory.isRealTime()){
             //通过cmd命令向iot发送获取实时记录
