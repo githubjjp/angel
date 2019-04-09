@@ -23,4 +23,11 @@ public class QcTestSuccessServiceImpl implements QcTestSuccessServcie {
     public QcTestSuccessDeviceEntity findBySnCode(String snCode) {
         return qcTestSuccessDao.findOne(Query.query(Criteria.where("snCode").is(snCode)));
     }
+
+    @Override
+    public void deleteBySnCode(String snCode) {
+        QcTestSuccessDeviceEntity successDeviceEntity = new QcTestSuccessDeviceEntity();
+        successDeviceEntity.setId(snCode);
+        qcTestSuccessDao.deleteById(successDeviceEntity);
+    }
 }
