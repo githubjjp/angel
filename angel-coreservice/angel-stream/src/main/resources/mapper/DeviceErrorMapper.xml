@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pingan.stream.mysql.mapper.DeviceErrorMapper">
+    <resultMap id="ResultData" type="com.pingan.angel.admin.api.mysql.DeviceErrorEntity">
+        <id property="id" column="id" />
+        <result property="snCode" column="sn_code"/>
+        <result property="deviceId" column="device_id"/>
+        <result property="lastPostTime" column="last_post_time"/>
+        <result property="faultCode" column="fault_code"/>
+        <result property="isDeal" column="is_deal"/>
+        <result property="faultContent" column="fault_content"/>
+        <result property="userId" column="user_id"/>
+        <result property="protectCode" column="protect_code"/>
+        <result property="protectContent" column="protect_content"/>
+        <result property="createdTime" column="created_time"/>
+        <result property="createdBy" column="created_by"/>
+        <result property="updatedTime" column="updated_time"/>
+        <result property="updatedBy" column="updated_by"/>
+    </resultMap>
+
+    <select id="findByDeviceId" parameterType="java.lang.String" resultMap="ResultData">
+        select
+            id,sn_code,device_id,last_post_time,fault_code,is_deal,fault_content,
+            user_id,protect_code,protect_content
+        from t_device_error
+        where device_id=#{deviceId}
+    </select>
+
+
+</mapper>
+
+

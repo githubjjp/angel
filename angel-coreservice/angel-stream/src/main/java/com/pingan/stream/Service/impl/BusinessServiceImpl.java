@@ -7,12 +7,17 @@ import com.pingan.angel.admin.api.mongodb.ErrorLogEntity;
 import com.pingan.angel.admin.api.mongodb.QcDeviceLogEntity;
 import com.pingan.angel.admin.api.mongodb.QcTestSuccessDeviceEntity;
 import com.pingan.angel.admin.api.mysql.DeviceEntity;
+import com.pingan.angel.admin.api.mysql.DeviceErrorEntity;
 import com.pingan.angel.admin.api.mysql.DeviceStatusEntity;
 import com.pingan.angel.admin.api.mysql.FilterElementEntity;
 import com.pingan.stream.Service.BusinessService;
+import com.pingan.stream.Service.IssueCmdService;
 import com.pingan.stream.common.CmdCommon;
 import com.pingan.stream.common.Content;
-import com.pingan.stream.mongodb.dao.*;
+import com.pingan.stream.mongodb.dao.DeviceLogDao;
+import com.pingan.stream.mongodb.dao.ErrorLogDao;
+import com.pingan.stream.mongodb.dao.QcDeviceLogDao;
+import com.pingan.stream.mongodb.dao.QcTestSuccessDeviceDao;
 import com.pingan.stream.mysql.mapper.DeviceErrorMapper;
 import com.pingan.stream.mysql.mapper.DeviceInfoMapper;
 import com.pingan.stream.mysql.mapper.DeviceStatusMapper;
@@ -33,22 +38,18 @@ import java.util.*;
 @PropertySource("classpath:iot.properties")
 public class BusinessServiceImpl implements BusinessService {
     private static Logger logger= LoggerFactory.getLogger(BusinessServiceImpl.class);
-    @Autowired
-    private DeviceInfoMapper deviceInfoMapper; //设备基本信息操作
     @Value("${iot.product.key}")
     private String productKey;   //产品key
     @Value("${iot.test.url}")
     private String iotUrl;       //iot url
     @Autowired
+    private DeviceInfoMapper deviceInfoMapper; //设备基本信息操作
+    @Autowired
     private QcTestSuccessDeviceDao qcTestSuccessDeviceDao;  //产测成功记录操作
     @Autowired
     private QcDeviceLogDao qcDeviceLogDao;   //产测上报日志操作
     @Autowired
-    private QcControlLogDao qcControlLogDao;//产测控制下发日志操作
-    @Autowired
     private DeviceLogDao deviceLogDao;//非产测设备上报日志操作
-    @Autowired
-    private DeviceControlLogDao deviceControlLogDao;//非产测控制下发日志操作
     @Autowired
     private ErrorLogDao errorLogDao;//故障上报日志
     @Autowired
@@ -57,6 +58,8 @@ public class BusinessServiceImpl implements BusinessService {
     private DeviceErrorMapper deviceErrorMapper;//设备故障信息操作
     @Autowired
     private FilterElementMapper filterElementMapper;//滤芯状态操作
+    @Autowired
+    private IssueCmdService issueCmdService;  //下发指令入口
 
 
 
@@ -102,25 +105,7 @@ public class BusinessServiceImpl implements BusinessService {
         return deviceInfoMapper.queryDeviceOnline(deviceId);
     }
 
-    @Override
-    public String issueCmd16(String deviceId, String barcodeId) {
-        return null;
-    }
 
-    @Override
-    public String issueCmd17(String deviceId, String barcodeId, String type) {
-        return null;
-    }
-
-    @Override
-    public String issueCmd18(String deviceId, String barcodeId) {
-        return null;
-    }
-
-    @Override
-    public String issueCmd20(String deviceId, String barcodeId, String type) {
-        return null;
-    }
 
     @Override
     public Map<String, Object> getConnectionStr(String deviceId) {
@@ -179,66 +164,6 @@ public class BusinessServiceImpl implements BusinessService {
         String analysisResult=null;
         logger.info("上报指令解析后的数据::"+analysisResult);
         resolve(analysisResult,deviceId);
-    }
-
-    /**
-     * 上报指令的业务处理
-     * @param json
-     * @param deviceId
-     */
-    private void resolve(String json,String deviceId){
-        JSONObject jsonData=JSONObject.parseObject(json);
-        int cmd=(Integer)jsonData.get("cmd");
-        if(cmd==22){    //同步滤芯数据到设备状态表
-            //设备基本状态信息
-            DeviceStatusEntity status=new DeviceStatusEntity();
-            status.setDeviceId(deviceId);
-            status.setInTemperature(jsonData.getDoubleValue("inTemperature"));//进水水温
-            status.setInTds(jsonData.getIntValue("inTds"));//进水tds
-            status.setOutTds(jsonData.getIntValue("outTds"));//出水tds
-            status.setOutTemperature(jsonData.getDoubleValue("outTemperature"));//出水温度
-            status.setCmd(jsonData.getIntValue("cmd"));//cmd
-            status.setTotalCleanWater(jsonData.getDoubleValue("totalCleanWater"));//总纯水量
-            //status.setTotalUsedWater();
-            status.setTotalWater(jsonData.getDoubleValue("totalWater"));//总水量
-            status.setReportTime(jsonData.getDate("reportTime"));//最后一次上报时间
-            //滤芯设置
-            FilterElementEntity filter=new FilterElementEntity();
-            filter.setDeviceId(deviceId);
-            filter.setReportFlowFilterCount1(jsonData.getDoubleValue("reportFlowFilterCount1"));//滤芯1剩余流量
-            filter.setReportHourFilterCount1(jsonData.getIntValue("reportHourFilterCount1"));//滤芯1剩余时长
-            filter.setReportFlowFilterCount2(jsonData.getDoubleValue("reportFlowFilterCount2"));//滤芯2剩余流量
-            filter.setReportHourFilterCount2(jsonData.getIntValue("reportHourFilterCount2"));//滤芯2剩余时长
-            filter.setReportFlowFilterCount3(jsonData.getDoubleValue("reportFlowFilterCount3"));//滤芯3剩余流量
-            filter.setReportHourFilterCount3(jsonData.getIntValue("reportHourFilterCount3"));//滤芯3剩余时长
-            filter.setReportFlowFilterCount4(jsonData.getDoubleValue("reportFlowFilterCount4"));//滤芯4剩余流量
-            filter.setReportHourFilterCount4(jsonData.getIntValue("reportHourFilterCount4"));//滤芯4剩余时长
-            filter.setReportFlowFilterCount5(jsonData.getDoubleValue("reportFlowFilterCount5"));//滤芯5剩余流量
-            filter.setReportHourFilterCount5(jsonData.getIntValue("reportHourFilterCount5"));//滤芯5剩余时长
-
-            Map<String,Object> paramMap=new HashMap<>();
-            paramMap.put("deviceId",deviceId);
-            DeviceStatusEntity statusDtoOne=deviceStatusMapper.findByCondition(paramMap);
-            if(statusDtoOne !=null){
-                deviceStatusMapper.update(status);
-                logger.info("设备状态基本信息更新ok.");
-                filterElementMapper.update(filter);
-                logger.info("设备滤芯状态信息更新ok.");
-            }else{
-                deviceStatusMapper.insert(status);
-                logger.info("设备状态基本信息新增ok.");
-                filterElementMapper.insert(filter);
-                logger.info("设备滤芯状态信息新增ok.");
-            }
-        }else if(cmd==25){ //请求服务器数据指令
-
-        }else if(cmd==29){   //设备上传机器状态
-
-        }else if(cmd==32){   //请求升级文件指令
-
-        }else if(cmd==35){   //滤芯复位上报指令
-
-        }
     }
 
     /**
@@ -326,31 +251,124 @@ public class BusinessServiceImpl implements BusinessService {
         //保存故障上报日志
         if(cmd==21){
             int d1=(Integer)originMap.get("d1");//故障代码  0x0000: 无故障
-            //int d2=(Integer)originMap.get("d2");//保护代码  0x0000: 无保护
-             if(d1 !=0x0000){
-                 ErrorLogEntity one=new ErrorLogEntity();
-                 one.setDeviceId(deviceId);
-                 one.setBarcodeId(String.valueOf(originMap.get("barcodeid")));
-                 one.setJson(content);
-                 one.setTimestamp(timestamp);
-                 one.setLen((Integer)originMap.get("len"));
-                 one.setFlage((Integer)originMap.get("flag"));
-                 one.setCreateTime(new Date());
-                 one.setCreateUser("system");
-                 one.setVersion(String.valueOf(originMap.get("version")));
-                 one.setIMEI(String.valueOf(originMap.get("addr")));//当cmd=28的时候表示IMIO号,默认是经纬度
-                 one.setAddr(String.valueOf(originMap.get("addr")));
-                 one.setGprs(String.valueOf(originMap.get("gprs")));
-                 one.setCmd(cmd);
-                 one.setCmdText(CmdCommon.cmd_text_map.get(cmd));
-                 one.setData(getDynamicMap(originMap));
-                 one.setSnCode(snCode);
-                 ErrorLogEntity ss=errorLogDao.save(one);
-                 logger.info("故障日志保存Ok..."+ss.getId());
-             }
+            int d2=(Integer)originMap.get("d2");//保护代码  0x0000: 无保护
+            if(d1 !=0x0000){
+                //mongodb操作
+                ErrorLogEntity one=new ErrorLogEntity();
+                one.setDeviceId(deviceId);
+                one.setBarcodeId(String.valueOf(originMap.get("barcodeid")));
+                one.setJson(content);
+                one.setTimestamp(timestamp);
+                one.setLen((Integer)originMap.get("len"));
+                one.setFlage((Integer)originMap.get("flag"));
+                one.setCreateTime(new Date());
+                one.setCreateUser("system");
+                one.setVersion(String.valueOf(originMap.get("version")));
+                one.setIMEI(String.valueOf(originMap.get("addr")));//当cmd=28的时候表示IMIO号,默认是经纬度
+                one.setAddr(String.valueOf(originMap.get("addr")));
+                one.setGprs(String.valueOf(originMap.get("gprs")));
+                one.setCmd(cmd);
+                one.setCmdText(CmdCommon.cmd_text_map.get(cmd));
+                one.setData(getDynamicMap(originMap));
+                one.setSnCode(snCode);
+                ErrorLogEntity ss=errorLogDao.save(one);
+                logger.info("故障日志保存 mongodb  Ok..."+ss.getId());
+            }
+            //mysql操作
+            DeviceErrorEntity error=new DeviceErrorEntity();
+            error.setDeviceId(deviceId);
+            error.setSnCode(snCode);
+            error.setFaultCode(d1);
+            error.setFaultContent(CmdCommon.CMD_FAULT_CONTENT.get(d1));
+            error.setProtectCode(d2);
+            error.setProtectContent(CmdCommon.CMD_PROTECT_CONTENT.get(d2));
+            if(d1 ==0x0000 && d2==0x0000){
+                error.setIsDeal("Y");//设备正常
+            }else{
+                error.setIsDeal("N");//设备故障
+            }
+            error.setLastPostTime(new Date(timestamp));
+            DeviceErrorEntity errorOne=deviceErrorMapper.findByDeviceId(deviceId);
+            if(errorOne !=null){
+                error.setId(errorOne.getId());
+                deviceErrorMapper.updateById(error);
+                logger.info("设备故障信息更新mysql   ok.");
+            }else{
+                deviceErrorMapper.insert(error);
+                logger.info("设备故障信息新增mysql   ok.");
+            }
         }
         return false;
     }
+
+    /**
+     * 上报指令的业务处理
+     * @param json
+     * @param deviceId
+     */
+    private void resolve(String json,String deviceId){
+        JSONObject jsonData=JSONObject.parseObject(json);
+        int cmd=(Integer)jsonData.get("cmd");
+        if(cmd==22){    //同步滤芯数据到设备状态表
+            //设备基本状态信息
+            DeviceStatusEntity status=new DeviceStatusEntity();
+            status.setDeviceId(deviceId);
+            status.setInTemperature(jsonData.getDoubleValue("inTemperature"));//进水水温
+            status.setInTds(jsonData.getIntValue("inTds"));//进水tds
+            status.setOutTds(jsonData.getIntValue("outTds"));//出水tds
+            status.setOutTemperature(jsonData.getDoubleValue("outTemperature"));//出水温度
+            status.setCmd(jsonData.getIntValue("cmd"));//cmd
+            status.setTotalCleanWater(jsonData.getDoubleValue("totalCleanWater"));//总纯水量
+            //status.setTotalUsedWater();
+            status.setTotalWater(jsonData.getDoubleValue("totalWater"));//总水量
+            status.setReportTime(jsonData.getDate("reportTime"));//最后一次上报时间
+            //滤芯设置
+            FilterElementEntity filter=new FilterElementEntity();
+            filter.setDeviceId(deviceId);
+            filter.setReportFlowFilterCount1(jsonData.getDoubleValue("reportFlowFilterCount1"));//滤芯1剩余流量
+            filter.setReportHourFilterCount1(jsonData.getIntValue("reportHourFilterCount1"));//滤芯1剩余时长
+            filter.setReportFlowFilterCount2(jsonData.getDoubleValue("reportFlowFilterCount2"));//滤芯2剩余流量
+            filter.setReportHourFilterCount2(jsonData.getIntValue("reportHourFilterCount2"));//滤芯2剩余时长
+            filter.setReportFlowFilterCount3(jsonData.getDoubleValue("reportFlowFilterCount3"));//滤芯3剩余流量
+            filter.setReportHourFilterCount3(jsonData.getIntValue("reportHourFilterCount3"));//滤芯3剩余时长
+            filter.setReportFlowFilterCount4(jsonData.getDoubleValue("reportFlowFilterCount4"));//滤芯4剩余流量
+            filter.setReportHourFilterCount4(jsonData.getIntValue("reportHourFilterCount4"));//滤芯4剩余时长
+            filter.setReportFlowFilterCount5(jsonData.getDoubleValue("reportFlowFilterCount5"));//滤芯5剩余流量
+            filter.setReportHourFilterCount5(jsonData.getIntValue("reportHourFilterCount5"));//滤芯5剩余时长
+
+            DeviceStatusEntity statusDtoOne=deviceStatusMapper.findByDeviceId(deviceId);
+            FilterElementEntity filterOne=filterElementMapper.findByDeviceId(deviceId);
+            if(statusDtoOne !=null){
+                status.setId(statusDtoOne.getId());
+                deviceStatusMapper.updateById(status);
+                logger.info("设备状态基本信息更新ok.");
+                filter.setId(filterOne.getId());
+                filterElementMapper.updateById(filter);
+                logger.info("设备滤芯状态信息更新ok.");
+            }else{
+                deviceStatusMapper.insert(status);
+                logger.info("设备状态基本信息新增ok.");
+                filterElementMapper.insert(filter);
+                logger.info("设备滤芯状态信息新增ok.");
+            }
+        }else if(cmd==25){ //请求服务器数据指令
+            int d1=jsonData.getIntValue("d1");
+            String barcodeId=jsonData.getString("barcodeid");//配件码
+            if(d1==1){   //请求校时指令
+                issueCmdService.issueCmd18(deviceId,barcodeId);
+            }else{       //滤芯数据下发指令
+                issueCmdService.issueCmd30(deviceId,barcodeId);
+            }
+        }else if(cmd==29){   //设备上传机器状态
+
+        }else if(cmd==32){   //请求升级文件指令
+
+        }else if(cmd==35){   //滤芯复位上报指令
+
+        }
+    }
+
+
 
 
 
@@ -370,6 +388,8 @@ public class BusinessServiceImpl implements BusinessService {
         }
         return map;
     }
+
+
 
 
 

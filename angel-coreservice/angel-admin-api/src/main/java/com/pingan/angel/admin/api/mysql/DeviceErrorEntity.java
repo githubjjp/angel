@@ -19,4 +19,6 @@ public class DeviceErrorEntity extends BaseEntity{
     private String isDeal;//设备状态，Y恢复，N故障
     private String faultContent;//故障说明
     private String userId;//用户id
+    private int protectCode;//保护代码
+    private String protectContent;//保护代码说明
 }

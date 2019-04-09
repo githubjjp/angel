@@ -1,19 +1,16 @@
 package com.pingan.stream.mysql.mapper;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.pingan.angel.admin.api.mysql.DeviceErrorEntity;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface DeviceErrorMapper {
-    /**
-     * 新增
-     * @param dto
-     */
-    public void insert(DeviceErrorEntity dto);
+public interface DeviceErrorMapper extends BaseMapper<DeviceErrorEntity> {
 
     /**
-     * 更新
-     * @param dto
+     * 查询设备故障信息
+     * @param deviceId
+     * @return
      */
-    public void update(DeviceErrorEntity dto);
+    public DeviceErrorEntity findByDeviceId(String deviceId);
 }

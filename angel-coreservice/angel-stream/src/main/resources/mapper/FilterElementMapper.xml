@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pingan.stream.mysql.mapper.FilterElementMapper">
+    <resultMap id="ResultData" type="com.pingan.angel.admin.api.mysql.FilterElementEntity">
+        <id property="id" column="id" />
+        <result property="deviceId" column="device_id"/>
+        <result property="configTotalFlowFilterCount1" column="config_total_flow_filter_count1"/>
+        <result property="invalidDateFilter1" column="invalid_date_filter1"/>
+        <result property="reportHourFilterCount1" column="report_hour_filter_count1"/>
+        <result property="reportFlowFilterCount1" column="report_flow_filter_count1"/>
+        <result property="configTotalFlowFilterCount2" column="config_total_flow_filter_count2"/>
+        <result property="invalidDateFilter2" column="invalid_date_filter2"/>
+        <result property="reportHourFilterCount2" column="report_hour_filter_count2"/>
+        <result property="reportFlowFilterCount2" column="report_flow_filter_count2"/>
+        <result property="configTotalFlowFilterCount3" column="config_total_flow_filter_count3"/>
+        <result property="invalidDateFilter3" column="invalid_date_filter3"/>
+        <result property="reportHourFilterCount3" column="report_hour_filter_count3"/>
+        <result property="reportFlowFilterCount3" column="report_flow_filter_count3"/>
+        <result property="configTotalFlowFilterCount4" column="config_total_flow_filter_count4"/>
+        <result property="invalidDateFilter4" column="invalid_date_filter4"/>
+        <result property="reportHourFilterCount4" column="report_hour_filter_count4"/>
+        <result property="reportFlowFilterCount4" column="report_flow_filter_count4"/>
+        <result property="configTotalFlowFilterCount5" column="config_total_flow_filter_count5"/>
+        <result property="invalidDateFilter5" column="invalid_date_filter5"/>
+        <result property="reportHourFilterCount5" column="report_hour_filter_count5"/>
+        <result property="reportFlowFilterCount5" column="report_flow_filter_count5"/>
+        <result property="configTotalFlowFilterCount6" column="config_total_flow_filter_count6"/>
+        <result property="invalidDateFilter6" column="invalid_date_filter6"/>
+        <result property="reportHourFilterCount6" column="report_hour_filter_count6"/>
+        <result property="reportFlowFilterCount6" column="report_flow_filter_count6"/>
+        <result property="configTotalFlowFilterCount7" column="config_total_flow_filter_count7"/>
+        <result property="invalidDateFilter7" column="invalid_date_filter7"/>
+        <result property="reportHourFilterCount7" column="report_hour_filter_count7"/>
+        <result property="reportFlowFilterCount7" column="report_flow_filter_count7"/>
+        <result property="configTotalFlowFilterCount8" column="config_total_flow_filter_count8"/>
+        <result property="invalidDateFilter8" column="invalid_date_filter8"/>
+        <result property="reportHourFilterCount8" column="report_hour_filter_count8"/>
+        <result property="reportFlowFilterCount8" column="report_flow_filter_count8"/>
+        <result property="configTotalFlowFilterCount9" column="config_total_flow_filter_count9"/>
+        <result property="invalidDateFilter9" column="invalid_date_filter9"/>
+        <result property="reportHourFilterCount9" column="report_hour_filter_count9"/>
+        <result property="reportFlowFilterCount9" column="report_flow_filter_count9"/>
+        <result property="configTotalFlowFilterCount10" column="config_total_flow_filter_count10"/>
+        <result property="invalidDateFilter10" column="invalid_date_filter10"/>
+        <result property="reportHourFilterCount10" column="report_hour_filter_count10"/>
+        <result property="reportFlowFilterCount10" column="report_flow_filter_count10"/>
+        <result property="createdTime" column="created_time"/>
+        <result property="createdBy" column="created_by"/>
+        <result property="updatedTime" column="updated_time"/>
+        <result property="updatedBy" column="updated_by"/>
+    </resultMap>
+
+    <select id="findByDeviceId" parameterType="java.lang.String" resultMap="ResultData">
+        select
+            id,device_id,config_total_flow_filter_count1,invalid_date_filter1,report_hour_filter_count1,report_flow_filter_count1,
+            config_total_flow_filter_count2,invalid_date_filter2,report_hour_filter_count2,report_flow_filter_count2,
+            config_total_flow_filter_count3,invalid_date_filter3,report_hour_filter_count3,report_flow_filter_count3,
+            config_total_flow_filter_count4,invalid_date_filter4,report_hour_filter_count4,report_flow_filter_count4,
+            config_total_flow_filter_count5,invalid_date_filter5,report_hour_filter_count5,report_flow_filter_count5,
+            config_total_flow_filter_count6,invalid_date_filter6,report_hour_filter_count6,report_flow_filter_count6,
+            config_total_flow_filter_count7,invalid_date_filter7,report_hour_filter_count7,report_flow_filter_count7,
+            config_total_flow_filter_count8,invalid_date_filter8,report_hour_filter_count8,report_flow_filter_count8,
+            config_total_flow_filter_count9,invalid_date_filter9,report_hour_filter_count9,report_flow_filter_count9,
+            config_total_flow_filter_count10,invalid_date_filter10,report_hour_filter_count10,report_flow_filter_count10
+        from t_device_filter_element
+        where device_id=#{deviceId}
+    </select>
+</mapper>
+
+

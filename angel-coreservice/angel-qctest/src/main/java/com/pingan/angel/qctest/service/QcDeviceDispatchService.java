@@ -16,7 +16,7 @@ import java.util.Map;
 public class QCDeviceDispatchService {
 
     @Autowired
-    private QCTestSuccessServcie qcTestSuccessServcie;
+    private QcTestSuccessServcie qcTestSuccessServcie;
     @Autowired
     private DeviceUnionInfoService deviceUnionInfoService;
 

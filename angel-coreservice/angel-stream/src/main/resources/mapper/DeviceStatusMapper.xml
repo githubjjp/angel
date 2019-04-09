@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pingan.stream.mysql.mapper.DeviceStatusMapper">
+    <resultMap id="ResultData" type="com.pingan.angel.admin.api.mysql.DeviceStatusEntity">
+        <id property="id" column="id" />
+        <result property="deviceId" column="device_id"/>
+        <result property="cmd" column="cmd"/>
+        <result property="rateOfDesalination" column="rate_of_desalination"/>
+        <result property="inTemperature" column="in_temperature"/>
+        <result property="outTemperature" column="out_temperature"/>
+        <result property="totalWater" column="total_water"/>
+        <result property="totalCleanWater" column="total_clean_water"/>
+        <result property="totalUsedWater" column="total_used_water"/>
+        <result property="reportTime" column="report_time"/>
+        <result property="outTds" column="out_tds"/>
+        <result property="inTds" column="in_tds"/>
+        <result property="isStartUp" column="is_start_up"/>
+        <result property="lastControlTime" column="last_control_time"/>
+        <result property="configUnit" column="config_unit"/>
+        <result property="deviceState" column="device_state"/>
+        <result property="createdTime" column="created_time"/>
+        <result property="createdBy" column="created_by"/>
+        <result property="updatedTime" column="updated_time"/>
+        <result property="updatedBy" column="updated_by"/>
+    </resultMap>
+
+    <select id="findByDeviceId" parameterType="java.lang.String" resultMap="ResultData">
+        select
+           id,sn_code,device_id,cmd,rate_of_desalination,in_temperature,out_temperature,
+           total_water,total_clean_water,total_used_water,report_time,out_tds,in_tds,
+           is_start_up,last_control_time,config_unit,device_state
+        from t_device_status
+        where device_id=#{deviceId}
+    </select>
+
+
+</mapper>
+
+
