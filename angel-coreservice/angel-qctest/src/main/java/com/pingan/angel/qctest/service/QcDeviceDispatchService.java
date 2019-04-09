@@ -170,7 +170,25 @@ public class QcDeviceDispatchService {
         QcDeviceHistoryEntity qcDeviceHistory = qcDeviceHistoryService.findById(historyId);
         if(!qcDeviceHistory.isRealTime()){
             //通过cmd命令向iot发送获取实时记录
+            QcDeviceEntity qcDevice = qcDeviceService.findByBarCodeId(qcDeviceHistory.getBarCodeId());
+            if (qcDevice!=null){
+                //iot发送实时获取数据的指令
+                String jsonResult = issueCmdService.issueCmd28(qcDevice.getDeviceId(),qcDevice.getBarcodeId());
+                Map<String,Object> map = (Map<String,Object>)JSON.parse(jsonResult);
+                if (map.get("code") != null){
+                    String code = map.get("code").toString();
+                    if ("000".equals(code)){
+                        qcDeviceHistory = qcDeviceHistoryService.findById(historyId);
+                    }else{
+                        return ApiResult.error("查询失败，请稍后再试!");
+                    }
+                }else{
+                    return ApiResult.error("查询失败，请稍后再试!");
+                }
+            }else{
+                return  ApiResult.error("查询出错，请稍后再试！");
+            }
         }
-        return null;
+        return ApiResult.success(qcDeviceHistory);
     }
 }
