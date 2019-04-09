@@ -38,7 +38,7 @@ public class QcDeviceDispatchService {
         QcTestSuccessDeviceEntity qcSuccessEntity = qcTestSuccessServcie.findBySnCode(snCode);
         //无论产测是否通过都要去查询到对应的配件码
         QcDeviceUnionInfoEntity unionEntity = deviceUnionInfoService.findBySnCode(snCode);
-        if (unionEntity == null) {
+        if (unionEntity==null){
             return ApiResult.error("整机码错误！");
         }
         HashMap map = new HashMap<String, Object>();
