@@ -1,0 +1,96 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: angel-admin 
+  datasource:
+    mysql:
+      username: root
+      password: mysql123
+      driver-class-name: com.mysql.jdbc.Driver
+      url: jdbc:mysql://pig-mysql:3306/pig?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Asia/Shanghai
+      initialSize: 5
+      minIdle: 5
+      maxActive: 20
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  redis:
+    host: angel-redis
+    password: ''
+  profiles:
+    active: dev
+security:
+  oauth2:
+    client:
+      id: angel_client_id
+      client-id: angel
+      client-secret: angel
+      scope: server
+    resource:
+      loadBalanced: true
+      token-info-uri: http://angel-auth/oauth/check_token
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: http://angel:angel@angel-eureka:8123/eureka/    
+
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 10000
+        readTimeout: 10000
+  compression:
+    request:
+      enabled: true
+    response:
+      enabled: true
+  httpclient:
+    enabled: false
+  hystrix:
+    enabled: true
+  okhttp:
+    enabled: true
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          strategy: SEMAPHORE
+          thread:
+            timeoutInMilliseconds: 60000
+  shareSecurityContext: true
+ignore:
+  urls:
+  - /actuator/**
+  - /user/info/*
+  - /log/**
+jasypt:
+  encryptor:
+    password: angel
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+  global-config:
+    banner: false
+    db-config:
+      field-strategy: default
+      id-type: auto
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+      table-underline: true
+  mapper-locations: classpath*:dao/*Mapper.xml
+logging:
+  level:
+    root: debug
+ribbon:
+  ConnectTimeout: 10000
+  ReadTimeout: 10000
