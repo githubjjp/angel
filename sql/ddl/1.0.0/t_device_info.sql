@@ -19,4 +19,4 @@ CREATE TABLE `t_device_info` (
   `updated_by` varchar(32) CHARACTER SET utf8 DEFAULT NULL COMMENT '最后修改人',
   `device_secret` varchar(32) CHARACTER SET utf8 DEFAULT NULL COMMENT '设备密匙',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
