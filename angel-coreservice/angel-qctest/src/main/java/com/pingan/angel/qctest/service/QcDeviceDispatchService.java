@@ -1,10 +1,16 @@
 package com.pingan.angel.qctest.service;
 
+import cn.hutool.json.JSONString;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONReader;
 import com.pingan.angel.admin.api.entity.ApiResult;
 import com.pingan.angel.admin.api.entity.ResultCode;
+import com.pingan.angel.admin.api.mongodb.QcDeviceEntity;
+import com.pingan.angel.admin.api.mongodb.QcDeviceHistoryEntity;
 import com.pingan.angel.admin.api.mongodb.QcDeviceUnionInfoEntity;
 import com.pingan.angel.admin.api.mongodb.QcTestSuccessDeviceEntity;
 import com.pingan.angel.admin.api.mysql.DeviceEntity;
+import com.pingan.stream.Service.IssueCmdService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,6 +34,12 @@ public class QcDeviceDispatchService {
     private DeviceStatusService deviceStatusService;
     @Autowired
     private DeviceCustomerCodeService deviceCustomerCodeService;
+    @Autowired
+    private IssueCmdService issueCmdService;
+    @Autowired
+    private QcDeviceService qcDeviceService;
+    @Autowired
+    private QcDeviceHistoryService qcDeviceHistoryService;
 
 
     /**
@@ -37,6 +49,9 @@ public class QcDeviceDispatchService {
      * @return
      */
     public Map<String, Object> isTestSuccess(String snCode) {
+        if(StringUtils.isEmpty(snCode)){
+            return ApiResult.error("参数为空，请重试");
+        }
         QcTestSuccessDeviceEntity qcSuccessEntity = qcTestSuccessServcie.findBySnCode(snCode);
         //无论产测是否通过都要去查询到对应的配件码
         QcDeviceUnionInfoEntity unionEntity = deviceUnionInfoService.findBySnCode(snCode);
@@ -67,6 +82,9 @@ public class QcDeviceDispatchService {
      * @return
      */
     public Map<String, Object> reQcDevice(String snCode) {
+        if(StringUtils.isEmpty(snCode)){
+            return ApiResult.error("参数为空，请重试");
+        }
         QcTestSuccessDeviceEntity successDevice = qcTestSuccessServcie.findBySnCode(snCode);
         if (successDevice != null) {
             if(StringUtils.isEmpty(successDevice.getDeviceId())){
@@ -84,5 +102,114 @@ public class QcDeviceDispatchService {
             return ApiResult.error("重新产测失败，该设备未产测过");
         }
         return ApiResult.success("重新产测成功，请重启设备再次扫码产测");
+    }
+
+    /**
+     * 对设备设置工作模式，产测模式或者正常模式
+     * @param deviceId 设备id
+     * @param barcodeId 配件码
+     * @return
+     */
+    public Map<String,Object> setMod(String deviceId, String barcodeId) {
+        if(StringUtils.isEmpty(barcodeId)){
+            return ApiResult.error("参数为空，请重试");
+        }
+        if(StringUtils.isEmpty(deviceId)){
+            return ApiResult.error("参数为空，请重试");
+        }
+        //通过配件码查询产测设备表，查看是否认证成功
+        QcDeviceEntity qcDevice = qcDeviceService.findByBarCodeId(barcodeId);
+        if (qcDevice==null || !qcDevice.isAuthorization()){
+            return ApiResult.error("未认证，请先认证后再设置设备的工作模式");
+        }
+        //发送iot命令
+        String jsonResult = issueCmdService.issueCmd27(deviceId,barcodeId,2);
+        return resolveJsonResult(jsonResult);
+    }
+
+    //公共解析cmd命令返回的json字符串
+    private Map<String, Object> resolveJsonResult(String jsonResult) {
+        if(StringUtils.isEmpty(jsonResult)){
+            return ApiResult.error("操作失败，请重新尝试");
+        }
+        Map resultMap = (Map<String,Object>)JSON.parse(jsonResult);
+        String code = null;
+        if(resultMap.get("code") != null){
+            code = resultMap.get("code").toString();
+        }
+        if (!"000".equals(code)){
+            return ApiResult.error("操作失败，请重新尝试");
+        }else{
+            return ApiResult.success("操作成功，请开始流程");
+        }
+    }
+
+    /**
+     * 设备基本操作，包括开机、关机、等
+     * @param deviceId 设备id
+     * @param barcodeId 配件码
+     * @param type 1关机 2开机 3设备清洗 4锁机
+     * @return
+     */
+    public Map<String, Object> handleDevice(String deviceId, String barcodeId,int type) {
+        if(StringUtils.isEmpty(deviceId)){
+            return ApiResult.error("操作失败，请重新尝试");
+        }
+        if(StringUtils.isEmpty(barcodeId)){
+            return ApiResult.error("操作失败，请重新尝试");
+        }
+        String handleType = null;
+        switch (type){
+            case 1:
+                handleType = "0x04";//关机
+                break;
+            case 2:
+                handleType = "0x02";//开机
+                break;
+            case 3:
+                handleType = "0x01";//清洗设备
+                break;
+            case 4:
+                handleType = "0x08";//锁机
+                break;
+            default:
+                handleType = "0x01";//设备清洗
+        }
+        String resultJson = issueCmdService.issueCmd17(deviceId,barcodeId,handleType);
+        return resolveJsonResult(resultJson);
+    }
+
+    /**
+     * 查询产测实时记录信息
+     * @param historyId
+     * @return
+     */
+    public Map<String, Object> findTestHistory(String historyId) {
+        if(StringUtils.isEmpty(historyId)){
+            return ApiResult.error("操作失败，请重新尝试");
+        }
+        QcDeviceHistoryEntity qcDeviceHistory = qcDeviceHistoryService.findById(historyId);
+        if(!qcDeviceHistory.isRealTime()){
+            //通过cmd命令向iot发送获取实时记录
+            QcDeviceEntity qcDevice = qcDeviceService.findByBarCodeId(qcDeviceHistory.getBarCodeId());
+            if (qcDevice!=null){
+                //iot发送实时获取数据的指令
+                String jsonResult = issueCmdService.issueCmd28(qcDevice.getDeviceId(),qcDevice.getBarcodeId());
+                Map<String,Object> map = (Map<String,Object>)JSON.parse(jsonResult);
+                if (map.get("code") != null){
+                    String code = map.get("code").toString();
+                    if ("000".equals(code)){
+                        qcDeviceHistory = qcDeviceHistoryService.findById(historyId);
+                    }else{
+                        return ApiResult.error("查询失败，请稍后再试!");
+                    }
+                }else{
+                    return ApiResult.error("查询失败，请稍后再试!");
+                }
+            }else{
+                return  ApiResult.error("查询出错，请稍后再试！");
+            }
+        }
+        return ApiResult.success(qcDeviceHistory);
     }
 }

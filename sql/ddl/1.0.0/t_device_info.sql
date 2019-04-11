@@ -32,4 +32,4 @@ CREATE TABLE `t_device_info` (
   `filter_author5` char(1) CHARACTER SET utf8 DEFAULT 'N' COMMENT '滤芯认证5   Y-认证  N-未认证',
   `is_authorization` char(1) CHARACTER SET utf8 DEFAULT 'N' COMMENT '设备认证   Y-认证  N-未认证',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;

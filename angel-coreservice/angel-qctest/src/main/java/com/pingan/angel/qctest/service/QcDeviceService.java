@@ -5,4 +5,6 @@ import com.pingan.angel.admin.api.mongodb.QcDeviceEntity;
 public interface QcDeviceService {
 
     QcDeviceEntity findBySnCode(String snCode);
+
+    QcDeviceEntity findByBarCodeId(String barcodeId);
 }

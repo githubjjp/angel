@@ -1,8 +1,13 @@
 server:
   port: 8080
+
+
 spring:
+
   application:
-    name: angel-admin 
+    name: angel-admin
+    profiles:
+      active:@package.environment@
   datasource:
     mysql:
       username: root
@@ -18,6 +23,10 @@ spring:
   redis:
     host: angel-redis
     password: ''
+  profiles:
+    active: dev
+  activemq:
+    broker-url:
 security:
   oauth2:
     client:
@@ -33,7 +42,7 @@ eureka:
     prefer-ip-address: true
   client:
     service-url:
-      defaultZone: http://angel:angel@angel-eureka:8123/eureka/    
+      defaultZone: http://angel:angel@angel-eureka:8123/eureka/
 
 feign:
   client:
@@ -63,9 +72,9 @@ hystrix:
   shareSecurityContext: true
 ignore:
   urls:
-  - /actuator/**
-  - /user/info/*
-  - /log/**
+    - /actuator/**
+    - /user/info/*
+    - /log/**
 jasypt:
   encryptor:
     password: angel
