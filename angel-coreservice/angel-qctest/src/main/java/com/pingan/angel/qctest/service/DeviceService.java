@@ -4,7 +4,9 @@ import com.pingan.angel.admin.api.mysql.DeviceEntity;
 
 public interface DeviceService {
 
-    DeviceEntity findOne(String deviceId);
+    DeviceEntity findOneByDeviceId(String deviceId);
 
     void updateQCTestUndoById(String deviceId);
+
+    DeviceEntity findOneBySnCode(String snCode);
 }

@@ -14,6 +14,7 @@ import java.io.Serializable;
 public class QcTestSuccessDeviceEntity implements Serializable {
     @Id
     private String id;
+    private String snCode;//物流码/整机码
     private String deviceId;//设备id
     private String barcodeId;//配件码
 }

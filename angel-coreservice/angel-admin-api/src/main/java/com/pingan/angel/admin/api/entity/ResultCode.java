@@ -2,8 +2,8 @@ package com.pingan.angel.admin.api.entity;
 
 public enum ResultCode {
 
-    SUCCESS("000","成功"),
-    ERROR("999","失败"),
+    SUCCESS("00","成功"),
+    ERROR("99","失败"),
     /**
      * 020 - 029 请求类错误
      */

@@ -27,7 +27,7 @@ public class QcTestSuccessServiceImpl implements QcTestSuccessServcie {
     @Override
     public void deleteBySnCode(String snCode) {
         QcTestSuccessDeviceEntity successDeviceEntity = new QcTestSuccessDeviceEntity();
-        successDeviceEntity.setId(snCode);
-        qcTestSuccessDao.deleteById(successDeviceEntity);
+        successDeviceEntity.setSnCode(snCode);
+        qcTestSuccessDao.deleteByCondition(successDeviceEntity);
     }
 }

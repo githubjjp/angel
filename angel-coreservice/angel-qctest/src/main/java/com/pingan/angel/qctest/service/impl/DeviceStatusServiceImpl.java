@@ -28,4 +28,10 @@ public class DeviceStatusServiceImpl implements DeviceStatusService {
         //删除设备滤芯数据
         deviceFilterDao.delete(Wrappers.<FilterElementEntity>query().lambda().eq(FilterElementEntity::getDeviceId,deviceId));
     }
+
+    @Override
+    public DeviceStatusEntity findByDeviceId(String deviceId) {
+        return null;
+    }
+
 }

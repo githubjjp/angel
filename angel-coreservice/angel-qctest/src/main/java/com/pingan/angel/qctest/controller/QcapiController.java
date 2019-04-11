@@ -1,6 +1,5 @@
 package com.pingan.angel.qctest.controller;
 
-import com.pingan.angel.admin.api.entity.ApiResult;
 import com.pingan.angel.qctest.service.QcDeviceDispatchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +18,6 @@ public class QcapiController {
     @Autowired
     private QcDeviceDispatchService service;
 
-
     /**
      * 查询是否产测成功
      * @param snCode 整机码
@@ -37,10 +35,10 @@ public class QcapiController {
      * @param isWifi    是否wifi网络
      * @return
      */
-    @RequestMapping(value = "/scanTest",method = RequestMethod.POST)
-    public Map<String,Object> scanTest(String snCode,String mac,boolean isWifi){
-        return service.scanTest(snCode,isWifi,mac);
-    }
+//    @RequestMapping(value = "/scanTest",method = RequestMethod.POST)
+//    public Map<String,Object> scanTest(String snCode,String mac,boolean isWifi){
+//        return service.scanTest(snCode,isWifi,mac);
+//    }
 
     /**
      * 重新产测
@@ -53,7 +51,7 @@ public class QcapiController {
     }
 
     /**
-     * 设备设置工作模式
+     * 设备设置工作模式,并下发认证指令
      * @param deviceId 设备id
      * @param barcodeId 配件码
      * @return
@@ -65,12 +63,12 @@ public class QcapiController {
 
     /**
      * 获取产测记录设备实时数据
-     * @param historyId 产测记录id
+     * @param deviceId 设备id
      * @return
      */
     @RequestMapping(value = "/getData",method = RequestMethod.POST)
-    public Map<String,Object> getData(String historyId){
-        return service.findTestHistory(historyId);
+    public Map<String,Object> getData(String deviceId){
+        return service.findRealTimeData(deviceId);
     }
 
     /**
@@ -90,7 +88,7 @@ public class QcapiController {
      * @param barcodeId
      * @return
      */
-    @RequestMapping(value = "/startupDevice",method = RequestMethod.GET)
+    @RequestMapping(value = "/startupDevice",method = RequestMethod.POST)
     public Map<String,Object> startupDevice(String deviceId,String barcodeId){
         return service.handleDevice(deviceId, barcodeId,2);
     }
@@ -101,7 +99,7 @@ public class QcapiController {
      * @param barcodeId
      * @return
      */
-    @RequestMapping(value = "/washDevice",method = RequestMethod.GET)
+    @RequestMapping(value = "/washDevice",method = RequestMethod.POST)
     public Map<String,Object> washDevice(String deviceId,String barcodeId){
         return service.handleDevice(deviceId, barcodeId,3);
     }
@@ -111,21 +109,21 @@ public class QcapiController {
      * @param historyId
      * @return
      */
-//    @RequestMapping(value = "/endTest",method = RequestMethod.GET)
-//    public Map<String,Object> endTest(String historyId){
-//        return service.checkTestResult(historyId);
-//    }
+    @RequestMapping(value = "/endTest",method = RequestMethod.POST)
+    public Map<String,Object> endTest(String historyId){
+        return service.checkTestResult(historyId);
+    }
 
     /**
-     * 恢复出厂设置
+     * 恢复出厂设置,删除设备状态信息，修改认证信息
      * @param historyId
      * @param isLock
      * @return
      */
-//    @RequestMapping(value = "/reset",method = RequestMethod.GET)
-//    public Map<String,Object> reset(String historyId,@RequestParam(required = false,defaultValue = "true") boolean isLock){
-//        return service.reset(historyId,isLock);
-//    }
+    @RequestMapping(value = "/reset",method = RequestMethod.POST)
+    public Map<String,Object> reset(String historyId,boolean isLock){
+        return service.reset(historyId,isLock);
+    }
 
     /**
      * 扫描大客户码
