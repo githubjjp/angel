@@ -9,7 +9,7 @@ import java.io.Serializable;
 /**
  *  产测通过的设备整机码记录表
  */
-@Document(collection = "QcTestSuccessDeviceEntity")
+@Document(collection = "QcTestSuccessDeviceTab")
 @Data
 public class QcTestSuccessDeviceEntity implements Serializable {
     @Id

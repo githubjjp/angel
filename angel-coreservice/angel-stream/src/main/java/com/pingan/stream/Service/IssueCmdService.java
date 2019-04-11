@@ -1,5 +1,7 @@
 package com.pingan.stream.Service;
 
+import com.alibaba.fastjson.JSONObject;
+
 /**
  * 服务器下发控制指令
  */
@@ -23,10 +25,9 @@ public interface IssueCmdService {
     /**
      * 校时指令-18
      * @param deviceId
-     * @param barcodeId
      * @return
      */
-    public String issueCmd18(String deviceId,String barcodeId);
+    public void issueCmd18(String deviceId);
 
     /**
      * 认证指令-20
@@ -82,10 +83,9 @@ public interface IssueCmdService {
     /**
      * 滤芯数据下发指令-30
      * @param deviceId
-     * @param barcodeId
      * @return
      */
-    public String issueCmd30(String deviceId,String barcodeId);
+    public void issueCmd30(String deviceId);
 
     /**
      * 在线升级指令-31
@@ -94,6 +94,32 @@ public interface IssueCmdService {
      * @return
      */
     public String issueCmd31(String deviceId,String barcodeId);
+
+    /**
+     *  反馈设备状态信息-29
+     * @param deviceId
+     */
+    public void issueCmd29(String deviceId);
+
+    /**
+     *  请求升级文件指令-32
+     * @param deviceId
+     */
+    public void issueCmd32(String deviceId);
+
+    /**
+     * 滤芯复位上报指令-35
+     * @param deviceId
+     * @param d1
+     */
+    public void issueCmd35(String deviceId,int d1);
+
+    /**
+     * 更新设备状态及滤芯状态信息
+     * @param deviceId
+     * @param resultJSON
+     */
+    public void updateFileStatus(String deviceId, JSONObject resultJSON);
 
 
 }

@@ -8,7 +8,7 @@ import java.io.Serializable;
 /**
  * 产测控制下发指令对象
  */
-@Document(collection = "QcControlLogEntity")
+@Document(collection = "QcControlLogTab")
 @Data
 public class QcControlLogEntity extends OrderCommonEntity implements Serializable {
 }

@@ -8,7 +8,7 @@ import java.io.Serializable;
 /**
  * 产测设备上报日志对象
  */
-@Document(collection = "QcDeviceLogEntity")
+@Document(collection = "QcDeviceLogTab")
 @Data
 public class QcDeviceLogEntity extends OrderCommonEntity implements Serializable {
 }
