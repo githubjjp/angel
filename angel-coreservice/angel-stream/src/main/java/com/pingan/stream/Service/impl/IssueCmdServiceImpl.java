@@ -80,7 +80,6 @@ public class IssueCmdServiceImpl implements IssueCmdService {
     }
 
 
-
     @Override
     public String issueCmd17(String deviceId, String barcodeId, String type) {
         Map<String,Object> retMap=new HashMap<>();
