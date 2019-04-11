@@ -1,5 +1,6 @@
 package com.pingan.stream.utils;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
@@ -175,6 +176,23 @@ public class JSONUtils {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	/**
+	 * 获取对象属性之外的动态字段
+	 * @param origialMap
+	 * @return
+	 */
+	public static Map<String,Object> getDynamicMap(Map<String,Object> origialMap){
+		Set<String> keys=origialMap.keySet();
+		logger.info("keys"+ JSON.toJSONString(keys));
+		LinkedHashMap map=new LinkedHashMap();
+		for(String key:keys){
+			if(key.indexOf("d")==0 && key.length() <=3){  //只需要d1-dn这些字段信息
+				map.put(key,origialMap.get(key));
+			}
+		}
+		return map;
 	}
 	
 

@@ -17,7 +17,7 @@ public class DeviceServiceImpl implements DeviceService {
     private DeviceDao deviceDao;
 
     @Override
-    public DeviceEntity findOne(String deviceId) {
+    public DeviceEntity findOneByDeviceId(String deviceId) {
         return deviceDao.selectOne(Wrappers.<DeviceEntity>query()
                 .lambda().eq(DeviceEntity::getDeviceId, deviceId));
     }
@@ -31,5 +31,10 @@ public class DeviceServiceImpl implements DeviceService {
         DeviceEntity device = new DeviceEntity();
         device.setIsProductTest("N");
         deviceDao.update(device,Wrappers.<DeviceEntity>query().lambda().eq(DeviceEntity::getDeviceId, deviceId));
+    }
+
+    @Override
+    public DeviceEntity findOneBySnCode(String snCode) {
+        return deviceDao.selectOne(Wrappers.<DeviceEntity>query().lambda().eq(DeviceEntity::getSnCode,snCode));
     }
 }

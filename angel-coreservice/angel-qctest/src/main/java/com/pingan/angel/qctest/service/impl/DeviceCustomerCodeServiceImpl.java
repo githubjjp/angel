@@ -5,6 +5,7 @@ import com.pingan.angel.admin.api.mongodb.DeviceCustomerCodeEntity;
 import com.pingan.angel.qctest.dao.DeviceCustomerCodeDao;
 import com.pingan.angel.qctest.service.DeviceCustomerCodeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 @Service("deviceCustomerCodeService")
@@ -15,6 +16,8 @@ public class DeviceCustomerCodeServiceImpl implements DeviceCustomerCodeService 
 
     @Override
     public void deleteBySnCode(String snCode) {
-        deviceCustomerCodeDao.delete(Wrappers.<DeviceCustomerCodeEntity>query().lambda().eq(DeviceCustomerCodeEntity::getSnCode,snCode));
+        DeviceCustomerCodeEntity customerCode = new DeviceCustomerCodeEntity();
+        customerCode.setSnCode(snCode);
+        deviceCustomerCodeDao.deleteByCondition(customerCode);
     }
 }

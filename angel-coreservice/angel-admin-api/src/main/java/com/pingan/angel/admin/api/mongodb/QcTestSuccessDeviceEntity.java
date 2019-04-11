@@ -9,11 +9,12 @@ import java.io.Serializable;
 /**
  *  产测通过的设备整机码记录表
  */
-@Document(collection = "QcTestSuccessDeviceEntity")
+@Document(collection = "QcTestSuccessDeviceTab")
 @Data
 public class QcTestSuccessDeviceEntity implements Serializable {
     @Id
     private String id;
+    private String snCode;//物流码/整机码
     private String deviceId;//设备id
     private String barcodeId;//配件码
 }
