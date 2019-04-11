@@ -205,17 +205,60 @@ public class IssueCmdServiceImpl implements IssueCmdService {
 
     @Override
     public String issueCmd26(String deviceId, String barcodeId) {
-        return null;
+        Map<String,Object> retMap=new HashMap<>();
+        logger.info("请求SIM卡的CCID指令  deviceId::"+deviceId);
+        DeviceEntity dto=getDeviceEntity(deviceId);
+        if(dto==null){
+            logger.info("设备尚未注册，请求SIM卡的CCID指令发送失败");
+            retMap.put("code","99");
+            retMap.put("msg","设备尚未注册，请求SIM卡的CCID指令异常");
+            return JSON.toJSONString(retMap);
+        }
+
+        String requestJSON=null;//调用解析组件
+        return JSON.toJSONString(operate(dto,requestJSON,26,deviceId));
     }
 
     @Override
     public String issueCmd27(String deviceId, String barcodeId, int type) {
-        return null;
+        Map<String,Object> retMap=new HashMap<>();
+        logger.info("工作模式选择指令  deviceId::"+deviceId);
+        DeviceEntity dto=getDeviceEntity(deviceId);
+        if(dto==null){
+            logger.info("设备尚未注册，工作模式选择指令发送失败");
+            retMap.put("code","99");
+            retMap.put("msg","设备尚未注册，工作模式选择指令异常");
+            return JSON.toJSONString(retMap);
+        }
+        String requestJSON=null;//调用解析组件
+        return JSON.toJSONString(operate(dto,requestJSON,27,deviceId));
     }
 
     @Override
     public String issueCmd28(String deviceId, String barcodeId) {
-        return null;
+        Map<String,Object> retMap=new HashMap<>();
+        logger.info("测试模式读取数据指令  deviceId::"+deviceId);
+        DeviceEntity dto=getDeviceEntity(deviceId);
+        if(dto==null){
+            logger.info("设备尚未注册，测试模式读取数据指令发送失败");
+            retMap.put("code","99");
+            retMap.put("msg","设备尚未注册，测试模式读取数据指令异常");
+            return JSON.toJSONString(retMap);
+        }
+
+        String requestJSON=null;//调用解析组件
+        return JSON.toJSONString(operate(dto,requestJSON,28,deviceId));
+    }
+
+    @Override
+    public void issueCmd29(String deviceId) {
+        DeviceEntity dto=getDeviceEntity(deviceId);
+        if(dto==null){
+            logger.info("设备尚未注册，反馈设备状态信息失败");
+            return;
+        }
+        String requestStr=null;
+        operate(dto,requestStr,29,deviceId);
     }
 
     @Override
@@ -242,16 +285,7 @@ public class IssueCmdServiceImpl implements IssueCmdService {
         return null;
     }
 
-    @Override
-    public void issueCmd29(String deviceId) {
-        DeviceEntity dto=getDeviceEntity(deviceId);
-        if(dto==null){
-            logger.info("设备尚未注册，反馈设备状态信息失败");
-            return;
-        }
-        String requestStr=null;
-        operate(dto,requestStr,29,deviceId);
-    }
+
 
     @Override
     public void issueCmd32(String deviceId) {
@@ -397,11 +431,14 @@ public class IssueCmdServiceImpl implements IssueCmdService {
                 dataMap.put("cmdMsg","获取设备数据ok");
             }else if(cmd==17){
                 int d2=resultJSON.getIntValue("d2");
+                int d1=resultJSON.getIntValue("d1");
                 if(d2==0xff){
                     dataMap.put("status","成功");
                 }else{
                     dataMap.put("status","失败");
                 }
+                dataMap.put("modelType",d1);
+                dataMap.put("modelContent",CmdCommon.CMD17_MODEL_TYPE.get(d1));
             }else if(cmd==20){   //设备认证
                 //需要更新设备表中的滤芯认证字段
                 int d1=resultJSON.getIntValue("d1"); //认证滤芯X
@@ -419,17 +456,39 @@ public class IssueCmdServiceImpl implements IssueCmdService {
                 if(d2==0xff){ //成功
                     DeviceEntity device=new DeviceEntity();
                     device.setDeviceId(deviceId);
-                    device.setFilterAuthor1("N");
-                    device.setFilterAuthor2("N");
-                    device.setFilterAuthor3("N");
-                    device.setFilterAuthor4("N");
-                    device.setFilterAuthor5("N");
+                    device.setFilterAuthor1("N"); //清除滤芯1认证
+                    device.setFilterAuthor2("N");//清除滤芯2认证
+                    device.setFilterAuthor3("N");//清除滤芯3认证
+                    device.setFilterAuthor4("N");//清除滤芯4认证
+                    device.setFilterAuthor5("N");//清除滤芯5认证
+                    device.setIsAuthorization("N");//清除设备认证
                     deviceInfoMapper.update(device,Wrappers.<DeviceEntity>query().lambda().eq(DeviceEntity::getDeviceId, deviceId));
                     logger.info("更新滤芯认证信息ok");
                     dataMap.put("status","成功");
                 }else{
                     dataMap.put("status","失败");
                 }
+            }else if(cmd==26){   //请求SIM卡的CCID指令
+                 int d1=resultJSON.getIntValue("d1");//ccid
+                 DeviceEntity device=new DeviceEntity();
+                 device.setDeviceId(deviceId);
+                 device.setCcid(d1);
+                 deviceInfoMapper.update(device,Wrappers.<DeviceEntity>query().lambda().eq(DeviceEntity::getDeviceId, deviceId));
+                 logger.info("更新设备ccid值ok.");
+                dataMap.put("cmdMsg","请求SIM卡的CCID指令成功");
+            }else if(cmd==27) {  //工作模式选择指令
+                int d1=resultJSON.getIntValue("d1");//1-正常模式  2-工厂测试模式
+                int d2=resultJSON.getIntValue("d2");
+                if(d2==0xff){
+                    dataMap.put("status","成功");
+                }else{
+                    dataMap.put("status","失败");
+                }
+                dataMap.put("modelType",d1);
+                dataMap.put("modelContent",CmdCommon.CMD27_MODEL_TYPE.get(d1));
+            }else if(cmd==28){   //测试模式读取数据指令
+                updateFileStatus(deviceId,resultJSON);
+                dataMap.put("status","成功");
             }
             retMap.put("data",dataMap);
         }else{
@@ -451,16 +510,18 @@ public class IssueCmdServiceImpl implements IssueCmdService {
         if(d2==0xff){ //成功
             DeviceEntity device=new DeviceEntity();
             device.setDeviceId(deviceId);
-            if(d1==0x01){
+            if(d1==0x01){   //第1个滤芯认证
                 device.setFilterAuthor1("Y");
-            }else if(d1==0x02){
+            }else if(d1==0x02){   //第2个滤芯认证
                 device.setFilterAuthor2("Y");
-            }else if(d1==0x03){
+            }else if(d1==0x03){    //第3个滤芯认证
                 device.setFilterAuthor3("Y");
-            }else if(d1==0x04){
+            }else if(d1==0x04){     //第4个滤芯认证
                 device.setFilterAuthor4("Y");
-            }else if(d1==0x05){
+            }else if(d1==0x05){    //第5个滤芯认证
                 device.setFilterAuthor5("Y");
+            }else if(d1==0x06){    //第5个滤芯认证
+                device.setIsAuthorization("Y");
             }
             deviceInfoMapper.update(device,Wrappers.<DeviceEntity>query().lambda().eq(DeviceEntity::getDeviceId, deviceId));
             logger.info("更新滤芯认证信息ok");
