@@ -33,6 +33,15 @@
         where device_id=#{deviceId}
     </select>
 
+    <update id="updateByDeviceId" parameterType="java.util.HashMap">
+        update t_device_status
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="deviceState != null">device_state=#{deviceState},</if>
+            updated_time=now()
+        </trim>
+        where device_id=#{deviceId}
+    </update>
+
 
 </mapper>
 

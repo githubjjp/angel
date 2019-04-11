@@ -9,7 +9,7 @@ import java.util.Date;
 /**
  * 产测设备信息表
  */
-@Document(collection = "QcDeviceEntity")
+@Document(collection = "QcDeviceTab")
 @Data
 public class QcDeviceEntity implements Serializable {
     private String wifi;//是否支持wifi

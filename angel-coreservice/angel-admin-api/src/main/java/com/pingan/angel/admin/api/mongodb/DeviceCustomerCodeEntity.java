@@ -3,7 +3,7 @@ package com.pingan.angel.admin.api.mongodb;
 import lombok.Data;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection = "DeviceCustomerCodeEntity")
+@Document(collection = "DeviceCustomerCodeTab")
 @Data
 public class DeviceCustomerCodeEntity extends BaseMongoEntity {
 

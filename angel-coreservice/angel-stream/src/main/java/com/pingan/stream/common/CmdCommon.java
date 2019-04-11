@@ -16,6 +16,8 @@ public class CmdCommon {
      * 保护代码说明
      */
     public static final  Map<Integer,String> CMD_PROTECT_CONTENT=new HashMap<Integer,String>();
+
+    public static final Map<Integer,String> CMD35_D2_CONTENT=new HashMap<Integer,String>();
     static{
         cmd_text_map.put(16,"用户实时获取数据指令");
         cmd_text_map.put(17,"设备控制指令");
@@ -59,5 +61,10 @@ public class CmdCommon {
         CMD_PROTECT_CONTENT.put(0x0020,"保留");
         CMD_PROTECT_CONTENT.put(0x0040,"保留");
         CMD_PROTECT_CONTENT.put(0x0080,"保留");
+
+        CMD35_D2_CONTENT.put(1,"设备版本比升级版本高");
+        CMD35_D2_CONTENT.put(2,"数据接收错误，校验失败");
+        CMD35_D2_CONTENT.put(3,"数据长度不符");
+        CMD35_D2_CONTENT.put(4,"请求无应答数据");
     }
 }

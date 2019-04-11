@@ -8,7 +8,7 @@ import java.io.Serializable;
 /**
  * 故障上报日志
  */
-@Document(collection = "ErrorLogEntity")
+@Document(collection = "ErrorLogTab")
 @Data
 public class ErrorLogEntity  extends OrderCommonEntity implements Serializable {
 }
