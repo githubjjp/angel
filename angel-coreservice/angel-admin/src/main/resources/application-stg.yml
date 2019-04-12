@@ -11,8 +11,8 @@ eureka:
 spring:
   datasource:
     mysql:
-      username: root
-      password: mysql123
+      username: angeldata
+      password: Angel124!@$
       driver-class-name: com.mysql.jdbc.Driver
       url: jdbc:mysql://myye2qk9.mysql.db.cloud.papub:3871/angel?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Asia/Shanghai
       initialSize: 5
