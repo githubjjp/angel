@@ -1,0 +1,9 @@
+server:
+  port: 8124
+# 注册中心
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: http://angel:angel@angel-eureka:8123/eureka/

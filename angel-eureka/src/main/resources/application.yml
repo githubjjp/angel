@@ -1,6 +1,3 @@
-server:
-  port: 8123
-
 spring:
   security:
     user:
@@ -8,19 +5,13 @@ spring:
       password: angel
   application:
     name: angel-eureka
+  profiles:
+    active: dev
 
 
 # docker-compose部署时候 hostname 换成angel-eureka
 # 类似的 redis 使用angel-eureka ,gateway 换成 angel-eureka
 eureka:
-  instance:
-    hostname: angel-eureka
-    prefer-ip-address: true
-  client:
-    register-with-eureka: false
-    fetch-registry: false
-    service-url:
-      defaultZone: http://angel:angel@127.0.0.1:${server.port}/eureka/
   server:
     eviction-interval-timer-in-ms: 4000
     enable-self-preservation: false

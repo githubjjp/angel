@@ -1,0 +1,16 @@
+server:
+  port: 8125
+
+# 注册中心
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: http://angel:angel@angel-eureka:8123/eureka/
+
+security:
+  oauth2:
+    resource:
+      loadBalanced: true
+      token-info-uri: http://angel-auth/oauth/check_token

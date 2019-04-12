@@ -1,28 +1,11 @@
-server:
-  port: 8080
-
-
 spring:
-
   application:
     name: angel-admin
     profiles:
       active:@package.environment@
-  datasource:
-    mysql:
-      username: root
-      password: mysql123
-      driver-class-name: com.mysql.jdbc.Driver
-      url: jdbc:mysql://pig-mysql:3306/pig?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Asia/Shanghai
-      initialSize: 5
-      minIdle: 5
-      maxActive: 20
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
-  redis:
-    host: angel-redis
-    password: ''
   profiles:
     active: dev
   activemq:
@@ -36,13 +19,9 @@ security:
       scope: server
     resource:
       loadBalanced: true
-      token-info-uri: http://angel-auth/oauth/check_token
 eureka:
   instance:
     prefer-ip-address: true
-  client:
-    service-url:
-      defaultZone: http://angel:angel@angel-eureka:8123/eureka/
 
 feign:
   client:
