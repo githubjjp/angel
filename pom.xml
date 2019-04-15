@@ -1,16 +1,17 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.pingan.angel</groupId>
-  <artifactId>angel</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
-  <packaging>pom</packaging>
+	<groupId>com.pingan.angel</groupId>
+	<artifactId>angel</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
 
-  <name>angel</name>
-  <url>http://maven.apache.org</url>
+	<name>angel</name>
+	<url>http://maven.apache.org</url>
 
-  <properties>
+	<properties>
 		<spring-boot.version>2.0.8.RELEASE</spring-boot.version>
 		<spring-cloud.version>Finchley.SR1</spring-cloud.version>
 		<spring-platform.version>Cairo-SR5</spring-platform.version>
@@ -26,13 +27,13 @@
 		<security.oauth.version>2.3.3.RELEASE</security.oauth.version>
 		<jackson.modules>2.9.6</jackson.modules>
 	</properties>
-  <dependencies>
-		<!--eureka 客户端-->
+	<dependencies>
+		<!--eureka 客户端 -->
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
 		</dependency>
-		<!--配置文件处理器-->
+		<!--配置文件处理器 -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-configuration-processor</artifactId>
@@ -43,36 +44,36 @@
 			<artifactId>jasypt-spring-boot-starter</artifactId>
 			<version>${jasypt.version}</version>
 		</dependency>
-		<!--监控-->
+		<!--监控 -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
-		<!--监控客户端-->
+		<!--监控客户端 -->
 		<dependency>
 			<groupId>de.codecentric</groupId>
 			<artifactId>spring-boot-admin-starter-client</artifactId>
 			<version>${spring-boot-admin.version}</version>
 		</dependency>
-		<!--断路器依赖-->
+		<!--断路器依赖 -->
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
 		</dependency>
-		<!--Lombok-->
+		<!--Lombok -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<scope>provided</scope>
 		</dependency>
-		<!--测试依赖-->
+		<!--测试依赖 -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-	
+
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -96,7 +97,7 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
-			<!--jackson模块-->
+			<!--jackson模块 -->
 			<dependency>
 				<groupId>com.fasterxml.jackson.module</groupId>
 				<artifactId>jackson-modules-java8</artifactId>
@@ -106,16 +107,16 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
-	
 
-  <modules>
-  	<module>angel-eureka</module>
-  	<module>angel-monitor</module>
-  	<module>angel-gateway</module>
-	<module>angel-common</module>
-	<module>angel-coreservice</module>
-	<module>angel-auth</module>
-  </modules>
+
+	<modules>
+		<module>angel-eureka</module>
+		<module>angel-monitor</module>
+		<module>angel-gateway</module>
+		<module>angel-common</module>
+		<module>angel-coreservice</module>
+		<module>angel-auth</module>
+	</modules>
 
 	<profiles>
 		<profile>
@@ -144,19 +145,19 @@
 	</profiles>
 
 
-  <build>
+	<build>
 		<finalName>${project.name}</finalName>
-	  <resources>
-		  <resource>
-			  <directory>src/main/resources</directory>
-			  <filtering>true</filtering>
-			  <includes>
-				  <include>application.yml</include>
-				  <include>application-${package.environment}.yml</include>
-				  <include>**/*.xml</include>
-			  </includes>
-		  </resource>
-	  </resources>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+				<includes>
+					<include>application.yml</include>
+					<include>application-${package.environment}.yml</include>
+					<include>**/*.xml</include>
+				</includes>
+			</resource>
+		</resources>
 		<pluginManagement>
 			<plugins>
 				<plugin>
@@ -174,34 +175,27 @@
 						</execution>
 					</executions>
 				</plugin>
+
+				<plugin>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<configuration>
+						<target>${maven.compiler.target}</target>
+						<source>${maven.compiler.source}</source>
+						<encoding>${project.build.sourceEncoding}</encoding>
+					</configuration>
+				</plugin>
 			</plugins>
 		</pluginManagement>
-		<plugins>
-			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.8.0</version>
-				<configuration>
-					<target>${maven.compiler.target}</target>
-					<source>${maven.compiler.source}</source>
-					<encoding>${project.build.sourceEncoding}</encoding>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>pl.project13.maven</groupId>
-				<artifactId>git-commit-id-plugin</artifactId>
-				<version>2.2.5</version>
-			</plugin>
-		</plugins>
 	</build>
-  
-  	<repositories>
-		<!--使用阿里云镜像-->
+
+	<repositories>
+		<!--使用阿里云镜像 -->
 		<repository>
 			<id>aliyun</id>
 			<name>aliyun</name>
 			<url>http://maven.aliyun.com/nexus/content/groups/public/</url>
 		</repository>
-		<!--使用Spring镜像-->
+		<!--使用Spring镜像 -->
 		<repository>
 			<id>spring-milestones</id>
 			<name>Spring Milestones</name>

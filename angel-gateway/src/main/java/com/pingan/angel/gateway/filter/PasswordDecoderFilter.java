@@ -52,9 +52,9 @@ public class PasswordDecoderFilter extends AbstractGatewayFilterFactory {
         return new String(Base64.encode(aes.encrypt(data)).getBytes(), StandardCharsets.UTF_8);
     }
 
-    public static void main(String[] args) {
+ /*   public static void main(String[] args) {
         System.out.println(decryptAES(ecryptAES("123456", "thanks,pig4cloud"), "thanks,pig4cloud"));
-    }
+    }*/
 
 
     @Override

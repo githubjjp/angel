@@ -16,8 +16,16 @@ public class CmdCommon {
      * 保护代码说明
      */
     public static final  Map<Integer,String> CMD_PROTECT_CONTENT=new HashMap<Integer,String>();
-
+    /**
+     *  错误说明
+     */
     public static final Map<Integer,String> CMD35_D2_CONTENT=new HashMap<Integer,String>();
+    /**
+     * 模式说明
+     */
+    public static final Map<Integer,String> CMD27_MODEL_TYPE=new HashMap<Integer,String>();
+
+    public static final Map<Integer,String> CMD17_MODEL_TYPE=new HashMap<Integer,String>();
     static{
         cmd_text_map.put(16,"用户实时获取数据指令");
         cmd_text_map.put(17,"设备控制指令");
@@ -66,5 +74,17 @@ public class CmdCommon {
         CMD35_D2_CONTENT.put(2,"数据接收错误，校验失败");
         CMD35_D2_CONTENT.put(3,"数据长度不符");
         CMD35_D2_CONTENT.put(4,"请求无应答数据");
+
+        CMD27_MODEL_TYPE.put(1,"进入正常模式");
+        CMD27_MODEL_TYPE.put(2,"进入工厂测试模式");
+
+        CMD17_MODEL_TYPE.put(0x01,"冲洗");
+        CMD17_MODEL_TYPE.put(0x02,"开机");
+        CMD17_MODEL_TYPE.put(0x04,"关机");
+        CMD17_MODEL_TYPE.put(0x08,"锁机");
+        CMD17_MODEL_TYPE.put(0x10,"预留");
+        CMD17_MODEL_TYPE.put(0x20,"预留");
+        CMD17_MODEL_TYPE.put(0x40,"预留");
+        CMD17_MODEL_TYPE.put(0x80,"预留");
     }
 }

@@ -13,6 +13,10 @@ spring:
     mongodb:    #引入mongodb
       url: mongodb://root:root@192.168.36.141:27017/test?authSource=admin&connect=replicaSet&readPreference=secondaryPreferred&safe=true&authMechanism=SCRAM-SHA-1&maxPoolSize=500&minPoolSize=10
 
+
+
+
+
 eureka:
   client:
     serviceUrl:

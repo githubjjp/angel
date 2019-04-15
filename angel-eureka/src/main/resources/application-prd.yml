@@ -1,0 +1,12 @@
+server:
+  port: 8123
+
+eureka:
+  instance:
+    hostname: 127.0.0.1
+    prefer-ip-address: true
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+    service-url:
+      defaultZone: http://angel:angel@127.0.0.1:${server.port}/eureka/

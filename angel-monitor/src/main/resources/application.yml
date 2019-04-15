@@ -1,8 +1,6 @@
-server:
-  port: 8124
 spring:
   application:
-    name: SpringBootMonitor
+    name: angel-monitor
   security:
     user:
       name: angel
@@ -10,8 +8,9 @@ spring:
   boot:
     admin:
       ui:
-        title: 安吉尔后台监控
-
+        title: 安吉尔服务器监控
+  profiles:
+    active: dev
 management:
   endpoints:
     web:
@@ -29,7 +28,3 @@ eureka:
     ip-address: 127.0.0.1
     prefer-ip-address: true
     instance-id: ${eureka.instance.ip-address}:${server.port}
-  client:
-    registryFetchIntervalSeconds: 5
-    serviceUrl:
-      defaultZone: http://angel:angel@127.0.0.1:8123/eureka/
