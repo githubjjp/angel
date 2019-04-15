@@ -1,14 +1,16 @@
 package com.pingan.angel.admin.api.dto.req;
 
-import java.util.Date;
-
 import com.pingan.angel.admin.api.dto.respond.HeadNews;
+import lombok.Data;
+
+import java.util.Date;
 
 /**
  * 
  * @author zhangquan
  * @Text 校时指令
  */
+@Data
 public class InspectionTime extends HeadNews {
 
 	/**

@@ -20,25 +20,8 @@
         <result property="updatedBy" column="updated_by"/>
         <result property="deviceSecret" column="device_secret"/>
     </resultMap>
-    <!--更新设备上下线时间-->
-    <update id="updateOnlineStatus" parameterType="java.util.Map">
-        update t_device_info
-        <set>
-            <if test="isOnline != null">is_online=#{isOnline},</if>
-            <if test="isOnlineDate != null">is_online_date=#{isOnlineDate},</if>
-        </set>
-        where barcode_id=#{barcodeId}
-    </update>
-    <!--查询设备在线状态 -->
-    <select id="queryDeviceOnline" parameterType="java.lang.String" resultType="java.util.Map">
-       select
-           device_id as deviceId,
-           is_online as isOnline,
-           is_online_date as isOnlineDate,
-           sn_code as snCode
-      from t_device_info
-      where device_id =#{deviceId}
-    </select>
+
+
     <!--根据设备ID查询设备状态 -->
     <select id="findByDeviceId" parameterType="java.util.Map" resultMap="ResultData">
        select

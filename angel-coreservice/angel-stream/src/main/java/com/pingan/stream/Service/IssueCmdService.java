@@ -1,6 +1,8 @@
 package com.pingan.stream.Service;
 
 import com.alibaba.fastjson.JSONObject;
+import com.pingan.angel.admin.api.dto.req.InspectionTime;
+import com.pingan.angel.admin.api.mongodb.QcTestSuccessDeviceEntity;
 
 /**
  * 服务器下发控制指令
@@ -24,10 +26,11 @@ public interface IssueCmdService {
 
     /**
      * 校时指令-18
+     * @param timeDto
      * @param deviceId
-     * @return
+     * @param snCode
      */
-    public void issueCmd18(String deviceId);
+    public void issueCmd18(InspectionTime timeDto,String deviceId,String snCode);
 
     /**
      * 认证指令-20
@@ -120,6 +123,14 @@ public interface IssueCmdService {
      * @param resultJSON
      */
     public void updateFileStatus(String deviceId, JSONObject resultJSON);
+
+    /**
+     * 获取产测成功设备记录
+     * @param snCode
+     * @param deviceId
+     * @return
+     */
+    public QcTestSuccessDeviceEntity getQcTestSuccessDeviceEntity(String snCode,String deviceId);
 
 
 }

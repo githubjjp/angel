@@ -1,14 +1,14 @@
 package com.pingan.angel.admin.api.dto.req;
 
 import lombok.Data;
-
+import com.pingan.angel.admin.api.dto.respond.HeadNews;
 /**
  * 
  * @author zhangquan
  * @Text 认证指令
  */
 @Data
-public class Authentication extends HeadNews {
+public class Authentication extends HeadNews{
 
 	/**
 	 *  d1:数据类型

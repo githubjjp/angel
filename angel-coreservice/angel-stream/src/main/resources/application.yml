@@ -11,7 +11,8 @@ spring:
     name: angel-stream
   data:
     mongodb:    #引入mongodb
-      url: mongodb://angeldata:Angel!@#123@119.147.77.6:27017/angel?authSource=admin&connect=replicaSet&readPreference=secondaryPreferred&safe=true&authMechanism=SCRAM-SHA-1&maxPoolSize=500&minPoolSize=10
+      #url: mongodb://angeldata:Angel!@#123@119.147.77.6:27017/angel?authSource=admin&connect=replicaSet&readPreference=secondaryPreferred&safe=true&authMechanism=SCRAM-SHA-1&maxPoolSize=500&minPoolSize=10
+      url: mongodb://angel:angel123@119.147.77.6:27017/angel_stg?authSource=admin&connect=replicaSet&readPreference=secondaryPreferred&safe=true&authMechanism=SCRAM-SHA-1&maxPoolSize=500&minPoolSize=10
 
 
 

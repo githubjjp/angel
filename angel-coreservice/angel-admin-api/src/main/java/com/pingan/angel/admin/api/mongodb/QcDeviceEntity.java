@@ -33,5 +33,6 @@ public class QcDeviceEntity implements Serializable {
     private	String	barcodeId;//配件码
     private	String	activeCode;//设备激活码
     private	boolean	testSuccess;//产测是否通过
+    private String deviceSecret;//设备密钥    iot获取
 
 }
