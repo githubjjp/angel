@@ -9,4 +9,4 @@ eureka:
     register-with-eureka: false
     fetch-registry: false
     service-url:
-      defaultZone: http://angel:angel@127.0.0.1:${server.port}/eureka/
+      defaultZone: http://angel:angel@10.10.76.130:8123/eureka/
