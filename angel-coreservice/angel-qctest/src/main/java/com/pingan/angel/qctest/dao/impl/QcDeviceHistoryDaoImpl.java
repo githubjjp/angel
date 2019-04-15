@@ -9,8 +9,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class QcDeviceHistoryDaoImpl extends MongoBaseDaoImpl<QcDeviceHistoryEntity> implements QcDeviceHistoryDao {
-    @Override
-    public void updateMutil(Query query, Update update) {
-
-    }
 }

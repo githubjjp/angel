@@ -64,13 +64,8 @@ public class QcDeviceDispatchService {
         if (qcDevice == null){
             return ApiResult.error("整机码未注册，请稍后再试");
         }
-//        QcDeviceUnionInfoEntity unionEntity = deviceUnionInfoService.findBySnCode(snCode);
-//        if (unionEntity == null) {
-//            return ApiResult.error("整机码错误！");
-//        }
         HashMap map = new HashMap<String, Object>();
         map.put("isTestSuccess", qcSuccessEntity != null ? true : false);
-//        map.put("barcodeId", unionEntity.getBarcodeId());
         map.put("barcodeId", qcDevice.getBarcodeId());
         return ApiResult.success(map);
     }
@@ -85,70 +80,71 @@ public class QcDeviceDispatchService {
      */
     public Map<String, Object> scanTest(String snCode, boolean isWifi, String mac) {
         QcDeviceEntity qcDevice = qcDeviceService.findBySnCode(snCode);
-        if (qcDevice == null) {//未产测，在产测设备表和产测记录表分别添加一条数据
-            QcTestSuccessDeviceEntity testSuccessDevice = qcTestSuccessServcie.findBySnCode(snCode);
-            if (testSuccessDevice != null) {
-                try {
-                    //删除设备表中的信息,直接删除一条记录
-                    deviceService.deleteDeviceInfoBySnCode(snCode);
-                    //删除设备状态表中的数据
-                    deviceStatusService.deleteByDeviceId(testSuccessDevice.getDeviceId());
-                    //删除产测成功表中的数据
-                    qcTestSuccessServcie.deleteBySnCode(snCode);
-                } catch (Exception e) {
-                    return ApiResult.error("设备信息异常，无法重新进行产测");
-                }
-            }
-            //查询设备表中数据
-            DeviceEntity device = deviceService.findOneBySnCode(snCode);
-            String deviceId = device.getDeviceId();
-            String activeId = device.getActiveId();
-            String proId = device.getItemId();
-            String company = device.getCompany();
-            String barcodeId = device.getBarcodeId();
-
-            //产测记录表
-            QcDeviceHistoryEntity qcDeviceHistoryEntity = new QcDeviceHistoryEntity();//产测记录
-            qcDeviceHistoryEntity.setProductCode(proId);
-            qcDeviceHistoryEntity.setBarCodeId(barcodeId);
-            qcDeviceHistoryEntity.setActiveId(activeId);
-            qcDeviceHistoryEntity.setMac(mac);
-            qcDeviceHistoryEntity.setCreateTime(new Date());
-            qcDeviceHistoryEntity.setTestAccount("userid");//fixme
-            qcDeviceHistoryEntity.setTestUserName("sys");//fixme 从app用户部分获取
-            qcDeviceHistoryEntity.setActiveTime(new Date());
-            qcDeviceHistoryEntity.setSnCode(snCode);
-            String historyId = qcDeviceHistoryService.add(qcDeviceHistoryEntity);
-            qcDeviceHistoryEntity.setId(historyId);
-
-            //产测设备表
-            qcDevice = new QcDeviceEntity();
-            qcDevice.setActiveCode(activeId);
-            qcDevice.setBarcodeId(barcodeId);
-            qcDevice.setCompany(company);
-            qcDevice.setOnline(true);//此时直接认为上线了
-            qcDevice.setLastActiveTime(new Date());
-            qcDevice.setQcHistoryId(historyId);
-            qcDevice.setProId(proId);
-            qcDevice.setSnCode(snCode);
-            qcDevice.setCreateTime(new Date());
-            qcDevice.setDeviceId(deviceId);
-            if (isWifi){
-                qcDevice.setWifi("Y");
-                qcDevice.setGprs("N");
-            }else{
-                qcDevice.setWifi("N");
-                qcDevice.setGprs("Y");
-            }
-            qcDeviceService.add(qcDevice);
-
-            Map<String, Object> result = new HashMap<>();
-            result.put("qcHistory",qcDeviceHistoryEntity);
-            result.put("qcDeviceInfo", qcDevice);
-            //认证
-            issueCmdService.issueCmd20(deviceId,barcodeId,"6");//激活码认证
-            return ApiResult.success(result);
-        } else {//产测过，不一定完成，注意此处
+        if (qcDevice == null) {//未注册
+            return ApiResult.error("设备未注册，请稍后再试");
+//            QcTestSuccessDeviceEntity testSuccessDevice = qcTestSuccessServcie.findBySnCode(snCode);
+//            if (testSuccessDevice != null) {
+//                try {
+//                    //删除设备表中的信息,直接删除一条记录
+//                    deviceService.deleteDeviceInfoBySnCode(snCode);
+//                    //删除设备状态表中的数据
+//                    deviceStatusService.deleteByDeviceId(testSuccessDevice.getDeviceId());
+//                    //删除产测成功表中的数据
+//                    qcTestSuccessServcie.deleteBySnCode(snCode);
+//                } catch (Exception e) {
+//                    return ApiResult.error("设备信息异常，无法重新进行产测");
+//                }
+//            }
+//            //查询设备表中数据
+//            DeviceEntity device = deviceService.findOneBySnCode(snCode);
+//            String deviceId = device.getDeviceId();
+//            String activeId = device.getActiveId();
+//            String proId = device.getItemId();
+//            String company = device.getCompany();
+//            String barcodeId = device.getBarcodeId();
+//
+//            //产测记录表
+//            QcDeviceHistoryEntity qcDeviceHistoryEntity = new QcDeviceHistoryEntity();//产测记录
+//            qcDeviceHistoryEntity.setProductCode(proId);
+//            qcDeviceHistoryEntity.setBarCodeId(barcodeId);
+//            qcDeviceHistoryEntity.setActiveId(activeId);
+//            qcDeviceHistoryEntity.setMac(mac);
+//            qcDeviceHistoryEntity.setCreateTime(new Date());
+//            qcDeviceHistoryEntity.setTestAccount("userid");//fixme
+//            qcDeviceHistoryEntity.setTestUserName("sys");//fixme 从app用户部分获取
+//            qcDeviceHistoryEntity.setActiveTime(new Date());
+//            qcDeviceHistoryEntity.setSnCode(snCode);
+//            String historyId = qcDeviceHistoryService.add(qcDeviceHistoryEntity);
+//            qcDeviceHistoryEntity.setId(historyId);
+//
+//            //产测设备表
+//            qcDevice = new QcDeviceEntity();
+//            qcDevice.setActiveCode(activeId);
+//            qcDevice.setBarcodeId(barcodeId);
+//            qcDevice.setCompany(company);
+//            qcDevice.setOnline(true);//此时直接认为上线了
+//            qcDevice.setLastActiveTime(new Date());
+//            qcDevice.setQcHistoryId(historyId);
+//            qcDevice.setProId(proId);
+//            qcDevice.setSnCode(snCode);
+//            qcDevice.setCreateTime(new Date());
+//            qcDevice.setDeviceId(deviceId);
+//            if (isWifi){
+//                qcDevice.setWifi("Y");
+//                qcDevice.setGprs("N");
+//            }else{
+//                qcDevice.setWifi("N");
+//                qcDevice.setGprs("Y");
+//            }
+//            qcDeviceService.add(qcDevice);
+//
+//            Map<String, Object> result = new HashMap<>();
+//            result.put("qcHistory",qcDeviceHistoryEntity);
+//            result.put("qcDeviceInfo", qcDevice);
+//            //认证
+//            issueCmdService.issueCmd20(deviceId,barcodeId,"6");//激活码认证
+//            return ApiResult.success(result);
+        } else {//
             String historyId = qcDevice.getQcHistoryId();
             QcDeviceHistoryEntity deviceHistoryEntity = new QcDeviceHistoryEntity();
             deviceHistoryEntity.setId(historyId);
