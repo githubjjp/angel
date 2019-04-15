@@ -2,7 +2,6 @@ package com.pingan.stream.Service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.pingan.angel.admin.api.dto.req.InspectionTime;
 import com.pingan.angel.admin.api.dto.req.RequestServer;
 import com.pingan.angel.admin.api.mongodb.*;
 import com.pingan.angel.admin.api.mysql.DeviceEntity;
@@ -250,9 +249,7 @@ public class BusinessServiceImpl implements BusinessService {
             deviceId=device.getDeviceId();
 
         }
-        /*
-        * 这里需要思考下是否用异步线程单独处理日志保存，注意消息是否重复消费的问题
-         */
+
         boolean flag=saveDeviceLog(isQcDevice,deviceId,snCode,msgContent,ts);
         if(flag){
             logger.info("该消息已经被消费过，无需重复消费");
@@ -406,21 +403,13 @@ public class BusinessServiceImpl implements BusinessService {
         int cmd=(Integer)jsonData.get("cmd");
         if(cmd==22){    //同步滤芯数据到设备状态表
             //设备基本状态信息
-            issueCmdService.updateFileStatus(deviceId,jsonData);
+
+
         }else if(cmd==25){ //请求服务器数据指令
             RequestServer rs=JSONUtils.toObejct(json,RequestServer.class);
             int type=rs.getType();
             if(type==1){   //请求校时指令
-                InspectionTime timeDto=new InspectionTime();
-                timeDto.setTime(new Date());
-                timeDto.setCmd(rs.getCmd());
-                timeDto.setLen(6);
-                timeDto.setVersion(rs.getVersion());
-                timeDto.setAddr(rs.getAddr());
-                timeDto.setBarcodeid(rs.getBarcodeid());
-                timeDto.setFlag(rs.getFlag());
-                timeDto.setGprs(rs.getGprs());
-                issueCmdService.issueCmd18(timeDto, deviceId,snCode);
+                issueCmdService.issueCmd18(deviceId);
             }else{       //滤芯数据下发指令
                 issueCmdService.issueCmd30(deviceId);
             }
@@ -456,7 +445,7 @@ public class BusinessServiceImpl implements BusinessService {
             device.setProgramMainVersion(jsonData.getIntValue("programMainVersion"));
             device.setProgramMainVersionName(jsonData.getIntValue("programMainVersion")==100?"V1.00版本":"V1.01版本");
             device.setMac(jsonData.getString("mac"));
-            device.setCcid(jsonData.getIntValue("ccid"));//WIFI版本不用上传CCID，GPRS版本上传此字段信息。
+            device.setCcid(jsonData.getString("ccid"));//WIFI版本不用上传CCID，GPRS版本上传此字段信息。
             device.setIsOnlineDate(new Date());//正常情况每次10分钟上报一次
 
             device.setProgramSmallSupplier(jsonData.getIntValue("programSmallSupplier"));

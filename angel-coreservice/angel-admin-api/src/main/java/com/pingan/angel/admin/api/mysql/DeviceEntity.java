@@ -29,7 +29,7 @@ public class DeviceEntity extends BaseEntity implements Serializable {
     private int programMainVersion;//主板固件版本号   版本100 表示V1.00版本，101 表示V1.01版本。
     private String programMainVersionName;//版本100 表示V1.00版本，101 表示V1.01版本
     private String mac;   //MAC地址(WIFI)/IMEI(GPRS)
-    private int ccid;//CCID(gprs信号)
+    private String ccid;//CCID(gprs信号)
     private int programSmallSupplier;//小板固件供应商
     private int programSmallVersion;//小板固件版本号   版本100 表示V1.00版本，101 表示V1.01版本。
     private String programSmallVersionName;//版本100 表示V1.00版本，101 表示V1.01版本

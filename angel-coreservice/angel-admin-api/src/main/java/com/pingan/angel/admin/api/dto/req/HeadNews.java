@@ -39,5 +39,10 @@ public class HeadNews {
 	 * 配件码
 	 */
 	private String barcodeid ;
+
+	/**
+	 * 数据长度
+	 */
+	private int len;
 	
 }

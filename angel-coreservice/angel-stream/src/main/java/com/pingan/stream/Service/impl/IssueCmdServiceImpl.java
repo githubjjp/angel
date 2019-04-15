@@ -3,7 +3,9 @@ package com.pingan.stream.Service.impl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.pingan.angel.admin.api.dto.req.*;
+import com.pingan.angel.admin.api.dto.req.Authentication;
+import com.pingan.angel.admin.api.dto.req.InspectionTime;
+import com.pingan.angel.admin.api.dto.req.RequestSIM;
 import com.pingan.angel.admin.api.mongodb.DeviceControlLogEntity;
 import com.pingan.angel.admin.api.mongodb.QcControlLogEntity;
 import com.pingan.angel.admin.api.mongodb.QcDeviceEntity;
@@ -88,6 +90,7 @@ public class IssueCmdServiceImpl implements IssueCmdService {
                 map.put("snCode",qcDto.getSnCode());
                 map.put("activeCode",qcDto.getActiveCode());
                 map.put("deviceSecret",qcDto.getDeviceSecret());
+                map.put("barcodeId",qcDto.getBarcodeId());
             }
         }else{              //正常设备
             DeviceEntity device=deviceInfoMapper.selectOne(Wrappers.<DeviceEntity>query()
@@ -97,6 +100,7 @@ public class IssueCmdServiceImpl implements IssueCmdService {
                 map.put("snCode",device.getSnCode());
                 map.put("activeCode",device.getActiveId());
                 map.put("deviceSecret",device.getDeviceSecret());
+                map.put("barcodeId",device.getBarcodeId());
             }
         }
         return map;
@@ -113,6 +117,8 @@ public class IssueCmdServiceImpl implements IssueCmdService {
         return qcTestSuccessDeviceDao.findOne(query);
     }
 
+
+
     @Override
     public String issueCmd16(String deviceId, String barcodeId) {
         Map<String,Object> retMap=new HashMap<>();
@@ -124,7 +130,7 @@ public class IssueCmdServiceImpl implements IssueCmdService {
             retMap.put("msg","设备尚未注册，用户实时获取数据异常");
             return JSON.toJSONString(retMap);
         }
-        UserCurrentData userCurrentData=new UserCurrentData();
+        com.pingan.angel.admin.api.dto.req.UserCurrentData userCurrentData=new com.pingan.angel.admin.api.dto.req.UserCurrentData();
         userCurrentData.setAddr((String)getCommonFields().get("addr"));
         userCurrentData.setBarcodeid(barcodeId);
         userCurrentData.setCmd(16);
@@ -148,7 +154,7 @@ public class IssueCmdServiceImpl implements IssueCmdService {
             retMap.put("msg","设备尚未注册，设备控制指令异常");
             return JSON.toJSONString(retMap);
         }
-        EquipmentControl equip=new EquipmentControl();
+        com.pingan.angel.admin.api.dto.req.EquipmentControl equip=new com.pingan.angel.admin.api.dto.req.EquipmentControl();
         if("1".equals(type)){
             equip.setRinse(true);//0x01-冲洗
         }else if("2".equals(type)){
@@ -170,7 +176,22 @@ public class IssueCmdServiceImpl implements IssueCmdService {
     }
 
     @Override
-    public void issueCmd18(InspectionTime timeDto,String deviceId,String snCode) {
+    public void issueCmd18(String deviceId) {
+        String snCode=getDeviceInfo(deviceId).get("snCode");
+        if(StringUtils.isEmpty(snCode)){
+            logger.info("设备尚未注册，校时指令下发失败");
+            return ;
+        }
+        InspectionTime timeDto=new InspectionTime();
+        timeDto.setTime(new Date());
+        timeDto.setLen(6);
+        timeDto.setAddr((String)getCommonFields().get("addr"));
+        timeDto.setBarcodeid(getDeviceInfo(deviceId).get("barcodeId"));
+        timeDto.setCmd(18);
+        timeDto.setGprs((Integer)getCommonFields().get("gprs"));
+        timeDto.setVersion((Integer)getCommonFields().get("version"));
+        timeDto.setFlag((Integer)getCommonFields().get("flag"));
+
         String requestJSON=null;    //调用动态解析组件组装数据
         logger.info("下发的校时指令为::"+requestJSON);
         operate(snCode,requestJSON,18,deviceId);
@@ -239,13 +260,13 @@ public class IssueCmdServiceImpl implements IssueCmdService {
             retMap.put("msg","设备尚未注册，发送上报数据的时间间隔指令异常");
             return JSON.toJSONString(retMap);
         }
-        Heartbeat heart=new Heartbeat();
+        com.pingan.angel.admin.api.dto.req.Heartbeat heart=new com.pingan.angel.admin.api.dto.req.Heartbeat();
         heart.setHour(hour);
         heart.setBarcodeid(barcodeId);
         heart.setCmd(23);
         heart.setGprs((Integer)getCommonFields().get("gprs"));
         heart.setVersion((Integer)getCommonFields().get("version"));
-        heart.setLen(1);
+        //heart.setLen(1);
         heart.setFlag((Integer)getCommonFields().get("flag"));
         heart.setAddr((String)getCommonFields().get("addr"));
         String requestJSON=null;//调用解析组件
@@ -264,8 +285,8 @@ public class IssueCmdServiceImpl implements IssueCmdService {
             return JSON.toJSONString(retMap);
         }
 
-        EmptyAuthentication emptyAuthor=new EmptyAuthentication();
-        emptyAuthor.setEmptySum(0xff);
+        com.pingan.angel.admin.api.dto.req.EmptyAuthentication emptyAuthor=new com.pingan.angel.admin.api.dto.req.EmptyAuthentication();
+        emptyAuthor.setEmptySum(0xff);//清除全部
         emptyAuthor.setCmd(24);
         emptyAuthor.setBarcodeid(barcodeId);
         emptyAuthor.setGprs((Integer)getCommonFields().get("gprs"));
@@ -311,7 +332,7 @@ public class IssueCmdServiceImpl implements IssueCmdService {
             retMap.put("msg","设备尚未注册，工作模式选择指令异常");
             return JSON.toJSONString(retMap);
         }
-        WorkMode model=new WorkMode();
+        com.pingan.angel.admin.api.dto.req.WorkMode model=new com.pingan.angel.admin.api.dto.req.WorkMode();
         model.setCmd(27);
         model.setBarcodeid(barcodeId);
         model.setGprs((Integer)getCommonFields().get("gprs"));
@@ -365,6 +386,8 @@ public class IssueCmdServiceImpl implements IssueCmdService {
             logger.info("滤芯数据下发指令失败");
             return;
         }
+
+
 
         String requestJSON=null;    //调用动态解析组件组装数据
         operate(snCode,requestJSON,30,deviceId);
@@ -429,6 +452,7 @@ public class IssueCmdServiceImpl implements IssueCmdService {
          */
         String deviceName=productKey+"@@"+snCode;
         String result=iotHubService.publish(deviceName,requestJSON,"1");//至少发送一次
+        logger.info("IOT应用接口返回的初始结果::"+result);
         return getResponse(deviceId,result,cmd);
     }
 
@@ -502,56 +526,91 @@ public class IssueCmdServiceImpl implements IssueCmdService {
         }
         String status=json.getString("status");
         if(status.equals("true")){
-            JSONObject resultJSON=JSONObject.parseObject(json.getString("content"));
             retMap.put("code","00");
             retMap.put("msg","请求成功");
+            String msgContent=json.getString("content");
+            String analysisResult=null;//解析后的结果
             Map<String,Object> dataMap=new HashMap<>();
-            if(cmd==18){ //校时指令
-                int d1=resultJSON.getIntValue("d1");
-                if(d1==0xff){
-                    dataMap.put("cmdMsg","校时设置失败");
-                }else{
-                    dataMap.put("cmdMsg","校时设置成功");
-                }
-            }else if(cmd==30){
-                int d1=resultJSON.getIntValue("d1");
-                if(d1==0xff){
-                    dataMap.put("cmdMsg","设备接受滤芯数据失败");
-                }else{
-                    dataMap.put("cmdMsg","设备接受滤芯数据成功");
-                }
-            }else if(cmd==29){
-                dataMap.put("cmdMsg","反馈设备状态ok.");
-            }else if(cmd==32){
-                dataMap.put("cmdMsg","反馈设备文件升级ok.");
-            }else if(cmd==16){
-                updateFileStatus(deviceId,resultJSON);
-                dataMap.put("cmdMsg","获取设备数据ok");
+            if(cmd==16){  //用户获取实时数据
+                com.pingan.angel.admin.api.dto.respond.UserCurrentData userData=JSONUtils.toObejct(analysisResult,com.pingan.angel.admin.api.dto.respond.UserCurrentData.class);
+                DeviceStatusEntity deviceStatus=new DeviceStatusEntity();
+                deviceStatus.setInTemperature(userData.getPrimaryTemperature());//进水温度
+                deviceStatus.setOutTemperature(userData.getOutTemperature());//出水温度
+                deviceStatus.setInTds(userData.getPrimaryTDS());//进水tds
+                deviceStatus.setOutTds(userData.getOutTDS());//出水tds
+                deviceStatus.setRateOfDesalination(userData.getDesalinationRate());//脱盐率
+                deviceStatus.setTotalWater(userData.getWaterTotal());//总水量
+                deviceStatus.setTotalCleanWater(userData.getPureWaterTotal());//净水总量
+                deviceStatus.setDeviceId(deviceId);
+                updateDeviceStatus(deviceStatus,deviceId);
+
+                FilterElementEntity filter=new FilterElementEntity();
+                filter.setReportFlowFilterCount1(userData.getFilterOneResidualFlow());
+                filter.setReportHourFilterCount1(userData.getFilterOneResidualLife());
+                filter.setReportFlowFilterCount2(userData.getFilterTwoResidualFlow());
+                filter.setReportHourFilterCount2(userData.getFilterTwoResidualLife());
+                filter.setReportFlowFilterCount3(userData.getFilterThreeResidualFlow());
+                filter.setReportHourFilterCount3(userData.getFilterThreeResidualLife());
+                filter.setReportFlowFilterCount4(userData.getFilterFourResidualFlow());
+                filter.setReportHourFilterCount4(userData.getFilterFourResidualLife());
+                filter.setReportFlowFilterCount5(userData.getFilterFiveResidualFlow());
+                filter.setReportHourFilterCount5(userData.getFilterFiveResidualLife());
+                filter.setDeviceId(deviceId);
+                updateFilterElement(filter,deviceId);
+                dataMap.put("desc","用户获取实时数据ok");
+                dataMap.put("status","00");
             }else if(cmd==17){
-                int d2=resultJSON.getIntValue("d2");
-                int d1=resultJSON.getIntValue("d1");
-                if(d2==0xff){
-                    dataMap.put("status","成功");
+                com.pingan.angel.admin.api.dto.respond.EquipmentControl equip=JSONUtils.toObejct(analysisResult,com.pingan.angel.admin.api.dto.respond.EquipmentControl.class);
+                if(equip.isSuccess()){
+                    dataMap.put("status","00");
                 }else{
-                    dataMap.put("status","失败");
+                    dataMap.put("status","99");
                 }
-                dataMap.put("modelType",d1);
-                dataMap.put("modelContent",CmdCommon.CMD17_MODEL_TYPE.get(d1));
+                if(equip.isRinse()){
+                    dataMap.put("desc",CmdCommon.CMD17_MODEL_TYPE.get("0x01"));
+                }
+                if(equip.isStarts()){
+                    dataMap.put("modelContent",CmdCommon.CMD17_MODEL_TYPE.get("0x02"));
+                }
+                if(equip.isShutdown()){
+                    dataMap.put("modelContent",CmdCommon.CMD17_MODEL_TYPE.get("0x03"));
+                }
+                if(equip.isLockMachine()){
+                    dataMap.put("modelContent",CmdCommon.CMD17_MODEL_TYPE.get("0x04"));
+                }
+            }else if(cmd==18){ //校时指令
+                com.pingan.angel.admin.api.dto.respond.InspectionTime inspectionTime=JSONUtils.toObejct(analysisResult,com.pingan.angel.admin.api.dto.respond.InspectionTime.class);
+                if(inspectionTime.isSuccess()){
+                    dataMap.put("status","00");
+                    dataMap.put("desc","校时设置成功");
+                }else{
+                    dataMap.put("status","99");
+                    dataMap.put("desc","校时设置失败");
+                }
             }else if(cmd==20){   //设备认证
                 //需要更新设备表中的滤芯认证字段
-                int d1=resultJSON.getIntValue("d1"); //认证滤芯X
-                int d2=resultJSON.getIntValue("d2");//结果
-                updateFilterAuthor(deviceId,dataMap,d1,d2);
-            }else if(cmd==23){  //发送上报数据的时间间隔指令
-                int d1=resultJSON.getIntValue("d1");
-                if(d1==0xff){
-                    dataMap.put("status","成功");
+                com.pingan.angel.admin.api.dto.respond.Authentication dto=JSONUtils.toObejct(analysisResult,com.pingan.angel.admin.api.dto.respond.Authentication.class);
+                if(dto.isSuccess()){
+                    dataMap.put("status","00");
+                    dataMap.put("desc","滤芯认证成功");
+
+                    updateFilterAuthor(deviceId,dto);
                 }else{
-                    dataMap.put("status","失败");
+                    dataMap.put("status","99");
+                    dataMap.put("desc","滤芯认证失败");
+                }
+            }else if(cmd==23){  //发送上报数据的时间间隔指令
+                com.pingan.angel.admin.api.dto.respond.Heartbeat dto=JSONUtils.toObejct(analysisResult,com.pingan.angel.admin.api.dto.respond.Heartbeat.class);
+                if(dto.isSuccess()){
+                    dataMap.put("status","00");
+                    dataMap.put("desc","发送上报数据的时间间隔指令ok");
+                }else{
+                    dataMap.put("status","99");
+                    dataMap.put("desc","发送上报数据的时间间隔指令失败");
                 }
             }else if(cmd==24){   //清除认证
-                int d2=resultJSON.getIntValue("d2");//结果
-                if(d2==0xff){ //成功
+                com.pingan.angel.admin.api.dto.respond.Authentication dto=JSONUtils.toObejct(analysisResult,com.pingan.angel.admin.api.dto.respond.Authentication.class);
+                if(dto.isSuccess()){ //成功
                     DeviceEntity device=new DeviceEntity();
                     device.setDeviceId(deviceId);
                     device.setFilterAuthor1("N"); //清除滤芯1认证
@@ -562,31 +621,45 @@ public class IssueCmdServiceImpl implements IssueCmdService {
                     device.setIsAuthorization("N");//清除设备认证
                     deviceInfoMapper.update(device,Wrappers.<DeviceEntity>query().lambda().eq(DeviceEntity::getDeviceId, deviceId));
                     logger.info("更新滤芯认证信息ok");
-                    dataMap.put("status","成功");
+                    dataMap.put("status","00");
+                    dataMap.put("desc","清除滤芯认证指令ok");
                 }else{
-                    dataMap.put("status","失败");
+                    dataMap.put("status","99");
+                    dataMap.put("desc","清除滤芯认证指令失败");
                 }
             }else if(cmd==26){   //请求SIM卡的CCID指令
-                 int d1=resultJSON.getIntValue("d1");//ccid
-                 DeviceEntity device=new DeviceEntity();
-                 device.setDeviceId(deviceId);
-                 device.setCcid(d1);
-                 deviceInfoMapper.update(device,Wrappers.<DeviceEntity>query().lambda().eq(DeviceEntity::getDeviceId, deviceId));
-                 logger.info("更新设备ccid值ok.");
-                dataMap.put("cmdMsg","请求SIM卡的CCID指令成功");
+                com.pingan.angel.admin.api.dto.respond.RequestSim dto=JSONUtils.toObejct(analysisResult,com.pingan.angel.admin.api.dto.respond.RequestSim.class);
+                DeviceEntity device=new DeviceEntity();
+                device.setDeviceId(deviceId);
+                device.setCcid(dto.getCcid());
+                deviceInfoMapper.update(device,Wrappers.<DeviceEntity>query().lambda().eq(DeviceEntity::getDeviceId, deviceId));
+                logger.info("更新设备ccid值ok.");
+                dataMap.put("status","00");
+                dataMap.put("desc","请求SIM卡的CCID指令ok");
             }else if(cmd==27) {  //工作模式选择指令
-                int d1=resultJSON.getIntValue("d1");//1-正常模式  2-工厂测试模式
-                int d2=resultJSON.getIntValue("d2");
-                if(d2==0xff){
-                    dataMap.put("status","成功");
+                com.pingan.angel.admin.api.dto.respond.WorkMode dto=JSONUtils.toObejct(analysisResult,com.pingan.angel.admin.api.dto.respond.WorkMode.class);
+                if(dto.isSuccess()){
+                    dataMap.put("status","00");
                 }else{
-                    dataMap.put("status","失败");
+                    dataMap.put("status","99");
                 }
-                dataMap.put("modelType",d1);
-                dataMap.put("modelContent",CmdCommon.CMD27_MODEL_TYPE.get(d1));
+                dataMap.put("desc",CmdCommon.CMD27_MODEL_TYPE.get(dto.getType()));
             }else if(cmd==28){   //测试模式读取数据指令
-                updateFileStatus(deviceId,resultJSON);
-                dataMap.put("status","成功");
+                //updateFileStatus(deviceId,resultJSON,28);
+                dataMap.put("status","00");
+                dataMap.put("desc","测试模式读取数据指令ok");
+            }else if(cmd==29){
+                dataMap.put("status","00");
+                dataMap.put("desc","测试模式读取数据指令ok");
+            }else if(cmd==30){
+//                int d1=resultJSON.getIntValue("d1");
+//                if(d1==0xff){
+//                    dataMap.put("cmdMsg","设备接受滤芯数据失败");
+//                }else{
+//                    dataMap.put("cmdMsg","设备接受滤芯数据成功");
+//                }
+            }else if(cmd==32){
+                dataMap.put("cmdMsg","反馈设备文件升级ok.");
             }
             retMap.put("data",dataMap);
         }else{
@@ -599,76 +672,48 @@ public class IssueCmdServiceImpl implements IssueCmdService {
 
     /**
      *  滤芯认证处理
-     * @param dataMap
-     * @param d1
-     * @param d2
      * @param deviceId
+     * @param dto
      */
-    private void updateFilterAuthor(String deviceId,Map<String,Object> dataMap,int d1,int d2){
-        if(d2==0xff){ //成功
+    private void updateFilterAuthor(String deviceId,com.pingan.angel.admin.api.dto.respond.Authentication dto){
             DeviceEntity device=new DeviceEntity();
             device.setDeviceId(deviceId);
-            if(d1==0x01){   //第1个滤芯认证
-                device.setFilterAuthor1("Y");
-            }else if(d1==0x02){   //第2个滤芯认证
-                device.setFilterAuthor2("Y");
-            }else if(d1==0x03){    //第3个滤芯认证
-                device.setFilterAuthor3("Y");
-            }else if(d1==0x04){     //第4个滤芯认证
-                device.setFilterAuthor4("Y");
-            }else if(d1==0x05){    //第5个滤芯认证
-                device.setFilterAuthor5("Y");
-            }else if(d1==0x06){    //第5个滤芯认证
-                device.setIsAuthorization("Y");
-            }
+//            if(d1==0x01){   //第1个滤芯认证
+//                device.setFilterAuthor1("Y");
+//            }else if(d1==0x02){   //第2个滤芯认证
+//                device.setFilterAuthor2("Y");
+//            }else if(d1==0x03){    //第3个滤芯认证
+//                device.setFilterAuthor3("Y");
+//            }else if(d1==0x04){     //第4个滤芯认证
+//                device.setFilterAuthor4("Y");
+//            }else if(d1==0x05){    //第5个滤芯认证
+//                device.setFilterAuthor5("Y");
+//            }else if(d1==0x06){    //第5个滤芯认证
+//                device.setIsAuthorization("Y");
+//            }
             deviceInfoMapper.update(device,Wrappers.<DeviceEntity>query().lambda().eq(DeviceEntity::getDeviceId, deviceId));
             logger.info("更新滤芯认证信息ok");
-            dataMap.put("status","成功");
+    }
+
+
+
+    @Override
+    public void updateDeviceStatus(DeviceStatusEntity deviceStatus,String deviceId) {
+        if(deviceStatus==null){
+            deviceStatusMapper.insert(deviceStatus);
+            logger.info("新增设备状态信息ok");
         }else{
-            dataMap.put("status","失败");
+            deviceStatusMapper.update(deviceStatus, Wrappers.<DeviceStatusEntity>query().lambda().eq(DeviceStatusEntity::getDeviceId, deviceId));
+            logger.info("更新设备状态信息ok");
         }
     }
 
-    /**
-     * 更新滤芯信息
-     * @param deviceId
-     * @param resultJSON
-     */
     @Override
-    public void updateFileStatus(String deviceId,JSONObject resultJSON){
-        DeviceStatusEntity statusDto=deviceStatusMapper.findByDeviceId(deviceId);//设备状态表
-        //FilterElementEntity filterDto=filterElementMapper.findByDeviceId(deviceId);//滤芯状态表
-
-        DeviceStatusEntity status=new DeviceStatusEntity();
-        status.setInTemperature(resultJSON.getDoubleValue("inTemperature"));//进水温度
-        status.setOutTemperature(resultJSON.getDoubleValue("outTemperature"));//出水温度
-        status.setInTds(resultJSON.getIntValue("inTds"));//进水tds
-        status.setOutTds(resultJSON.getIntValue("outTds"));//出水tds
-        status.setRateOfDesalination(resultJSON.getDoubleValue("rateOfDesalination"));//脱盐率
-        status.setTotalWater(resultJSON.getDoubleValue("totalWater"));//总水量
-        status.setTotalCleanWater(resultJSON.getDoubleValue("totalCleanWater"));//净水总量
-        status.setDeviceId(deviceId);
-
-        FilterElementEntity filter=new FilterElementEntity();
-        filter.setReportFlowFilterCount1(resultJSON.getDoubleValue("reportFlowFilterCount1"));
-        filter.setReportHourFilterCount1(resultJSON.getIntValue("reportHourFilterCount1"));
-        filter.setReportFlowFilterCount2(resultJSON.getDoubleValue("reportFlowFilterCount2"));
-        filter.setReportHourFilterCount2(resultJSON.getIntValue("reportHourFilterCount2"));
-        filter.setReportFlowFilterCount3(resultJSON.getDoubleValue("reportFlowFilterCount3"));
-        filter.setReportHourFilterCount3(resultJSON.getIntValue("reportHourFilterCount3"));
-        filter.setReportFlowFilterCount4(resultJSON.getDoubleValue("reportFlowFilterCount4"));
-        filter.setReportHourFilterCount4(resultJSON.getIntValue("reportHourFilterCount4"));
-        filter.setReportFlowFilterCount5(resultJSON.getDoubleValue("reportFlowFilterCount5"));
-        filter.setReportHourFilterCount5(resultJSON.getIntValue("reportHourFilterCount5"));
-        filter.setDeviceId(deviceId);
-        if(statusDto==null){
-            deviceStatusMapper.insert(status);
-            logger.info("新增设备状态信息ok");
+    public void updateFilterElement(FilterElementEntity filter,String deviceId) {
+        if(filter==null){
             filterElementMapper.insert(filter);
             logger.info("新增滤芯状态信息ok");
         }else{
-            deviceStatusMapper.update(status, Wrappers.<DeviceStatusEntity>query().lambda().eq(DeviceStatusEntity::getDeviceId, deviceId));
-            logger.info("更新设备状态信息ok");
             filterElementMapper.update(filter,Wrappers.<FilterElementEntity>query().lambda().eq(FilterElementEntity::getDeviceId, deviceId));
             logger.info("更新滤芯状态信息ok");
         }
