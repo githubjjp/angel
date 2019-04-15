@@ -3,11 +3,11 @@ server:
 security:
   oauth2:
     resource:
-      token-info-uri: http://127.0.0.1/oauth/check_token
+      token-info-uri: http://10.10.76.132/oauth/check_token
 eureka:
   client:
     service-url:
-       defaultZone: http://angel:angel@127.0.0.1:8123/eureka/
+       defaultZone: http://angel:angel@10.10.76.130:8123/eureka/
 spring:
   datasource:
     username: angeldata
