@@ -51,14 +51,12 @@ public abstract  class MongoBaseDaoImpl<T extends Serializable> implements Mongo
         mongoTemplate.remove(query, getEntityClass());
     }
 
-    /**
-     * 通过条件查询更新数据
-     * @param query
-     * @param update
-     */
-    public void updateMulti(Query query, Update update) {
+    @Override
+    public void updateMutil(Query query, Update update) {
         mongoTemplate.updateMulti(query, update, this.getEntityClass());
     }
+
+
 
     /**
      * 通过条件更新查询到的第一个数据
