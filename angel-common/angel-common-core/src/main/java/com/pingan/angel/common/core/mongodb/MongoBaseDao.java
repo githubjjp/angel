@@ -35,7 +35,14 @@ public interface MongoBaseDao<T> {
      * @param query
      * @param update
      */
-    public void update(Query query, Update update);
+    public void updateMutil(Query query, Update update);
+
+    /**
+     * 通过条件查询更新第一条数据
+     * @param query
+     * @param update
+     */
+    public void updateFirst(Query query, Update update);
 
     /**
      * 根据 id 进行更新

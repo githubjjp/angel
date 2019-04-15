@@ -7,4 +7,6 @@ public interface QcDeviceService {
     QcDeviceEntity findBySnCode(String snCode);
 
     QcDeviceEntity findByBarCodeId(String barcodeId);
+
+    String add(QcDeviceEntity qcDevice);
 }

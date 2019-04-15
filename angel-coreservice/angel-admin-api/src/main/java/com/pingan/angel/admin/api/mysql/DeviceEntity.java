@@ -40,5 +40,7 @@ public class DeviceEntity extends BaseEntity implements Serializable {
     private String filterAuthor5;//滤芯认证5   Y-认证  N-未认证
     private String isAuthorization;//设备认证  Y-认证  N-未认证
 
+    private String company;//从条码库移过来的公司id
+    private String itemId;//产品id
 
 }

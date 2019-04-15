@@ -1,13 +1,10 @@
 package com.pingan.angel.qctest.service.impl;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.pingan.angel.admin.api.entity.SysUser;
 import com.pingan.angel.admin.api.mysql.DeviceEntity;
 import com.pingan.angel.qctest.dao.DeviceDao;
 import com.pingan.angel.qctest.service.DeviceService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 @Service("deviceService")
@@ -36,5 +33,13 @@ public class DeviceServiceImpl implements DeviceService {
     @Override
     public DeviceEntity findOneBySnCode(String snCode) {
         return deviceDao.selectOne(Wrappers.<DeviceEntity>query().lambda().eq(DeviceEntity::getSnCode,snCode));
+    }
+
+    /**
+     * 删除设备表中的数据
+     */
+    @Override
+    public void deleteDeviceInfoBySnCode(String snCode) {
+        deviceDao.delete(Wrappers.<DeviceEntity>query().lambda().eq(DeviceEntity::getSnCode,snCode));
     }
 }

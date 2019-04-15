@@ -1,0 +1,19 @@
+server:
+  port: 8126
+security:
+  oauth2:
+    resource:
+      token-info-uri: http://127.0.0.1/oauth/check_token
+eureka:
+  client:
+    service-url:
+       defaultZone: http://angel:angel@127.0.0.1:8123/eureka/
+spring:
+  datasource:
+    username: angeldata
+    password: Angel124!@$
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://myye2qk9.mysql.db.cloud.papub:3871/angel?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Asia/Shanghai
+    initialSize: 5
+    minIdle: 5
+    maxActive: 20

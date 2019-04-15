@@ -56,8 +56,17 @@ public abstract  class MongoBaseDaoImpl<T extends Serializable> implements Mongo
      * @param query
      * @param update
      */
-    public void update(Query query, Update update) {
+    public void updateMulti(Query query, Update update) {
         mongoTemplate.updateMulti(query, update, this.getEntityClass());
+    }
+
+    /**
+     * 通过条件更新查询到的第一个数据
+     * @param query
+     * @param update
+     */
+    public void updateFirst(Query query, Update update){
+        mongoTemplate.updateFirst(query,update,this.getEntityClass());
     }
 
     /**
@@ -69,7 +78,7 @@ public abstract  class MongoBaseDaoImpl<T extends Serializable> implements Mongo
         Query query = new Query();
         query.addCriteria(Criteria.where("id").is(id));
         Update update = buildBaseUpdate(t);
-        update(query, update);
+        updateFirst(query, update);
     }
 
     /**

@@ -7,4 +7,8 @@ public interface QcDeviceHistoryService {
     QcDeviceHistoryEntity findById(String historyId);
 
     boolean updateTestResult(boolean flag, String historyId);
+
+    String add(QcDeviceHistoryEntity qcDeviceHistoryEntity);
+
+    boolean updateActiveTimeById(QcDeviceHistoryEntity deviceHistoryEntity);
 }

@@ -4,9 +4,13 @@ import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.pingan.angel.admin.api.entity.*;
+import com.pingan.angel.admin.api.entity.ApiResult;
+import com.pingan.angel.admin.api.entity.PageResult;
+import com.pingan.angel.admin.api.entity.QcTestResult;
+import com.pingan.angel.admin.api.entity.QcTestStatusEnum;
 import com.pingan.angel.admin.api.mongodb.QcDeviceEntity;
 import com.pingan.angel.admin.api.mongodb.QcDeviceHistoryEntity;
+import com.pingan.angel.admin.api.mongodb.QcDeviceUnionInfoEntity;
 import com.pingan.angel.admin.api.mongodb.QcTestSuccessDeviceEntity;
 import com.pingan.angel.admin.api.mysql.DeviceEntity;
 import com.pingan.angel.admin.api.mysql.DeviceStatusEntity;
@@ -56,13 +60,18 @@ public class QcDeviceDispatchService {
         }
         QcTestSuccessDeviceEntity qcSuccessEntity = qcTestSuccessServcie.findBySnCode(snCode);
         //无论产测是否通过都要去查询到对应的配件码
-        DeviceEntity device = deviceService.findOneBySnCode(snCode);
-        if (device == null) {
-            return ApiResult.error("整机码错误！");
+        QcDeviceEntity qcDevice = qcDeviceService.findBySnCode(snCode);
+        if (qcDevice == null){
+            return ApiResult.error("整机码未注册，请稍后再试");
         }
+//        QcDeviceUnionInfoEntity unionEntity = deviceUnionInfoService.findBySnCode(snCode);
+//        if (unionEntity == null) {
+//            return ApiResult.error("整机码错误！");
+//        }
         HashMap map = new HashMap<String, Object>();
         map.put("isTestSuccess", qcSuccessEntity != null ? true : false);
-        map.put("barcodeId", device.getBarcodeId());
+//        map.put("barcodeId", unionEntity.getBarcodeId());
+        map.put("barcodeId", qcDevice.getBarcodeId());
         return ApiResult.success(map);
     }
 
@@ -75,6 +84,94 @@ public class QcDeviceDispatchService {
      * @return
      */
     public Map<String, Object> scanTest(String snCode, boolean isWifi, String mac) {
+        QcDeviceEntity qcDevice = qcDeviceService.findBySnCode(snCode);
+        if (qcDevice == null) {//未产测，在产测设备表和产测记录表分别添加一条数据
+            QcTestSuccessDeviceEntity testSuccessDevice = qcTestSuccessServcie.findBySnCode(snCode);
+            if (testSuccessDevice != null) {
+                try {
+                    //删除设备表中的信息,直接删除一条记录
+                    deviceService.deleteDeviceInfoBySnCode(snCode);
+                    //删除设备状态表中的数据
+                    deviceStatusService.deleteByDeviceId(testSuccessDevice.getDeviceId());
+                    //删除产测成功表中的数据
+                    qcTestSuccessServcie.deleteBySnCode(snCode);
+                } catch (Exception e) {
+                    return ApiResult.error("设备信息异常，无法重新进行产测");
+                }
+            }
+            //查询设备表中数据
+            DeviceEntity device = deviceService.findOneBySnCode(snCode);
+            String deviceId = device.getDeviceId();
+            String activeId = device.getActiveId();
+            String proId = device.getItemId();
+            String company = device.getCompany();
+            String barcodeId = device.getBarcodeId();
+
+            //产测记录表
+            QcDeviceHistoryEntity qcDeviceHistoryEntity = new QcDeviceHistoryEntity();//产测记录
+            qcDeviceHistoryEntity.setProductCode(proId);
+            qcDeviceHistoryEntity.setBarCodeId(barcodeId);
+            qcDeviceHistoryEntity.setActiveId(activeId);
+            qcDeviceHistoryEntity.setMac(mac);
+            qcDeviceHistoryEntity.setCreateTime(new Date());
+            qcDeviceHistoryEntity.setTestAccount("userid");//fixme
+            qcDeviceHistoryEntity.setTestUserName("sys");//fixme 从app用户部分获取
+            qcDeviceHistoryEntity.setActiveTime(new Date());
+            qcDeviceHistoryEntity.setSnCode(snCode);
+            String historyId = qcDeviceHistoryService.add(qcDeviceHistoryEntity);
+            qcDeviceHistoryEntity.setId(historyId);
+
+            //产测设备表
+            qcDevice = new QcDeviceEntity();
+            qcDevice.setActiveCode(activeId);
+            qcDevice.setBarcodeId(barcodeId);
+            qcDevice.setCompany(company);
+            qcDevice.setOnline(true);//此时直接认为上线了
+            qcDevice.setLastActiveTime(new Date());
+            qcDevice.setQcHistoryId(historyId);
+            qcDevice.setProId(proId);
+            qcDevice.setSnCode(snCode);
+            qcDevice.setCreateTime(new Date());
+            qcDevice.setDeviceId(deviceId);
+            if (isWifi){
+                qcDevice.setWifi("Y");
+                qcDevice.setGprs("N");
+            }else{
+                qcDevice.setWifi("N");
+                qcDevice.setGprs("Y");
+            }
+            qcDeviceService.add(qcDevice);
+
+            Map<String, Object> result = new HashMap<>();
+            result.put("qcHistory",qcDeviceHistoryEntity);
+            result.put("qcDeviceInfo", qcDevice);
+            //认证
+            issueCmdService.issueCmd20(deviceId,barcodeId,"6");//激活码认证
+            return ApiResult.success(result);
+        } else {//产测过，不一定完成，注意此处
+            String historyId = qcDevice.getQcHistoryId();
+            QcDeviceHistoryEntity deviceHistoryEntity = new QcDeviceHistoryEntity();
+            deviceHistoryEntity.setId(historyId);
+            deviceHistoryEntity.setTestAccount("userid");//fixme 获取修改账户的userid
+            deviceHistoryEntity.setTestUserName("sys");//fixme 获取修改账户的用户名
+            deviceHistoryEntity.setActiveTime(new Date());
+            boolean flag = qcDeviceHistoryService.updateActiveTimeById(deviceHistoryEntity);
+            if (!flag){
+                return ApiResult.error("产测信息异常");
+            }
+            QcDeviceHistoryEntity deviceHistory = qcDeviceHistoryService.findById(historyId);
+            Map resultMap = new HashMap<String,Object>();
+            resultMap.put("qcHistory", deviceHistory);
+            resultMap.put("qcDeviceInfo", qcDevice);
+            //服务器下发iccid命令
+            if(StringUtils.isEmpty(qcDevice.getIccid())){
+                issueCmdService.issueCmd26(qcDevice.getDeviceId(),qcDevice.getBarcodeId());//iccid命令
+            }
+            //设备认证
+            if(!qcDevice.isAuthorization()){
+                issueCmdService.issueCmd20(qcDevice.getDeviceId(),qcDevice.getBarcodeId(),"6");
+            }
+        }
         return null;
     }
 
@@ -120,13 +217,11 @@ public class QcDeviceDispatchService {
             return ApiResult.error("参数为空，请重试");
         }
         //发送认证命令
-        issueCmdService.issueCmd20(deviceId,barcodeId,"6");//激活码认证
+        issueCmdService.issueCmd20(deviceId, barcodeId, "6");//激活码认证
         //设备表查询认证是否成功
         DeviceEntity device = deviceService.findOneByDeviceId(deviceId);
-        //通过配件码查询产测设备表，查看是否认证成功
-//        QcDeviceEntity qcDevice = qcDeviceService.findByBarCodeId(barcodeId);
-        if (device == null /*||*/ /*!device.isAuthorization()*/) {
-            return ApiResult.error("未认证，请先认证后再设置设备的工作模式");
+        if (device == null || "N".equalsIgnoreCase(device.getIsAuthorization())) {
+            return ApiResult.error("未认证，请重试后再设置设备的工作模式");
         }
         //发送iot命令
         String jsonResult = issueCmdService.issueCmd27(deviceId, barcodeId, 2);
@@ -226,24 +321,28 @@ public class QcDeviceDispatchService {
      * 提交产测数据，完成产测流程
      * 实时数据是否正确，开关机是否成功，
      *
-     * @param historyId 产测记录id
+     * @param deviceId 设备id
      * @return
      */
-    public Map<String, Object> checkTestResult(String historyId) {
-        if (StringUtils.isEmpty(historyId)) {
+    public Map<String, Object> checkTestResult(String deviceId) {
+        if (StringUtils.isEmpty(deviceId)) {
             return ApiResult.error("产测记录id为空");
         }
         boolean flag = true;//产测结果flag
         List<QcTestResult> qcTestResults = new ArrayList<>();//存放所有产测记录
         //根据产测历史纪录id查询产测记录信息
-        QcDeviceHistoryEntity qcDeviceHistory = qcDeviceHistoryService.findById(historyId);
-        if (qcDeviceHistory == null) {
-            return ApiResult.error("错误的产测记录id");
+        DeviceStatusEntity deviceStatusInfo = deviceStatusService.findByDeviceId(deviceId);//存储的产测记录信息
+        QcDeviceHistoryEntity qcDeviceHistory = qcDeviceHistoryService.findById(deviceId);
+//        if (qcDeviceHistory == null) {
+//            return ApiResult.error("错误的产测记录id");
+//        }
+        if (deviceStatusInfo == null) {
+            return ApiResult.error("未获取产测数据，请产测完成后再提交");
         }
         //实时数据检测结果
         QcTestResult realTimeData = new QcTestResult();
         realTimeData.setName("实时数据");
-        if (qcDeviceHistory.getInletTds() == null) {
+        if (deviceStatusInfo.getInTds() == 0) {
             realTimeData.setState(QcTestStatusEnum.WAIT.getStatus());
             realTimeData.setResult(QcTestStatusEnum.WAIT.getValue());
             flag = false;
@@ -262,7 +361,7 @@ public class QcDeviceDispatchService {
             }
 
             //进出水是否正常
-            String resultStr = checkData(qcDeviceHistory, productConfig);
+            String resultStr = checkData(deviceStatusInfo, productConfig);
             if (StringUtils.isNotEmpty(resultStr)) {
                 realTimeData.setState(QcTestStatusEnum.FAIL.getStatus());
                 realTimeData.setResult(resultStr);
@@ -309,7 +408,7 @@ public class QcDeviceDispatchService {
         qcTestResults.add(startUp);
         Map<String, Object> update = new HashMap<>();
         if (flag) {
-            boolean updateResult = qcDeviceHistoryService.updateTestResult(flag, historyId);
+            boolean updateResult = qcDeviceHistoryService.updateTestResult(flag, deviceId);
             if (updateResult) {
                 return ApiResult.success(qcTestResults);
             }
@@ -320,33 +419,33 @@ public class QcDeviceDispatchService {
     /**
      * 检查产测数据是否有问题
      *
-     * @param qcDeviceHistory 产测数据
-     * @param productConfig   配置数据
+     * @param deviceStatusEntity 产测数据
+     * @param productConfig      配置数据
      * @return
      */
-    private String checkData(QcDeviceHistoryEntity qcDeviceHistory, QcDeviceConfigEntity productConfig) {
+    private String checkData(DeviceStatusEntity deviceStatusEntity, QcDeviceConfigEntity productConfig) {
         StringBuffer sb = new StringBuffer();
         Integer minInletTds = productConfig.getMinInletTds();
         Integer maxInletTds = productConfig.getMaxInletTds();
-        if (qcDeviceHistory.getInletTds() < minInletTds || qcDeviceHistory.getInletTds() > maxInletTds) {
+        if (deviceStatusEntity.getInTds() < minInletTds || deviceStatusEntity.getInTds() > maxInletTds) {
             sb.append("进水TDS值异常，");
         }
 
         Integer minOutTds = productConfig.getMinOutTds();
         Integer maxOutTds = productConfig.getMaxOutTds();
-        if (qcDeviceHistory.getOutTds() < minOutTds || qcDeviceHistory.getOutTds() > maxOutTds) {
+        if (deviceStatusEntity.getOutTds() < minOutTds || deviceStatusEntity.getOutTds() > maxOutTds) {
             sb.append("出水TDS值异常，");
         }
 
         Integer minWaterTemperature = productConfig.getMinWaterTemperature();
         Integer maxWaterTemperature = productConfig.getMaxWaterTemperature();
-        if (qcDeviceHistory.getOutWaterTemperature() < minWaterTemperature || qcDeviceHistory.getOutWaterTemperature() > maxWaterTemperature) {
+        if (deviceStatusEntity.getOutTemperature() < minWaterTemperature || deviceStatusEntity.getOutTemperature() > maxWaterTemperature) {
             sb.append("水温值异常，");
         }
 
         Integer minWaterAmount = productConfig.getMinWaterAmount();
         Integer maxWaterAmount = productConfig.getMaxWaterAmount();
-        if (qcDeviceHistory.getWaterAmount() < minWaterAmount || qcDeviceHistory.getWaterAmount() > maxWaterAmount) {
+        if (deviceStatusEntity.getTotalWater() < minWaterAmount || deviceStatusEntity.getTotalWater() > maxWaterAmount) {
             sb.append("水量异常，");
         }
         return sb.toString();
@@ -366,6 +465,18 @@ public class QcDeviceDispatchService {
             return ApiResult.error("设备信息不存在");
         }
 
+        return null;
+    }
+
+    /**
+     * 扫描大客户码完成产测
+     *
+     * @param historyId
+     * @param customerCode 大客户二维码
+     * @param isLock       是否锁机
+     * @return
+     */
+    public Map<String, Object> scanCustomerSuper(String historyId, String customerCode, boolean isLock) {
         return null;
     }
 }

@@ -1,25 +1,9 @@
-server:
-  port: 8126
-
 spring:
   application:
     name: angel-auth
-  datasource:
-    driver-class-name: com.mysql.jdbc.Driver
-    password: mysql123
-    type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:mysql://localhost:3306/pig?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Asia/Shanghai
-    username: root
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
-# 注册中心配置
-eureka:
-  instance:
-    prefer-ip-address: true
-  client:
-    service-url:
-      defaultZone: http://angel:angel@angel-eureka:8123/eureka/      
 feign:
   client:
     config:
@@ -60,8 +44,8 @@ mybatis-plus:
   global-config:
     banner: false
     db-config:
-      field-strategy: 1
-      id-type: 0
+      field-strategy: default
+      id-type: auto
       logic-delete-value: 1
       logic-not-delete-value: 0
       table-underline: true
@@ -69,8 +53,4 @@ mybatis-plus:
 ribbon:
   ConnectTimeout: 10000
   ReadTimeout: 10000
-security:
-  oauth2:
-    resource:
-      loadBalanced: true
-      token-info-uri: http://angel-auth/oauth/check_token  
+ 
