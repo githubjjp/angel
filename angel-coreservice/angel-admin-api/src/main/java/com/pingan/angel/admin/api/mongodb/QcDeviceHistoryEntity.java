@@ -3,15 +3,17 @@ package com.pingan.angel.admin.api.mongodb;
 import lombok.Data;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * 产测纪录表
  */
-@Document(collection = "QcDeviceHistoryEntity")
+@Document(collection = "qcDeviceHistoryEntity")
 @Data
-public class QcDeviceHistoryEntity extends BaseMongoEntity {
+public class QcDeviceHistoryEntity extends BaseMongoEntity implements Serializable {
 
+    private String id;//产测记录id
     private String productCode;//产品编码
     private String activeId;//设备开机码
     private String barCodeId;//配件码
@@ -41,10 +43,10 @@ public class QcDeviceHistoryEntity extends BaseMongoEntity {
     private Date washTestTime;//冲洗测试时间
     private String customerSuperCode;//水机大客户码
     private String customerSuperId;//大客户Id
-    private boolean isRealTime;//是否实时信息
-
-    public boolean isRealTime() {
-        if(this.getUpdateTime()==null) return false;
-        return (System.currentTimeMillis() - this.getUpdateTime().getTime())<60000;
-    }
+//    private boolean isRealTime;//是否实时信息
+//
+//    public boolean isRealTime() {
+//        if(this.getUpdateTime()==null) return false;
+//        return (System.currentTimeMillis() - this.getUpdateTime().getTime())<60000;
+//    }
 }

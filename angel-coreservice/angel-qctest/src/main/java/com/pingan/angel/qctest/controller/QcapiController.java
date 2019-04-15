@@ -29,16 +29,16 @@ public class QcapiController {
     }
 
     /**
-     * 扫描开始测试
+     * 扫描开始测试--进入产测明细页面获取的基本数据，同时创建一个产测记录信息
      * @param snCode 物流码
      * @param mac   物理mac地址
      * @param isWifi    是否wifi网络
      * @return
      */
-//    @RequestMapping(value = "/scanTest",method = RequestMethod.POST)
-//    public Map<String,Object> scanTest(String snCode,String mac,boolean isWifi){
-//        return service.scanTest(snCode,isWifi,mac);
-//    }
+    @RequestMapping(value = "/scanTest",method = RequestMethod.POST)
+    public Map<String,Object> scanTest(String snCode,String mac,boolean isWifi){
+        return service.scanTest(snCode,isWifi,mac);
+    }
 
     /**
      * 重新产测
@@ -63,12 +63,12 @@ public class QcapiController {
 
     /**
      * 获取产测记录设备实时数据
-     * @param deviceId 设备id
+     * @param historyId 设备id
      * @return
      */
     @RequestMapping(value = "/getData",method = RequestMethod.POST)
-    public Map<String,Object> getData(String deviceId){
-        return service.findRealTimeData(deviceId);
+    public Map<String,Object> getData(String historyId){
+        return service.findRealTimeData(historyId);
     }
 
     /**
@@ -106,7 +106,7 @@ public class QcapiController {
 
     /**
      * 结束产测，提交产测
-     * @param historyId
+     * @param deviceId
      * @return
      */
     @RequestMapping(value = "/endTest",method = RequestMethod.POST)
@@ -128,14 +128,14 @@ public class QcapiController {
     /**
      * 扫描大客户码
      * @param historyId
-     * @param customerCode
-     * @param isLock
+     * @param customerCode 大客户二维码
+     * @param isLock 是否锁机，清楚认证
      * @return
      */
-//    @RequestMapping(value = "/scanCustomerSuper",method = RequestMethod.GET)
-//    public Map<String,Object> scanCustomerSuper(String historyId,String customerCode,@RequestParam(required = false,defaultValue = "false") boolean isLock
-//    ){
-//        return service.scanCustomerSuper(historyId,customerCode,isLock);
-//    }
+    @RequestMapping(value = "/scanCustomerSuper",method = RequestMethod.GET)
+    public Map<String,Object> scanCustomerSuper(String historyId,String customerCode,boolean isLock
+    ){
+        return service.scanCustomerSuper(historyId,customerCode,isLock);
+    }
 
 }

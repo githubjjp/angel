@@ -4,6 +4,5 @@ import com.pingan.angel.admin.api.mongodb.QcDeviceHistoryEntity;
 import com.pingan.angel.common.core.mongodb.MongoBaseDao;
 import org.springframework.stereotype.Repository;
 
-@Repository
 public interface QcDeviceHistoryDao extends MongoBaseDao<QcDeviceHistoryEntity> {
 }
