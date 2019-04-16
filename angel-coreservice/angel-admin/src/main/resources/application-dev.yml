@@ -3,21 +3,17 @@ server:
 security:
   oauth2:
     resource:
-      token-info-uri: http://127.0.0.1/oauth/check_token
+      token-info-uri: http://angel-auth/oauth/check_token
 eureka:
   client:
     service-url:
-       defaultZone: http://angel:angel@127.0.0.1:8123/eureka/
+       defaultZone: http://angel:angel@angel-eureka:8123/eureka/
 spring:
   datasource:
-    mysql:
-      username: root
-      password: mysql123
-      driver-class-name: com.mysql.jdbc.Driver
-      url: jdbc:mysql://127.0.0.1:3306/pig?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Asia/Shanghai
-      initialSize: 5
-      minIdle: 5
-      maxActive: 20
+    username: root
+    password: mysql123
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://angel-eureka:3306/pig?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Asia/Shanghai
   data:
     mongodb:
-      uri: mongodb://angel:angel123!@#@119.147.77.6:27017/angel?authSource=admin&connect=replicaSet&readPreference=secondaryPreferred&safe=true&authMechanism=SCRAM-SHA-1&maxPoolSize=500&minPoolSize=10
+      uri: mongodb://angel:angel123@119.147.77.6:27017/angel_stg?authSource=angel_stg&connect=replicaSet&readPreference=secondaryPreferred&safe=true&authMechanism=SCRAM-SHA-1&maxPoolSize=500&minPoolSize=10

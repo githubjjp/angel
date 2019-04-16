@@ -192,6 +192,8 @@ public class QcDeviceDispatchService {
             }
             //逻辑删除设备表中的设备产测状态
             deviceService.updateQCTestUndoById(successDevice.getDeviceId());
+            //删除设备状态表
+
             //删除产测成功表中的记录
             qcTestSuccessServcie.deleteBySnCode(snCode);
             //通过整机码删除设备大客户批次码关联记录
@@ -581,13 +583,32 @@ public class QcDeviceDispatchService {
     /**
      * 扫描大客户码完成产测
      *
-     * @param historyId
+     * @param historyId 产测记录id
      * @param customerCode 大客户二维码
      * @param isLock       是否锁机
      * @return
      */
     public Map<String, Object> scanCustomerSuper(String historyId, String customerCode, boolean isLock) {
-        return null;
+        String customerSuperId = customerSuperService.findIdByCustomerCode(customerCode);
+        if (StringUtils.isEmpty(customerSuperId)){
+            return ApiResult.error("请输入正确的大客户码");
+        }
+
+        //更新产测记录表
+        Map<String,Object> map = new HashMap<String,Object>();
+        map.put("customerSuperCode",customerCode);
+        map.put("customerSuperId",customerSuperId);
+
+        //更新产测记录表
+        qcDeviceHistoryService.updateByMap(map,historyId);
+
+        //产测记录
+        QcDeviceHistoryEntity deviceHistory = qcDeviceHistoryService.findById(historyId);
+        //产测设备
+        QcDeviceEntity qcDevice = qcDeviceService.findBySnCode(deviceHistory.getSnCode());
+        //完成产测流程
+        Map<String,Object> resultMap = qcTestEnd(deviceHistory,qcDevice,isLock);
+        return resultMap;
     }
 
 }
