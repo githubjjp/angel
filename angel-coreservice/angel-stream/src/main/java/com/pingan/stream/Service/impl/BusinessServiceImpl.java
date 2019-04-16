@@ -184,7 +184,7 @@ public class BusinessServiceImpl implements BusinessService {
             if(qcDto==null){
                 logger.info("设备尚未注册，获取连接字符串异常");
                 return new HashMap<>();
-            }
+        }
             retMap.put("deviceName",productKey+"@@"+qcDto.getSnCode());//注册设备的时候是默认按照配件码作为设备名称
             retMap.put("deviceSecret",qcDto.getDeviceSecret());
         }else{
