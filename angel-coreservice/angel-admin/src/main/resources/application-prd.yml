@@ -3,7 +3,7 @@ server:
 security:
   oauth2:
     resource:
-      token-info-uri: http://127.0.0.1/oauth/check_token
+      token-info-uri: http://angel-auth/oauth/check_token
 eureka:
   client:
     service-url:
