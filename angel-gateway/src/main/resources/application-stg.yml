@@ -7,10 +7,22 @@ eureka:
     prefer-ip-address: true
   client:
     service-url:
-      defaultZone: http://angel:angel@angel-eureka:8123/eureka/
+      defaultZone: http://angel:angel@10.10.76.130:8123/eureka/
 
 security:
   oauth2:
     resource:
       loadBalanced: true
       token-info-uri: http://angel-auth/oauth/check_token
+spring:
+  datasource:
+    username: angeldata
+    password: Angel124!@$
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://myye2qk9.mysql.db.cloud.papub:3871/angel?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Asia/Shanghai
+    initialSize: 5
+    minIdle: 5
+    maxActive: 20
+  data:
+    mongodb:
+      uri: mongodb://angel:angel123@ng208g94.mongodb.db.cloud.papub:15503/angel?authSource=admin&connect=replicaSet&readPreference=secondaryPreferred&safe=true&authMechanism=SCRAM-SHA-1&maxPoolSize=500&minPoolSize=10

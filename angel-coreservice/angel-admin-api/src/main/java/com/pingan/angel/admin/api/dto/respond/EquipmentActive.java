@@ -1,8 +1,8 @@
 package com.pingan.angel.admin.api.dto.respond;
 
-import java.util.Date;
-
 import lombok.Data;
+
+import java.util.Date;
 
 /**
  * 
@@ -41,7 +41,7 @@ public class EquipmentActive extends HeadNews{
 	 * d6:总水量
 	 */
 	private double waterTotal ;
-	
+
 	/**
 	 * 上报时间
 	 */

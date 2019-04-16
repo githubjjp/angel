@@ -7,4 +7,4 @@ eureka:
     prefer-ip-address: true
   client:
     service-url:
-      defaultZone: http://angel:angel@angel-eureka:8123/eureka/
+      defaultZone: http://angel:angel@10.10.76.130:8123/eureka/

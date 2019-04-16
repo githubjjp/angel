@@ -1,8 +1,8 @@
 package com.pingan.stream.Service;
 
-import com.alibaba.fastjson.JSONObject;
-import com.pingan.angel.admin.api.dto.req.InspectionTime;
 import com.pingan.angel.admin.api.mongodb.QcTestSuccessDeviceEntity;
+import com.pingan.angel.admin.api.mysql.DeviceStatusEntity;
+import com.pingan.angel.admin.api.mysql.FilterElementEntity;
 
 /**
  * 服务器下发控制指令
@@ -26,11 +26,9 @@ public interface IssueCmdService {
 
     /**
      * 校时指令-18
-     * @param timeDto
      * @param deviceId
-     * @param snCode
      */
-    public void issueCmd18(InspectionTime timeDto,String deviceId,String snCode);
+    public void issueCmd18(String deviceId);
 
     /**
      * 认证指令-20
@@ -117,12 +115,7 @@ public interface IssueCmdService {
      */
     public void issueCmd35(String deviceId,int d1);
 
-    /**
-     * 更新设备状态及滤芯状态信息
-     * @param deviceId
-     * @param resultJSON
-     */
-    public void updateFileStatus(String deviceId, JSONObject resultJSON);
+
 
     /**
      * 获取产测成功设备记录
@@ -131,6 +124,20 @@ public interface IssueCmdService {
      * @return
      */
     public QcTestSuccessDeviceEntity getQcTestSuccessDeviceEntity(String snCode,String deviceId);
+
+    /**
+     * 更新设备状态表
+     * @param deviceStatus
+     * @param deviceId
+     */
+    public void updateDeviceStatus(DeviceStatusEntity deviceStatus,String deviceId);
+
+    /**
+     * 更新设备滤芯状态表
+     * @param filter
+     * @param deviceId
+     */
+    public void updateFilterElement(FilterElementEntity filter,String deviceId);
 
 
 }

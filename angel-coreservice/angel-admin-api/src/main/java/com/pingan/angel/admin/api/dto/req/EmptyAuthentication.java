@@ -1,7 +1,6 @@
 package com.pingan.angel.admin.api.dto.req;
 
 import lombok.Data;
-import com.pingan.angel.admin.api.dto.respond.HeadNews;
 /**
  * 
  * @author zhangquan
