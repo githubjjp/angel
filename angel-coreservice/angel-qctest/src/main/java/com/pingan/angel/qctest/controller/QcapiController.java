@@ -123,8 +123,7 @@ public class QcapiController {
      * @return
      */
     @RequestMapping(value = "/scanCustomerSuper",method = RequestMethod.GET)
-    public Map<String,Object> scanCustomerSuper(String historyId,String customerCode,boolean isLock
-    ){
+    public Map<String,Object> scanCustomerSuper(String historyId,String customerCode,boolean isLock){
         return service.scanCustomerSuper(historyId,customerCode,isLock);
     }
 

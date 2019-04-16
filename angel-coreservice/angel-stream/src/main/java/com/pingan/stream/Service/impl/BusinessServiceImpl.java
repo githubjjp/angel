@@ -445,7 +445,7 @@ public class BusinessServiceImpl implements BusinessService {
             device.setProgramMainVersion(jsonData.getIntValue("programMainVersion"));
             device.setProgramMainVersionName(jsonData.getIntValue("programMainVersion")==100?"V1.00版本":"V1.01版本");
             device.setMac(jsonData.getString("mac"));
-            device.setCcid(jsonData.getString("ccid"));//WIFI版本不用上传CCID，GPRS版本上传此字段信息。
+            device.setIccid(jsonData.getString("ccid"));//WIFI版本不用上传CCID，GPRS版本上传此字段信息。
             device.setIsOnlineDate(new Date());//正常情况每次10分钟上报一次
 
             device.setProgramSmallSupplier(jsonData.getIntValue("programSmallSupplier"));

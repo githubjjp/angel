@@ -631,7 +631,7 @@ public class IssueCmdServiceImpl implements IssueCmdService {
                 com.pingan.angel.admin.api.dto.respond.RequestSim dto=JSONUtils.toObejct(analysisResult,com.pingan.angel.admin.api.dto.respond.RequestSim.class);
                 DeviceEntity device=new DeviceEntity();
                 device.setDeviceId(deviceId);
-                device.setCcid(dto.getCcid());
+                device.setIccid(dto.getCcid());
                 deviceInfoMapper.update(device,Wrappers.<DeviceEntity>query().lambda().eq(DeviceEntity::getDeviceId, deviceId));
                 logger.info("更新设备ccid值ok.");
                 dataMap.put("status","00");
