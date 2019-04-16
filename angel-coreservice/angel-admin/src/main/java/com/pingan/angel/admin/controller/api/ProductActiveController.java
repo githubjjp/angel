@@ -1,4 +1,4 @@
-package com.pingan.angel.admin.controller;
+package com.pingan.angel.admin.controller.api;
 
 
 import com.pingan.angel.common.core.util.Result;
