@@ -81,19 +81,6 @@ management:
     web:
       exposure:
         include: '*'
-mybatis-plus:
-  configuration:
-    map-underscore-to-camel-case: true
-  global-config:
-    banner: false
-    db-config:
-      field-strategy: default
-      id-type: auto
-      logic-delete-value: 1
-      logic-not-delete-value: 0
-      table-underline: true
-  mapper-locations: classpath:/dao/*Mapper.xml
-  
 ribbon:
   ConnectTimeout: 10000
   ReadTimeout: 10000
