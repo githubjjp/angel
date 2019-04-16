@@ -15,7 +15,8 @@ public class DeviceEntity extends BaseEntity implements Serializable {
     private Long id;
     private String snCode;//物流码/整机码
     private String deviceId;//设备ID
-    private String  customerSuperCode;//大客户码
+    private String customerSuperCode;//大客户码
+    private String customerSuperId;//大客户的userId
     private String barcodeId;//配件码
     private String activeId;//开机码
     private String customerSn;//大客户批次码
@@ -29,7 +30,6 @@ public class DeviceEntity extends BaseEntity implements Serializable {
     private int programMainVersion;//主板固件版本号   版本100 表示V1.00版本，101 表示V1.01版本。
     private String programMainVersionName;//版本100 表示V1.00版本，101 表示V1.01版本
     private String mac;   //MAC地址(WIFI)/IMEI(GPRS)
-    private int ccid;//CCID(gprs信号)
     private int programSmallSupplier;//小板固件供应商
     private int programSmallVersion;//小板固件版本号   版本100 表示V1.00版本，101 表示V1.01版本。
     private String programSmallVersionName;//版本100 表示V1.00版本，101 表示V1.01版本
@@ -38,9 +38,16 @@ public class DeviceEntity extends BaseEntity implements Serializable {
     private String filterAuthor3;//滤芯认证3   Y-认证  N-未认证
     private String filterAuthor4;//滤芯认证4   Y-认证  N-未认证
     private String filterAuthor5;//滤芯认证5   Y-认证  N-未认证
+
     private String isAuthorization;//设备认证  Y-认证  N-未认证
+    private String isLock;//是否锁机
 
     private String company;//从条码库移过来的公司id
-    private String itemId;//产品id
+    private String proId;//产品id
+    private String iccid;//iccid
+    private String imei;//imei
+    private String proName = "";//产品名称
+    private String proMode = "";//产品型号
+    private String proImg = "";//产品图片
 
 }
