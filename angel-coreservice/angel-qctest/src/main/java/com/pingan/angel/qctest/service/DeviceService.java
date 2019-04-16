@@ -14,4 +14,10 @@ public interface DeviceService {
      * 删除设备表中的数据
      */
     void deleteDeviceInfoBySnCode(String snCode);
+
+    /**
+     * 产测完成添加一条记录
+     * @param deviceEntity
+     */
+    void add(DeviceEntity deviceEntity);
 }

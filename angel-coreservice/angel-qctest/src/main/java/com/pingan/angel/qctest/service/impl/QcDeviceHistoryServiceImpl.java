@@ -10,6 +10,8 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 
+import java.util.Map;
+
 public class QcDeviceHistoryServiceImpl implements QcDeviceHistoryService {
 
     @Autowired
@@ -64,6 +66,22 @@ public class QcDeviceHistoryServiceImpl implements QcDeviceHistoryService {
             return true;
         }
         return false;
+    }
+
+    /**
+     * 更新map中的字段
+     * @param paramMap
+     * @param id
+     * @return
+     */
+    @Override
+    public boolean updateByMap(Map<String,Object> paramMap, String id) {
+        Update update = new Update();
+        for (String key: paramMap.keySet()) {
+            update.set(key,paramMap.get(key));
+        }
+        qcDeviceHistoryDao.updateFirst(Query.query(Criteria.where("id").is(id)),update);
+        return true;
     }
 
 }

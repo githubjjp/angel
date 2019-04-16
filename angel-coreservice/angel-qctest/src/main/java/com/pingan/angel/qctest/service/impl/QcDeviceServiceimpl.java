@@ -39,5 +39,16 @@ public class QcDeviceServiceimpl implements QcDeviceService {
         return null;
     }
 
+    /**
+     * 根据字段更新产测设备信息
+     * @param qcDevice
+     * @return
+     */
+    @Override
+    public String updateById(QcDeviceEntity qcDevice) {
+        qcDeviceDao.updateById(qcDevice.getId(),qcDevice);
+        return null;
+    }
+
 
 }

@@ -105,16 +105,6 @@ public class QcapiController {
     }
 
     /**
-     * 结束产测，提交产测
-     * @param deviceId
-     * @return
-     */
-    @RequestMapping(value = "/endTest",method = RequestMethod.POST)
-    public Map<String,Object> endTest(String historyId){
-        return service.checkTestResult(historyId);
-    }
-
-    /**
      * 恢复出厂设置,删除设备状态信息，修改认证信息
      * @param historyId
      * @param isLock

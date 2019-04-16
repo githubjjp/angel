@@ -42,4 +42,9 @@ public class DeviceServiceImpl implements DeviceService {
     public void deleteDeviceInfoBySnCode(String snCode) {
         deviceDao.delete(Wrappers.<DeviceEntity>query().lambda().eq(DeviceEntity::getSnCode,snCode));
     }
+
+    @Override
+    public void add(DeviceEntity deviceEntity) {
+        deviceDao.insert(deviceEntity);
+    }
 }

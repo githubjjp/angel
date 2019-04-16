@@ -15,4 +15,10 @@ public interface QcTestSuccessServcie {
     QcTestSuccessDeviceEntity findBySnCode(String snCode);
 
     void deleteBySnCode(String snCode);
+
+    /**
+     * 添加一条产测成功记录
+     * @param qcsuccessDevice
+     */
+    void add(QcTestSuccessDeviceEntity qcsuccessDevice);
 }

@@ -30,4 +30,9 @@ public class QcTestSuccessServiceImpl implements QcTestSuccessServcie {
         successDeviceEntity.setSnCode(snCode);
         qcTestSuccessDao.deleteByCondition(successDeviceEntity);
     }
+
+    @Override
+    public void add(QcTestSuccessDeviceEntity qcsuccessDevice) {
+        qcTestSuccessDao.save(qcsuccessDevice);
+    }
 }
