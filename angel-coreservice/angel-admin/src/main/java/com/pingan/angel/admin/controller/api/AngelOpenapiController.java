@@ -1,9 +1,12 @@
 package com.pingan.angel.admin.controller.api;
 
-import com.pingan.angel.common.core.constant.DataEncryption;
+import com.pingan.angel.admin.api.mongodb.QcDeviceEntity;
+import com.pingan.angel.admin.service.AngleApiService;
+import com.pingan.angel.admin.service.mongodb.service.SysConfigService;
 import com.pingan.angel.common.core.util.Result;
 import com.pingan.stream.Service.IotHubService;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,39 +17,27 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @AllArgsConstructor
-@RequestMapping("/registerInfo")
-public class ProductRegisterController {
+@RequestMapping("/openapi/angel")
+public class AngelOpenapiController {
 
-    private String productId = "";
 
-    private String MD5Key = "";
+    @Autowired
+    private AngleApiService angleApiService;
 
-    private final IotHubService iotHubService;
+    @Autowired
+    private IotHubService iotHubService;
 
-    /**
-     * 设备信息注册
-     *
-     * @param id
+
+    /***
+     * @param snCode
+     * @param barcodeId
+     * @param activeId
      * @return
      */
-    @GetMapping("/auth")
-    public Result upload(@PathVariable Integer id, @PathVariable String barcodeId, @PathVariable String sign) {
-        if (sign == null || !sign.equals(DataEncryption.md5(barcodeId, MD5Key))) {
-            return new Result();
-        }
+    @RequestMapping("/snCodeUnion")
+    public Result snCodeUnion(@PathVariable String barcodeId, @PathVariable String snCode, @PathVariable String activeId) {
+        angleApiService.snCodeUnion(snCode, barcodeId, activeId);
 
-        String registeResult = iotHubService.registDevice(barcodeId);
-        if (registeResult != null) {
-            //解析数据
-
-
-            //存库Mysql
-
-
-        } else {
-            //暂时注册失败存库Mysql
-
-        }
         return new Result();
     }
 
@@ -60,9 +51,7 @@ public class ProductRegisterController {
     public Result update(@PathVariable Integer id, @PathVariable String customerSuperCode,
                          @PathVariable String barcodeId, @PathVariable String logisticsCode,
                          @PathVariable String sign) {
-        // md5解密比对
 
-        //MySql入库
         return new Result();
     }
 
