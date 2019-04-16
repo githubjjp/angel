@@ -48,37 +48,37 @@ public class MybatisPlusConfig {
     }
 
     @Bean(name = "mysql")
-    @ConfigurationProperties(prefix = "spring.datasource.druid.mysql" )
+    @ConfigurationProperties(prefix = "spring.datasource.mysql" )
     public DataSource mysql () {
         return DruidDataSourceBuilder.create().build();
     }
 
-    @Bean(name = "mongodb")
-    @ConfigurationProperties(prefix = "spring.datasource.druid.mongodb" )
-    public DataSource mongodb () {
-        return DruidDataSourceBuilder.create().build();
-    }
-    /**
-     * 动态数据源配置
-     * @return
-     */
-    @Bean
-    @Primary
-    public DataSource multipleDataSource (@Qualifier("mysql") DataSource mysql,
-                                          @Qualifier("mongodb") DataSource mongodb ) {
-        DynamicDataSource dynamicDataSource = new DynamicDataSource();
-        Map< Object, Object > targetDataSources = new HashMap<>();
-        targetDataSources.put(DBTypeEnum.mysql.getValue(), mysql );
-        targetDataSources.put(DBTypeEnum.mongodb.getValue(), mongodb);
-        dynamicDataSource.setTargetDataSources(targetDataSources);
-        dynamicDataSource.setDefaultTargetDataSource(mysql);
-        return dynamicDataSource;
-    }
+//    @Bean(name = "mongodb")
+//    @ConfigurationProperties(prefix = "spring.datasource.druid.mongodb" )
+//    public DataSource mongodb () {
+//        return DruidDataSourceBuilder.create().build();
+//    }
+//    /**
+//     * 动态数据源配置
+//     * @return
+//     */
+//    @Bean
+//    @Primary
+//    public DataSource multipleDataSource (@Qualifier("mysql") DataSource mysql,
+//                                          @Qualifier("mongodb") DataSource mongodb ) {
+//        DynamicDataSource dynamicDataSource = new DynamicDataSource();
+//        Map< Object, Object > targetDataSources = new HashMap<>();
+//        targetDataSources.put(DBTypeEnum.mysql.getValue(), mysql );
+//        targetDataSources.put(DBTypeEnum.mongodb.getValue(), mongodb);
+//        dynamicDataSource.setTargetDataSources(targetDataSources);
+//        dynamicDataSource.setDefaultTargetDataSource(mysql);
+//        return dynamicDataSource;
+//    }
 
     @Bean("sqlSessionFactory")
     public SqlSessionFactory sqlSessionFactory() throws Exception {
         MybatisSqlSessionFactoryBean sqlSessionFactory = new MybatisSqlSessionFactoryBean();
-        sqlSessionFactory.setDataSource(multipleDataSource(mysql(),mongodb()));
+        sqlSessionFactory.setDataSource(mysql());
         sqlSessionFactory.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath*:mapper/*Mapper.xml"));
 
         MybatisConfiguration configuration = new MybatisConfiguration();

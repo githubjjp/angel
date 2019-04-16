@@ -6,7 +6,7 @@ import org.springframework.data.annotation.Id;
 import java.util.Date;
 
 /**
- * 设备故障记录表
+ * 设备异常故障记录表
  */
 @Data
 public class DeviceErrorEntity extends BaseEntity{

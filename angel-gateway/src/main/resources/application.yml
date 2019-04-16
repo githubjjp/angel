@@ -19,22 +19,10 @@ spring:
           # 前端密码解密
         - PasswordDecoderFilter
       #UPMS 模块
-      - id: angel-upms
-        uri: lb://angel-upms
+      - id: angel-admin
+        uri: lb://angel-admin
         predicates:
         - Path=/admin/**
-        filters:
-          # 限流配置
-        - name: RequestRateLimiter
-          args:
-            key-resolver: '#{@remoteAddrKeyResolver}'
-            redis-rate-limiter.replenishRate: 10
-            redis-rate-limiter.burstCapacity: 20
-          # 降级配置
-        - name: Hystrix
-          args:
-            name: default
-            fallbackUri: 'forward:/fallback'
         #api 模块
       - id: angel-api
         uri: lb://angel-admin

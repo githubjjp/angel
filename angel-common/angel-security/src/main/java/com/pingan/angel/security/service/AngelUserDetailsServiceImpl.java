@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.security.core.GrantedAuthority;
@@ -14,7 +15,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.netflix.loadbalancer.LoadBalancerContext;
 import com.pingan.angel.admin.api.dto.UserInfo;
 import com.pingan.angel.admin.api.entity.SysUser;
 import com.pingan.angel.admin.api.feign.RemoteUserService;
@@ -24,7 +24,6 @@ import com.pingan.angel.common.core.util.Result;
 
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
-import lombok.AllArgsConstructor;
 
 /**
  * 用户详细信息
@@ -32,10 +31,11 @@ import lombok.AllArgsConstructor;
  * @author lengleng
  */
 @Service
-@AllArgsConstructor
 public class AngelUserDetailsServiceImpl implements UserDetailsService {
-	private final RemoteUserService remoteUserService;
-	private final CacheManager cacheManager;
+	@Autowired
+	private  RemoteUserService remoteUserService;
+//	@Autowired
+//	private  CacheManager cacheManager;
 
 	/**
 	 * 用户密码登录
@@ -46,13 +46,13 @@ public class AngelUserDetailsServiceImpl implements UserDetailsService {
 	 */
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		Cache cache = cacheManager.getCache("user_details");
-		if (cache != null && cache.get(username) != null) {
-			return (AngelLoginUser) cache.get(username).get();
-		}
+//		Cache cache = cacheManager.getCache("user_details");
+//		if (cache != null && cache.get(username) != null) {
+//			return (AngelLoginUser) cache.get(username).get();
+//		}
 		Result<UserInfo> result = remoteUserService.info(username, SecurityConstants.FROM_IN);
 		UserDetails userDetails = getUserDetails(result);
-		cache.put(username, userDetails);
+		//cache.put(username, userDetails);
 		return userDetails;
 	}
 

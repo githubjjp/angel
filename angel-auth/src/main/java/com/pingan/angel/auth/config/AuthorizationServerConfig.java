@@ -1,10 +1,9 @@
-/*
 package com.pingan.angel.auth.config;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.sql.DataSource;S
+import javax.sql.DataSource;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,18 +21,17 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 
 import com.pingan.angel.common.core.constant.SecurityConstants;
 import com.pingan.angel.security.component.AngelWebResponseExceptionTranslator;
-import com.pingan.angel.security.config.MyRedisTokenStore;
 import com.pingan.angel.security.service.AngelClientDetailsService;
 
 import lombok.AllArgsConstructor;
 import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 
-*/
+
 /**
  * @author lengleng
  * @date 2019/2/1
  * 认证服务器配置
- *//*
+ */
 
 @Configuration
 @AllArgsConstructor
@@ -91,4 +89,4 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 		};
 	}
 }
-*/
+

@@ -99,8 +99,9 @@ public interface IssueCmdService {
     /**
      *  反馈设备状态信息-29
      * @param deviceId
+     * @param device   设备状态
      */
-    public void issueCmd29(String deviceId);
+    public void issueCmd29(String deviceId,com.pingan.angel.admin.api.dto.req.ReportDeviceStatus device);
 
     /**
      *  请求升级文件指令-32

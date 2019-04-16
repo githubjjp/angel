@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 @Service
 @AllArgsConstructor
 public class SysRoleMenuServiceImpl extends ServiceImpl<SysRoleMenuMapper, SysRoleMenu> implements SysRoleMenuService {
-	private final CacheManager cacheManager;
+		//private final CacheManager cacheManager;
 
 	/**
 	 * @param role
@@ -55,7 +55,7 @@ public class SysRoleMenuServiceImpl extends ServiceImpl<SysRoleMenuMapper, SysRo
 			}).collect(Collectors.toList());
 
 		//清空userinfo
-		cacheManager.getCache("user_details").clear();
+		//cacheManager.getCache("user_details").clear();
 		return this.saveBatch(roleMenuList);
 	}
 }

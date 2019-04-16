@@ -6,6 +6,7 @@ import com.pingan.angel.admin.api.dto.req.RequestServer;
 import com.pingan.angel.admin.api.mongodb.*;
 import com.pingan.angel.admin.api.mysql.DeviceEntity;
 import com.pingan.angel.admin.api.mysql.DeviceErrorEntity;
+import com.pingan.angel.admin.api.mysql.DeviceStatusEntity;
 import com.pingan.angel.admin.api.mysql.FilterElementEntity;
 import com.pingan.stream.Service.BusinessService;
 import com.pingan.stream.Service.IssueCmdService;
@@ -337,11 +338,9 @@ public class BusinessServiceImpl implements BusinessService {
             DeviceLogEntity ss=deviceLogDao.save(one);
             logger.info("非产测设备保存上报日志ok..."+ss.getId());
         }
-
         //保存故障上报日志
         if(cmd==21){
             int d1=(Integer)originMap.get("d1");//故障代码  0x0000: 无故障
-            int d2=(Integer)originMap.get("d2");//保护代码  0x0000: 无保护
             if(d1 !=0x0000){
                 //mongodb操作
                 ErrorLogEntity one=new ErrorLogEntity();
@@ -354,7 +353,7 @@ public class BusinessServiceImpl implements BusinessService {
                 one.setCreateTime(new Date());
                 one.setCreateUser("system");
                 one.setVersion(String.valueOf(originMap.get("version")));
-                one.setIMEI(String.valueOf(originMap.get("addr")));//当cmd=28的时候表示IMIO号,默认是经纬度
+                //one.setIMEI(String.valueOf(originMap.get("addr")));//当cmd=28的时候表示IMIO号,默认是经纬度
                 one.setAddr(String.valueOf(originMap.get("addr")));
                 one.setGprs(String.valueOf(originMap.get("gprs")));
                 one.setCmd(cmd);
@@ -363,29 +362,6 @@ public class BusinessServiceImpl implements BusinessService {
                 one.setSnCode(snCode);
                 ErrorLogEntity ss=errorLogDao.save(one);
                 logger.info("故障日志保存 mongodb  Ok..."+ss.getId());
-            }
-            //mysql操作
-            DeviceErrorEntity error=new DeviceErrorEntity();
-            error.setDeviceId(deviceId);
-            error.setSnCode(snCode);
-            error.setFaultCode(d1);
-            error.setFaultContent(CmdCommon.CMD_FAULT_CONTENT.get(d1));
-            error.setProtectCode(d2);
-            error.setProtectContent(CmdCommon.CMD_PROTECT_CONTENT.get(d2));
-            if(d1 ==0x0000 && d2==0x0000){
-                error.setIsDeal("Y");//设备正常
-            }else{
-                error.setIsDeal("N");//设备故障
-            }
-            error.setLastPostTime(new Date(timestamp));
-            DeviceErrorEntity errorOne=deviceErrorMapper.findByDeviceId(deviceId);
-            if(errorOne !=null){
-                error.setId(errorOne.getId());
-                deviceErrorMapper.updateById(error);
-                logger.info("设备故障信息更新mysql   ok.");
-            }else{
-                deviceErrorMapper.insert(error);
-                logger.info("设备故障信息新增mysql   ok.");
             }
         }
         return false;
@@ -401,10 +377,60 @@ public class BusinessServiceImpl implements BusinessService {
         JSONObject jsonData=JSONObject.parseObject(json);
         logger.info("待处理业务的解析后数据::"+jsonData.toJSONString());
         int cmd=(Integer)jsonData.get("cmd");
-        if(cmd==22){    //同步滤芯数据到设备状态表
+        if(cmd==21){
+            com.pingan.angel.admin.api.dto.respond.Alarm alarm=JSONUtils.toObejct(json,com.pingan.angel.admin.api.dto.respond.Alarm.class);
+
+            //mysql操作
+            DeviceErrorEntity error=new DeviceErrorEntity();
+            error.setDeviceId(deviceId);
+            error.setSnCode(snCode);//整机码
+            error.setFaultCode(alarm.getFault());
+            error.setFaultContent(CmdCommon.CMD_FAULT_CONTENT.get(alarm.getFault()));
+            error.setProtectCode(alarm.getProtect());
+            error.setProtectContent(CmdCommon.CMD_PROTECT_CONTENT.get(alarm.getProtect()));
+            if(alarm.getFault() ==0x0000 && alarm.getProtect()==0x0000){
+                error.setIsDeal("Y");//设备正常
+            }else{
+                error.setIsDeal("N");//设备故障
+            }
+            error.setLastPostTime(alarm.getTime());//告警时间
+            DeviceErrorEntity errorOne=deviceErrorMapper.selectOne(Wrappers.<DeviceErrorEntity>query()
+                    .lambda().eq(DeviceErrorEntity::getDeviceId, deviceId));
+            if(errorOne !=null){
+                deviceErrorMapper.update(error,Wrappers.<DeviceErrorEntity>query().lambda().eq(DeviceErrorEntity::getDeviceId, deviceId));
+                logger.info("设备故障信息更新mysql   ok.");
+            }else{
+                deviceErrorMapper.insert(error);
+                logger.info("设备故障信息新增mysql   ok.");
+            }
+        }else if(cmd==22){    //同步滤芯数据到设备状态表
             //设备基本状态信息
-
-
+            com.pingan.angel.admin.api.dto.respond.EquipmentActive equipment=JSONUtils.toObejct(json,com.pingan.angel.admin.api.dto.respond.EquipmentActive.class);
+            //设备状态表
+            DeviceStatusEntity deviceStatus=new DeviceStatusEntity();
+            deviceStatus.setInTemperature(equipment.getPrimaryTemperature());//进水温度
+            deviceStatus.setOutTemperature(equipment.getOutTemperature());//出水温度
+            deviceStatus.setInTds(equipment.getPrimaryTDS());//进水tds
+            deviceStatus.setOutTds(equipment.getOutTDS());//出水tds
+            deviceStatus.setTotalWater(equipment.getWaterTotal());//总水量
+            deviceStatus.setTotalCleanWater(equipment.getPureWaterTotal());//净水总量
+            deviceStatus.setDeviceId(deviceId);
+            issueCmdService.updateDeviceStatus(deviceStatus,deviceId);
+            //滤芯状态表
+            FilterElementEntity filter=new FilterElementEntity();
+            filter.setReportFlowFilterCount1(equipment.getFilterOneResidualFlow());
+            filter.setReportHourFilterCount1(equipment.getFilterOneResidualLife());
+            filter.setReportFlowFilterCount2(equipment.getFilterTwoResidualFlow());
+            filter.setReportHourFilterCount2(equipment.getFilterTwoResidualLife());
+            filter.setReportFlowFilterCount3(equipment.getFilterThreeResidualFlow());
+            filter.setReportHourFilterCount3(equipment.getFilterThreeResidualLife());
+            filter.setReportFlowFilterCount4(equipment.getFilterFourResidualFlow());
+            filter.setReportHourFilterCount4(equipment.getFilterFourResidualLife());
+            filter.setReportFlowFilterCount5(equipment.getFilterFiveResidualFlow());
+            filter.setReportHourFilterCount5(equipment.getFilterFiveResidualLife());
+            filter.setDeviceId(deviceId);
+            issueCmdService.updateFilterElement(filter,deviceId);
+            logger.info("更新设备状态信息ok...");
         }else if(cmd==25){ //请求服务器数据指令
             RequestServer rs=JSONUtils.toObejct(json,RequestServer.class);
             int type=rs.getType();
@@ -414,20 +440,20 @@ public class BusinessServiceImpl implements BusinessService {
                 issueCmdService.issueCmd30(deviceId);
             }
         }else if(cmd==29){   //设备上传机器状态
-            int d1=jsonData.getIntValue("d1");
-            //更新设备状态表deviceState字段状态
-            Map<String,Object> param=new HashMap<String,Object>();
-            param.put("deviceId",deviceId);
-            if(d1==0x01){ //制水
-                param.put("deviceState",1);
-            }else if(d1==0x02){
-                param.put("deviceState",2); //满水
-            }else{
-                param.put("deviceState",3); //其他  ---扩展
+            com.pingan.angel.admin.api.dto.req.ReportDeviceStatus device=JSONUtils.toObejct(json,com.pingan.angel.admin.api.dto.req.ReportDeviceStatus.class);
+
+            DeviceStatusEntity deviceStatus=new DeviceStatusEntity();
+            deviceStatus.setDeviceId(deviceId);
+            if(device.getStatus()==0x01){   //0x01-制水
+                deviceStatus.setDeviceState(1);
+            }else if(device.getStatus()==0x02){ //0x02-满水
+                deviceStatus.setDeviceState(2);
             }
-            deviceStatusMapper.updateByDeviceId(param);
+            //更新设备上报状态表
+            issueCmdService.updateDeviceStatus(deviceStatus,deviceId);
             logger.info("设备制水状态更新ok");
-            issueCmdService.issueCmd29(deviceId);
+            issueCmdService.issueCmd29(deviceId,device);
+
         }else if(cmd==32){   //请求升级文件指令
             issueCmdService.issueCmd32(deviceId);
 
