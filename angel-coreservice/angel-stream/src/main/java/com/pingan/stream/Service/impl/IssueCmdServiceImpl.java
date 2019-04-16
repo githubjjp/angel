@@ -65,6 +65,10 @@ public class IssueCmdServiceImpl implements IssueCmdService {
     @Autowired
     private QcDeviceInfoDao qcDeviceInfoDao;//产测设备操作
 
+    /**
+     *  获取指令统一字段
+     * @return
+     */
     private Map<String,Object> getCommonFields(){
         Map<String,Object> common=new HashMap<>();
         common.put("flag",242);
@@ -73,6 +77,8 @@ public class IssueCmdServiceImpl implements IssueCmdService {
         common.put("gprs",1);
         return common;
     }
+
+
 
     /**
      * 根据设备id获取整机码
@@ -362,12 +368,13 @@ public class IssueCmdServiceImpl implements IssueCmdService {
     }
 
     @Override
-    public void issueCmd29(String deviceId) {
+    public void issueCmd29(String deviceId,com.pingan.angel.admin.api.dto.req.ReportDeviceStatus device) {
         String snCode=getDeviceInfo(deviceId).get("snCode");
         if(StringUtils.isEmpty(snCode)){
             logger.info("设备尚未注册，反馈设备状态信息失败");
             return;
         }
+
         String requestStr=null;
         operate(snCode,requestStr,29,deviceId);
     }
@@ -454,6 +461,43 @@ public class IssueCmdServiceImpl implements IssueCmdService {
         String result=iotHubService.publish(deviceName,requestJSON,"1");//至少发送一次
         logger.info("IOT应用接口返回的初始结果::"+result);
         return getResponse(deviceId,result,cmd);
+    }
+
+    /**
+     * 公共抽象方法
+     * @param snCode
+     * @param t   泛型
+     * @param cmd
+     * @param deviceId
+     * @return
+     */
+    private  Map<String,Object> getResponseObj(String snCode,Class t,int cmd,String deviceId){
+        Map<String,Object> resultMap=new HashMap<String,Object>();
+        try{
+            String requestJSON="";
+            /*
+             *  控制下发指令需要保存在mongodb对应表中
+             */
+            if(cmd !=35 && cmd !=29){   //上报指令的一些返回不需要保存
+                saveIssueLog(deviceId,requestJSON,cmd,snCode);
+            }
+            /*
+             * 请求IOT
+             */
+            String deviceName=productKey+"@@"+snCode;
+            String result=iotHubService.publish(deviceName,requestJSON,"1");//至少发送一次
+            JSONObject jsonObject=JSONObject.parseObject(result);
+
+
+            if(cmd==16){
+                com.pingan.angel.admin.api.dto.respond.ReqContent<com.pingan.angel.admin.api.dto.respond.UserCurrentData> reqContent=JSONUtils.toObejct(requestJSON,com.pingan.angel.admin.api.dto.respond.ReqContent.class);
+            }
+        }catch(Exception e){
+            resultMap.put("code","99");
+            resultMap.put("msg","请求失败");
+        }
+
+        return resultMap;
     }
 
     /**
@@ -631,7 +675,7 @@ public class IssueCmdServiceImpl implements IssueCmdService {
                 com.pingan.angel.admin.api.dto.respond.RequestSim dto=JSONUtils.toObejct(analysisResult,com.pingan.angel.admin.api.dto.respond.RequestSim.class);
                 DeviceEntity device=new DeviceEntity();
                 device.setDeviceId(deviceId);
-                device.setCcid(dto.getCcid());
+                device.setIccid(dto.getCcid());
                 deviceInfoMapper.update(device,Wrappers.<DeviceEntity>query().lambda().eq(DeviceEntity::getDeviceId, deviceId));
                 logger.info("更新设备ccid值ok.");
                 dataMap.put("status","00");
