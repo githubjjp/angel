@@ -17,3 +17,6 @@ spring:
     initialSize: 5
     minIdle: 5
     maxActive: 20
+  data:
+    mongodb:
+      uri: mongodb://angel:angel123@ng208g94.mongodb.db.cloud.papub:15503/angel?authSource=admin&connect=replicaSet&readPreference=secondaryPreferred&safe=true&authMechanism=SCRAM-SHA-1&maxPoolSize=500&minPoolSize=10

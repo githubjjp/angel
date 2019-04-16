@@ -14,7 +14,7 @@ import com.pingan.angel.security.annotation.EnableAngelFeignClients;
  */
 @SpringCloudApplication
 @EnableAngelFeignClients(basePackages = {"com.pingan.angel"})
-@ComponentScan("com.pingan.angel")
+@ComponentScan(basePackages="com.pingan.angel")
 public class AngelAuthApplication {
 
 	public static void main(String[] args) {
