@@ -15,9 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/registerInfo")
-public class ProductRegisterController {
+public class AngelOpenapiController {
 
-    private String productId = "";
 
     private String MD5Key = "";
 
@@ -30,7 +29,7 @@ public class ProductRegisterController {
      * @return
      */
     @GetMapping("/auth")
-    public Result upload(@PathVariable Integer id, @PathVariable String barcodeId, @PathVariable String sign) {
+    public Result snCodeUnion(@PathVariable Integer id, @PathVariable String barcodeId, @PathVariable String sign) {
         if (sign == null || !sign.equals(DataEncryption.md5(barcodeId, MD5Key))) {
             return new Result();
         }

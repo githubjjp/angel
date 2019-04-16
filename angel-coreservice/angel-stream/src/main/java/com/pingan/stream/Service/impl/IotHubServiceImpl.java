@@ -30,7 +30,7 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
-@Service
+@Service("iotHubService")
 @PropertySource("classpath:iot.properties")
 public class IotHubServiceImpl implements IotHubService {
     private static Logger logger= LoggerFactory.getLogger(IotHubServiceImpl.class);
