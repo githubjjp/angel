@@ -20,10 +20,8 @@ public class AngleApiServiceImpl implements AngleApiService {
     @Autowired
     public QcDeviceService qcDeviceService;
 
-
     @Autowired
     public QcDeviceHistoryService qcDeviceHistoryService;
-
 
     @Autowired
     public IotHubService iotHubService;

@@ -5,13 +5,14 @@ import com.pingan.angel.qctest.dao.QcDeviceHistoryDao;
 import com.pingan.angel.qctest.service.QcDeviceHistoryService;
 import com.pingan.stream.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.stereotype.Service;
 
 import java.util.Map;
 
+@Service("qcDeviceHistoryService")
 public class QcDeviceHistoryServiceImpl implements QcDeviceHistoryService {
 
     @Autowired
